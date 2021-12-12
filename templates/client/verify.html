@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}ورود به کوچرا{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 1-column  navbar-sticky footer-static bg-full-screen-image  blank-page" data-open="click" data-menu="vertical-menu-modern" data-col="1-column"{% endblock %}
+{% block body %}
+    <div class="app-content content">
+      <div class="content-overlay"></div>
+      <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body"><!-- login page start -->
+<section id="auth-login" class="row flexbox-container">
+    <div class="col-xl-8 col-11">
+        <div class="card bg-authentication mb-0">
+            <div class="row m-0">
+                <!-- left section-login -->
+                <div class="col-md-6 col-12 px-0">
+                    <div class="card disable-rounded-right mb-0 p-2 h-100 d-flex justify-content-center">
+                        <div class="card-header pb-1">
+                        </div>
+                        <div class="card-body mt-5">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group mt-50">
+                                    <label class="text-bold-400 pb-1" for="verify_code">کد ارسال شده به تلفن همراه خود را وارد کنید :</label>
+                                    <input type="text" name="verify_code" class="form-control" id="verify_code"
+                                        placeholder="****">
+                                </div>
+                                <button type="submit" class="btn btn-primary glow w-100 position-relative">تایید کد ارسال</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- right section image -->
+                <div class="col-md-6 d-md-block d-none text-center align-self-center p-3">
+                    <img class="img-fluid" src="{% static "app-assets/images/pages/login.png" %}" alt="branding logo">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- login page ends -->
+
+        </div>
+      </div>
+    </div>
+{% endblock %}
