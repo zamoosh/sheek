@@ -12,4 +12,3 @@ PyJWT==v1.7.1
 django_jalali
 suds-py3
 requests
-pycurl

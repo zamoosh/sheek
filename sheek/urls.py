@@ -36,5 +36,6 @@ urlpatterns = [
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/client/', include('client.apiurls'))
+    path('api/client/', include('client.apiurls')),
+    path('accounts/', include('client.urls'))
 ]
