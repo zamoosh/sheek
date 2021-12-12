@@ -1,0 +1,15 @@
+django==4
+unidecode
+pillow
+minio
+mysqlclient
+django-cors-headers #cros headers
+djangorestframework
+drf_yasg
+django-cors-headers
+djangorestframework_simplejwt
+PyJWT==v1.7.1
+django_jalali
+suds-py3
+requests
+pycurl
