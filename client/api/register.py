@@ -16,41 +16,37 @@ def get_verify_code(request):
 
     if is_mobile_number.match(username):
         if User.objects.filter(cellphone=username):
-            user = User.objects.get(cellphone=username)
-        return Response(context, status=HTTP_403_FORBIDDEN)
 
-    if VerificationCode.objects.filter(name=username):
-        VerificationCode.objects.filter(name=username).delete()
+            if VerificationCode.objects.filter(name=username):
+                VerificationCode.objects.filter(name=username).delete()
 
-        sms = Smsir()
-        code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
-        sms.sendwithtemplate({'verificationCode': code}, username, 55907)
-        context['msg'] = 'رمز یک بار مصرف برای شما پیامک گردید'
-        context['new_user'] = False
-        return Response(context, status=HTTP_200_OK)
+            sms = Smsir()
+            code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
+            sms.sendwithtemplate({'verificationCode': code}, username, 55907)
+            context['msg'] = 'رمز یک بار مصرف برای شما پیامک گردید'
+            context['new_user'] = False
+            return Response(context, status=HTTP_200_OK)
+        else:
+            sms = Smsir()
+            code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
+            sms.sendwithtemplate({'verificationCode': code}, username, 1387)
+            context['msg'] = 'رمز یک بار مصرف برای شما پیامک گردید'
+            context['new_user'] = True
+            return Response(context, status=HTTP_200_OK)
     else:
-        user = User.objects.create(username=username, cellphone=username)
-        sms = Smsir()
-        code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
-        sms.sendwithtemplate({'verificationCode': code}, username, 1387)
-        context['msg'] = 'رمز یک بار مصرف برای شما پیامک گردید'
-        context['new_user'] = True
-        return Response(context, status=HTTP_200_OK)
+        if User.objects.filter(email=username):
 
-    if VerificationCode.objects.filter(name=username):
-        VerificationCode.objects.filter(name=username).delete()
+            if VerificationCode.objects.filter(name=username):
+                VerificationCode.objects.filter(name=username).delete()
 
-    code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
-    send_mail_func(code, username)
-    context['msg'] = 'رمز یک بار مصرف برای شما ایمیل گردید'
-    context['new_user'] = False
-    return Response(context)
-
-else:
-user = User.objects.create(username=username, email=username)
-DeviceId.objects.create(owner=user, device_id=request.data.get('device_id'))
-code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
-send_mail_func(code, username)
-context['msg'] = 'رمز یک بار مصرف برای شما ایمیل گردید'
-context['new_user'] = True
-return Response(context, status=HTTP_200_OK)
+            code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
+            send_mail_func(code, username)
+            context['msg'] = 'رمز یک بار مصرف برای شما ایمیل گردید'
+            context['new_user'] = False
+            return Response(context)
+        else:
+            code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
+            send_mail_func(code, username)
+            context['msg'] = 'رمز یک بار مصرف برای شما ایمیل گردید'
+            context['new_user'] = True
+            return Response(context, status=HTTP_200_OK)
