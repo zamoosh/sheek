@@ -30,6 +30,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/pages/dashboard-analytics.min.css" %}">
     <!-- Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{% static "assets/css/style-rtl.css" %}">
+    {% block css %}{% endblock %}
 </head>
 <body{% block bodyclass %}{% endblock %}>
 {% block body %}{% endblock %}

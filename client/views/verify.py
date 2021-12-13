@@ -33,20 +33,21 @@ def verify(request):
                     if context['register']:
                         if user.is_active:
                             login(request, user)
-                            return HttpResponseRedirect("/profile/profile")
+                            return HttpResponseRedirect("/accounts/profile/")
             else:
                 context['error'] = 1
         else:
             import random
             try:
                 sms = Smsir()
-                key = str(random.randrange(10000, 99999))
+                # key = str(random.randrange(10000, 99999))
+                key = 1234
                 request.session['key'] = key
                 sms.sendwithtemplate({'verificationCode': key}, context['cellphone'], 55907)
                 return render(request, "client/verify.html", context)
             except:
                 context['sms'] = False
-                return HttpResponseRedirect("/profile/singing")
+                return HttpResponseRedirect("/accounts/auth/")
         return render(request, "client/verify.html", context)
     else:
-        return HttpResponseRedirect("/profile")
+        return HttpResponseRedirect("/accounts/")

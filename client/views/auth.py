@@ -1,6 +1,6 @@
 from .imports import *
 
-def singing(request):
+def auth(request):
     context = {}
     if request.user.is_authenticated:
         return HttpResponseRedirect("/")
@@ -13,5 +13,5 @@ def singing(request):
         if pattern.match(context['request']['cellphone']):
             context['request']['cellphone'] = "+989" + context['request']['cellphone'][2:]
             request.session['user'] = context['request']
-            return HttpResponseRedirect("/profile/verify/")
-    return render(request, 'client/singing.html', context)
+            return HttpResponseRedirect('/accounts/verify/')
+    return render(request, 'client/auth.html', context)
