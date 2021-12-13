@@ -3,15 +3,14 @@ from django.contrib.auth.models import AbstractUser
 from unidecode import unidecode
 from PIL import Image
 from state.models import State
-# Create your models here.
 
 
 def user_image(instance, filename):
-    return "%s/%s/%s" % ('profile', instance.username_clear, filename)
+    return "%s/%s/%s" % ('profile', instance.id, filename)
 
 
 class User(AbstractUser):
-    upload_file = models.FileField()
+    upload_file = models.ImageField(blank=True, null=True, upload_to=user_image)
     cellphone = models.CharField(max_length=15, unique=True, blank=True, null=True)
     national_code = models.CharField(max_length=10, blank=True, null=True, unique=True)
     birthday = models.DateField(null=True, blank=True)
@@ -19,7 +18,7 @@ class User(AbstractUser):
     image = models.ImageField(blank=True, null=True, upload_to=user_image)
     gender = models.BooleanField(default=True)
     has_jobField = models.BooleanField(default=False)
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.cellphone:
@@ -29,7 +28,6 @@ class User(AbstractUser):
             is_mobile_number = re.compile("^09?\d{9}$", re.IGNORECASE)
             if is_mobile_number.match(self.username):
                 self.cellphone = self.username
-
         super(User, self).save()
         if self.image:
             img = Image.open(self.image)

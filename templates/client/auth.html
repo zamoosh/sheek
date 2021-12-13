@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}ورود به کوچرا{% endblock %}
+{% block title %}ورود به آرمان سنجش{% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 1-column  navbar-sticky footer-static bg-full-screen-image  blank-page" data-open="click" data-menu="vertical-menu-modern" data-col="1-column"{% endblock %}
 {% block body %}
     <div class="app-content content">
@@ -19,7 +19,7 @@
                         <div class="card-header pb-1">
                         </div>
                         <div class="card-body mt-5">
-                            <form method="post" action="{% url 'users:singing' %}">
+                            <form method="post" action="{% url 'client:auth' %}">
                                 {% csrf_token %}
                                 <div class="form-group mt-50">
                                     <label class="text-bold-400 pb-1" for="cellphone">شماره موبایل</label>

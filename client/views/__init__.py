@@ -1,4 +1,4 @@
-from .singing import *
+from .auth import *
 from .verify import *
 from .logout import *
 from .dashboard import *
