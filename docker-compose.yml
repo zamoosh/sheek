@@ -1,0 +1,13 @@
+version: "0.0.0"
+services:
+  web:
+    image: "website:${VERSION}"
+    ports:
+      - "8001:80"
+    restart: on-failure
+    env_file:
+    - cicd/.env.stage
+    environment:
+      VERSION: "${VERSION}"
+#    volumes:
+#      - /var/www/stagemedia:/media/

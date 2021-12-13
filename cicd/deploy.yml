@@ -1,0 +1,19 @@
+deploy:
+  stage: deploy
+  variables:
+    IMAGE_ID: "website:"
+  only:
+    refs:
+      - master
+    changes:
+      - cicd/version.txt
+  environment:
+    name: $PROJECT_NAME
+  dependencies:
+    - build_all
+  script:
+    - pwd
+    - export VERSION=$(cat cicd/version.txt)
+    - docker-compose -f docker-compose-prod.yml config
+    - docker-compose -f docker-compose-prod.yml -p exchangeprod up -d
+    - rsync -avz static/ /var/www/html/static/

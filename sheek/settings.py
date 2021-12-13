@@ -66,7 +66,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -85,22 +85,22 @@ WSGI_APPLICATION = 'sheek.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'sheek',
-#         'USER': 'root',
-#         'PASSWORD': 'mdavoodi2020',
-#         'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
-#         'PORT': '3306',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get("DATABASE_ENGINE", "django.db.backends.mysql"),
+        'NAME': os.environ.get("DATABASE_NAME", "sheek_fcghfd"),
+        'USER': os.environ.get("DATABASE_USER", "sheek_sdvcsadvsa"),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD", "Bo-L9=7JjO%A"),
+        'HOST': os.environ.get("DATABASE_HOST", "cpanel.vps-vds.com"),
+        'PORT': os.environ.get("DATABASE_PORT", ''),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
