@@ -7,4 +7,5 @@ urlpatterns = [
     path('user', user),
     path('update', update_profile),
     path('user_info', user_info),
+    path('register', get_verify_code),
 ]

@@ -32,7 +32,6 @@ class UpdateProfileCreateDto(serializers.Serializer):
 
 class Verify(serializers.Serializer):
     username = serializers.CharField()
-    device_id = serializers.CharField()
 
 
 class UpdateProfileCreateDto(serializers.Serializer):
