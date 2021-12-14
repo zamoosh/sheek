@@ -114,3 +114,4 @@ def user(request):
         context['msg'] = 'method not allowed.'
         status_code = HTTP_405_METHOD_NOT_ALLOWED
     return Response(context, status=status_code)
+    return Response(context, status=status_code)

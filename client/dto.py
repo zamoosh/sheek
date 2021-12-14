@@ -94,3 +94,25 @@ class UserUpdatePermsDto(serializers.Serializer):
     permission = serializers.ListField(
         child=serializers.IntegerField(min_value=0, max_value=100)
     )
+
+
+class UserInfoDto(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    has_password = serializers.BooleanField()
+
+
+class UserInfoGetDto(serializers.Serializer):
+    username = serializers.CharField()
+
+
+class UserGroupUpdateDto(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    group_id = serializers.IntegerField()
+
+
+class UserUpdatePermsDto(serializers.Serializer):
+    id = serializers.IntegerField()
+    permission = serializers.ListField(
+        child=serializers.IntegerField(min_value=0, max_value=100)
+    )
