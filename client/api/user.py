@@ -17,7 +17,7 @@ from ..dto import *
     openapi.Parameter('cellphone', openapi.IN_QUERY, description="Filter By CELLPHONE", type=openapi.TYPE_STRING,
                       required=False)])
 @api_view(['GET', 'PUT', 'POST'])
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAny,))
 def user(request):
     context = {}
     # GET METHOD
@@ -113,3 +113,4 @@ def user(request):
     else:
         context['msg'] = 'method not allowed.'
         status_code = HTTP_405_METHOD_NOT_ALLOWED
+    return Response(context, status=status_code)
