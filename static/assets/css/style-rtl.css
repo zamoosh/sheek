@@ -94,3 +94,7 @@ input{
     url('../../app-assets/fonts/ttf/IRANSansWeb(FaNum).ttf') format('truetype');
 }
 
+th {
+    font-family: IRANSans !important;
+    letter-spacing: 0 !important;
+}

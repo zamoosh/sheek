@@ -5,9 +5,12 @@
 {% block css %}
     <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}" />
     <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
+    <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
     <script type="text/javascript">
         $(function() {
             $("#data-input").persianDatepicker();
@@ -110,7 +113,7 @@
                                                         </div>
                                                     </div>
                                                     <hr>
-                                                    <form class="validate-form" method="POST">
+                                                    <form id="jquery-val-form" class="validate-form" method="POST" novalidate="novalidate">
                                                         {% csrf_token %}
                                                         <div class="row">
                                                             <div class="col-12">
@@ -149,10 +152,7 @@
                                                                 <div class="form-group">
                                                                     <div class="controls">
                                                                         <label>ایمیل</label>
-                                                                        <input type="email" class="form-control"
-                                                                               placeholder="Email"
-                                                                               value="{{ request.user.email }}"
-                                                                               name="email">
+                                                                        <input type="email" class="form-control" placeholder="Email" value="{{ request.user.email }}" name="email" required />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -162,8 +162,8 @@
                                                                         <label>کد ملی</label>
                                                                         <input type="text" class="form-control"
                                                                                placeholder="کد ملی"
-                                                                               value="{{ request.user.national_code }}"
-                                                                               name="national_code">
+                                                                               value="{% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
+                                                                               name="national_code" minlength="10">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -176,7 +176,7 @@
                                                                                 <fieldset>
                                                                                     <div class="radio radio-primary radio-glow">
                                                                                         <input type="radio" id="gender1"
-                                                                                               name="gender" value="male">
+                                                                                               name="gender" value="male" {% if request.user.gender == 1 %} checked {% endif %}>
                                                                                         <label for="gender1">مرد</label>
                                                                                     </div>
                                                                                 </fieldset>
@@ -185,7 +185,7 @@
                                                                                 <fieldset>
                                                                                     <div class="radio radio-primary radio-glow">
                                                                                         <input type="radio" id="gender2"
-                                                                                               name="gender" value="female">
+                                                                                               name="gender" value="female" {% if request.user.gender == 0 %} checked {% endif %}>
                                                                                         <label for="gender2">زن</label>
                                                                                     </div>
                                                                                 </fieldset>
@@ -198,7 +198,7 @@
                                                                 <div class="form-group">
                                                                     <div class="controls">
                                                                         <label>تاریخ تولد</label>
-                                                                        <input type="text" class="form-control" id="data-input"
+                                                                        <input type="text" required class="form-control" readonly id="data-input"
                                                                                placeholder="تاریخ تولد"
                                                                                value="{% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
                                                                                name="birthday">
