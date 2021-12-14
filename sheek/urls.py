@@ -37,5 +37,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/client/', include('client.apiurls')),
-    path('accounts/', include('client.urls'))
+    path('accounts/', include('client.urls')),
+    path('state/', include('state.urls')),
 ]
