@@ -130,6 +130,17 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
+
 SWAGGER_SETTINGS = {
     'LOGIN_URL': 'rest_framework:login',
     'LOGOUT_URL': 'rest_framework:logout',
@@ -158,7 +169,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': 'VIDONE!!0110LKJfdosduijfa@#$#@ALKSDJFSDFlkjfsd2324!!@#FDSLFKJI*',
+    'SIGNING_KEY': 'SHEEK!!0110LKJfdosduijfa@#$#@ALKSDJFSDFlkjfsd2324!!@#FDSLFKJI*',
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,
