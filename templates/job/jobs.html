@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}شهر ها و استان ها - آرمان سنجش{% endblock %}
+{% block title %}مشاغل - آرمان سنجش{% endblock %}
 {% load jformat %}
 {% block css %}{% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script>
         $.ajax({
-            url: '{% url 'state:stateapi' %}',
+            url: '{% url 'projects:jobs' %}',
             type: "GET",
             send: function (xhr) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -23,14 +23,14 @@
                 console.log(error);
             }
         });
-        function getCookie(city) {
+        function getCookie(job) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 const cookies = document.cookie.split(';');
                 for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
-                    if (cookie.substring(0, city.length + 1) === (city + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(city.length + 1));
+                    if (cookie.substring(0, job.length + 1) === (job + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(job.length + 1));
                         break;
                     }
                 }
@@ -45,7 +45,7 @@
                 url: $("form")[0].action,
                 type: "POST",
                 data: {
-                    city: $("#citys").val(),
+                    title: $("#jobs").val(),
                     parent: $("#inputGroupSelect01").val(),
                 },
                 beforeSend: function (xhr) {
@@ -59,7 +59,7 @@
                 }
             });
             $.ajax({
-                url: '{% url 'state:stateapi' %}',
+                url: '{% url 'projects:jobsapi' %}',
                 type: "GET",
                 send: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -76,11 +76,11 @@
                 }
             });
             $.ajax({
-                url: '{% url 'state:state' %}',
+                url: '{% url 'projects:jobs' %}',
                 method: 'GET',
                 data: {},
                 success: function (data) {
-                    $('#stateTabale').replaceWith($('#stateTabale', data));
+                    $('#jobTabale').replaceWith($('#jobTabale', data));
                 },
                 error: function (error) {
                     console.log(error);
@@ -100,12 +100,12 @@
             <div class="content-header row">
                 <div class="content-header-left col-12 mb-2 mt-1">
                     <div class="breadcrumbs-top">
-                        <h5 class="content-header-title float-left pr-1 mb-0">شهر ها و استان ها</h5>
+                        <h5 class="content-header-title float-left pr-1 mb-0">مشاغل</h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block">
                             <ol class="breadcrumb p-0 mb-0 pl-1">
                                 <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
                                 </li>
-                                <li class="breadcrumb-item active">شهر ها و استان ها
+                                <li class="breadcrumb-item active">مشاغل
                                 </li>
                             </ol>
                         </div>
@@ -118,22 +118,26 @@
                         <div class="card">
                             <div class="card-body">
                                 <button type="button" class="btn btn-primary float-right shadow mr-1 mb-1" data-toggle="modal"
-                                        data-target="#inlineForm">اضافه کردن شهر
+                                        data-target="#inlineForm">اضافه کردن شغل
                                 </button>
-                                <div class="table-responsive" id="stateTabale">
+                                <div class="table-responsive" id="jobTabale">
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>استان</th>
-                                            <th>شهر</th>
+                                            <th>شغل</th>
+                                            <th>زیر مجموعه ها</th>
+                                            <th>توضیحات</th>
+                                            <th>تاریخ ایجاد</th>
                                             <th>عملیات</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for state in states %}
+                                        {% for job in jobs %}
                                             <tr>
-                                                <td class="text-bold-500">{{ state.title }}</td>
-                                                <td>{% if state.parent %}{{ state.parent.title }}{% endif %}</td>
+                                                <td class="text-bold-500">{{ job.title }}</td>
+                                                <td>{% if job.parent %}{{ job.parent.title }}{% endif %}</td>
+                                                <td class="text-bold-500">{{ job.description }}</td>
+                                                <td class="text-bold-500">{{ job.created_at|jformat:"%Y/%m/%d" }}</td>
                                                 <td><a href="javascript:void(0);"><i
                                                         class="badge-circle badge-circle-light-secondary bx deleted font-medium-1"></i></a>
                                                 </td>
@@ -154,17 +158,17 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن شهر</h4>
+                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن مشاغل</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="bx bx-x"></i>
                     </button>
                 </div>
-                <form method="POST" action="{% url 'state:state' %}">
+                <form method="POST" action="{% url 'projects:jobs' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                        <label>نام شهر: </label>
+                        <label>نام شغل/زیر مجموعه: </label>
                         <div class="form-group">
-                            <input name="city" id="citys" type="text" placeholder="تهران" class="form-control">
+                            <input name="job" id="jobs" type="text" placeholder="مشاور املاک" class="form-control">
 
                             <div class="input-group mt-1">
                                 <select class="form-control" id="inputGroupSelect01">

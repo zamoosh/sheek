@@ -8,7 +8,7 @@ User = get_user_model()
 class JobField(models.Model):
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField()
+    update_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True)
     description = models.TextField()
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
