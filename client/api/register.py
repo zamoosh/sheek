@@ -27,26 +27,10 @@ def get_verify_code(request):
             context['new_user'] = False
             return Response(context, status=HTTP_200_OK)
         else:
+            User.objects.create(username=username, cellphone=username)
             sms = Smsir()
             code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
             sms.sendwithtemplate({'verificationCode': code}, username, 1387)
             context['msg'] = 'رمز یک بار مصرف برای شما پیامک گردید'
-            context['new_user'] = True
-            return Response(context, status=HTTP_200_OK)
-    else:
-        if User.objects.filter(email=username):
-
-            if VerificationCode.objects.filter(name=username):
-                VerificationCode.objects.filter(name=username).delete()
-
-            code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
-            send_mail_func(code, username)
-            context['msg'] = 'رمز یک بار مصرف برای شما ایمیل گردید'
-            context['new_user'] = False
-            return Response(context)
-        else:
-            code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
-            send_mail_func(code, username)
-            context['msg'] = 'رمز یک بار مصرف برای شما ایمیل گردید'
             context['new_user'] = True
             return Response(context, status=HTTP_200_OK)
