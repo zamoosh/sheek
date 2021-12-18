@@ -1,8 +1,8 @@
 from .imports import *
 
-
-def jobs_api(request):
+@login_required
+def jobs_api(request, parent=None):
     context = []
     for i in JobField.objects.filter(parent=None):
-        context.append({'id': i.pk, 'title': i.title, 'description': i.description})
+        context.append({'id': i.pk, 'title': i.title})
     return JsonResponse(context, safe=False)
