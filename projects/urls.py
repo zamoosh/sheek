@@ -8,4 +8,6 @@ urlpatterns = [
     path('jobs/delete/<int:id>', delete_job, name="delete-job"),
     path('jobs/api/', jobs_api, name="jobsapi"),
     path('user-job/', userjobfield, name="userjob"),
+    path('add-user-job/', adduserjobfield, name="adduserjob"),
+    path('add-user-job/<int:parent>/', jobs_api, name="adduserjobapi"),
 ]

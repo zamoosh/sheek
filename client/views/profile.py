@@ -12,7 +12,6 @@ def profile(request):
         context['req']['email'] = request.POST.get('email', '').strip()
         context['req']['national_code'] = request.POST.get('national_code', '').strip()
         context['req']['gender'] = request.POST.get('gender', '').strip()
-        context['req']['state'] = int(request.POST.get('state'))
         user = User.objects.get(id=request.user.id)
         user.first_name = context['req']['first_name']
         user.last_name = context['req']['last_name']
@@ -25,7 +24,8 @@ def profile(request):
         if request.POST.get('birthday'):
             user.birthday = jdatetime.datetime.strptime(request.POST.get('birthday'), "%Y/%m/%d").togregorian()
         # request.user.state = context['req']['state']
-        user.state_id = request.POST.get('state')
+        if request.POST.get('state'):
+            user.state_id = int(request.POST.get('state'))
         user.save()
         return HttpResponseRedirect(reverse('client:profile'))
     return render(request, 'client/profile.html', context)
