@@ -17,20 +17,22 @@ class JobField(models.Model):
         self.status = False
         self.save()
 
+
 class UserJobField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField()
     status = models.BooleanField(default=True)
     delete = models.BooleanField(default=False)
     status_comment = models.CharField(max_length=250)
-    experience = models.DateTimeField()
+    experience = models.DateField()
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
 
 
 class Project(models.Model):
-    rate = models.IntegerField()
+    title = models.CharField(max_length=250)
+    rate = models.IntegerField(default=0)
     status = models.BooleanField(default=True)
     TYPE = (
         (0, 'before confirm'),
@@ -40,7 +42,7 @@ class Project(models.Model):
     status_jobField_user = models.IntegerField(choices=TYPE, default=1)
     description = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_jobField = models.ForeignKey(UserJobField, on_delete=models.CASCADE)
+    user_jobField = models.ForeignKey(UserJobField, on_delete=models.CASCADE, null=True, blank=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
 
 

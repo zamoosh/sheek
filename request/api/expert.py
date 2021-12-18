@@ -12,7 +12,7 @@ manual_parameter = [
 @swagger_auto_schema(method='GET', manual_parameters=[manual_parameter], responses={200: UserViewDto(many=True)})
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-def get_random(request):
+def get_choice(request):
     context = {}
     jobField = request.GET.get('jobField')
     state = State.objects.get(id=request.GET.get('state'))
