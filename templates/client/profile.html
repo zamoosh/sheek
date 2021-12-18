@@ -3,17 +3,54 @@
 {% block title %}پروفایل کاربری آرمان سنجش{% endblock %}
 {% load jformat %}
 {% block css %}
-    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}" />
-    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
     <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
     <script type="text/javascript">
-        $(function() {
+        $(function () {
             $("#data-input").persianDatepicker();
+        });
+    </script>
+    <script>
+        $.ajax({
+            url: '{% url 'state:stateapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#state').find('option').remove().end()
+                $("#state").append($('<option>', {value: {{ request.user.state.id }}, text: '{{ request.user.state.title }}'}))
+                data.forEach(function (element) {
+                    $("#state").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $("#state").change(function(){
+            $.ajax({
+                url: '{% url 'state:stateapi' %}'+$("#state").val()+'/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#city').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#city").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -113,7 +150,8 @@
                                                         </div>
                                                     </div>
                                                     <hr>
-                                                    <form id="jquery-val-form" class="validate-form" method="POST" novalidate="novalidate">
+                                                    <form id="jquery-val-form" class="validate-form" method="POST"
+                                                          novalidate="novalidate">
                                                         {% csrf_token %}
                                                         <div class="row">
                                                             <div class="col-12">
@@ -148,11 +186,14 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-12">
+                                                            <div class="col-6">
                                                                 <div class="form-group">
                                                                     <div class="controls">
                                                                         <label>ایمیل</label>
-                                                                        <input type="email" class="form-control" placeholder="Email" value="{{ request.user.email }}" name="email" required />
+                                                                        <input type="email" class="form-control"
+                                                                               placeholder="Email"
+                                                                               value="{{ request.user.email }}"
+                                                                               name="email" required/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -170,13 +211,53 @@
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     <div class="controls">
+                                                                        <label>استان</label>
+                                                                        <div class="input-group">
+                                                                            <select class="form-control" name="state" id="state">
+                                                                                <option selected>انتخاب استان</option>
+                                                                                <option value="1"></option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label>شهر</label>
+                                                                        <div class="input-group">
+                                                                            <select class="form-control" id="city">
+                                                                                <option>انتخاب شهر</option>
+                                                                                <option value="1"></option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label>تاریخ تولد</label>
+                                                                        <input type="text" required class="form-control"
+                                                                               readonly id="data-input"
+                                                                               placeholder="تاریخ تولد"
+                                                                               value="{% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
+                                                                               name="birthday">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
                                                                         <label>جنسیت</label>
                                                                         <ul class="list-unstyled mb-0">
                                                                             <li class="d-inline-block mr-2 mb-1">
-                                                                                <fieldset>
+                                                                                <fieldset class="mt-1">
                                                                                     <div class="radio radio-primary radio-glow">
                                                                                         <input type="radio" id="gender1"
-                                                                                               name="gender" value="male" {% if request.user.gender == 1 %} checked {% endif %}>
+                                                                                               name="gender"
+                                                                                               value="male"
+                                                                                                {% if request.user.gender == 1 %}checked {% endif %}>
                                                                                         <label for="gender1">مرد</label>
                                                                                     </div>
                                                                                 </fieldset>
@@ -185,23 +266,15 @@
                                                                                 <fieldset>
                                                                                     <div class="radio radio-primary radio-glow">
                                                                                         <input type="radio" id="gender2"
-                                                                                               name="gender" value="female" {% if request.user.gender == 0 %} checked {% endif %}>
+                                                                                               name="gender"
+                                                                                               value="female"
+                                                                                                {% if request.user.gender == 0 %}
+                                                                                               checked {% endif %}>
                                                                                         <label for="gender2">زن</label>
                                                                                     </div>
                                                                                 </fieldset>
                                                                             </li>
                                                                         </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <label>تاریخ تولد</label>
-                                                                        <input type="text" required class="form-control" readonly id="data-input"
-                                                                               placeholder="تاریخ تولد"
-                                                                               value="{% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
-                                                                               name="birthday">
                                                                     </div>
                                                                 </div>
                                                             </div>

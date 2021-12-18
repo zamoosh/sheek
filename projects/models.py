@@ -13,6 +13,9 @@ class JobField(models.Model):
     description = models.TextField()
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
+    def delete(self, *args, **kwargs):
+        self.status = False
+        self.save()
 
 class UserJobField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
