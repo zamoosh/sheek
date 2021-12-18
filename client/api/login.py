@@ -2,8 +2,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .imports import *
 from unidecode import unidecode
 
-from ..dto import *
-
 
 @swagger_auto_schema(method='POST', request_body=TokenCreateDto, responses={200: TokenViewDto(many=False)})
 @api_view(['POST'])

@@ -26,15 +26,16 @@ class UserJobField(models.Model):
     experience = models.DateTimeField()
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
 
 
 class Project(models.Model):
     rate = models.IntegerField()
     status = models.BooleanField(default=True)
     TYPE = (
-        (0, ''),
-        (1, ''),
-        (2, ''),
+        (0, 'before confirm'),
+        (1, 'progress'),
+        (2, 'done'),
     )
     status_jobField_user = models.IntegerField(choices=TYPE, default=1)
     description = models.TextField()

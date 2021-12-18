@@ -3,7 +3,7 @@ from .imports import *
 
 @swagger_auto_schema(method='GET', responses={200: UserViewDto(many=True)})
 @api_view(['GET'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def api_get_me(request):
     context = {}
     context['user'] = User.objects.filter(id=request.user.id)
