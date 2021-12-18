@@ -1,10 +1,10 @@
 from .imports import *
 
-
+@login_required
 def jobs(request):
     context = {}
     try:
-        context['jobs'] = JobField.objects.all()
+        context['jobs'] = JobField.objects.filter(status=True)
     except:
         pass
     if request.method == "POST":
@@ -18,3 +18,9 @@ def jobs(request):
             job.parent_id = context['req']['parent']
         job.save()
     return render(request, 'job/jobs.html', context)
+
+
+def delete_job(request, id):
+    context = {'job': JobField.objects.get(id=id)}
+    context['job'].delete()
+    return HttpResponseRedirect(reverse('projects:jobs'))

@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework_simplejwt import views as jwt_views
+from .views import *
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -37,9 +38,9 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/client/', include('client.apiurls')),
+    path('', index, name='index'),
     path('api/state/', include('state.apiurls')),
     path('api/projects/', include('projects.apiurls')),
-
     path('accounts/', include('client.urls')),
     path('state/', include('state.urls')),
     path('jobs/', include('projects.urls')),
