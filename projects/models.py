@@ -17,13 +17,14 @@ class JobField(models.Model):
         self.status = False
         self.save()
 
+
 class UserJobField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField()
     status = models.BooleanField(default=True)
     delete = models.BooleanField(default=False)
     status_comment = models.CharField(max_length=250)
-    experience = models.DateTimeField()
+    experience = models.DateField()
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)

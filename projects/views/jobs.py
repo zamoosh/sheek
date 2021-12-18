@@ -17,7 +17,7 @@ def jobs(request):
         if context['req']['parent']:
             job.parent_id = context['req']['parent']
         job.save()
-    return render(request, 'job/jobs.html', context)
+    return render(request, 'project/jobs.html', context)
 
 
 def delete_job(request, id):
