@@ -7,7 +7,7 @@
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script>
         $.ajax({
-            url: '{% url 'projects:jobs' %}',
+            url: '{% url 'projects:jobsapi' %}',
             type: "GET",
             send: function (xhr) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);

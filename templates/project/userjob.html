@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}انتخاب کارشناشی - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script>
+        $.ajax({
+            url: '{% url 'projects:jobsapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#inputGroupSelect01').find('option').remove().end()
+                $("#inputGroupSelect01").append($('<option>', {value: 0, text: ''}))
+                data.forEach(function (element) {
+                    $("#inputGroupSelect01").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        function getCookie(job) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, job.length + 1) === (job + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(job.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        $('[type="submit"]').on('click', function (e) {
+            e.preventDefault()
+            // Making the AJAX Request
+            $.ajax({
+                url: $("form")[0].action,
+                type: "POST",
+                data: {
+                    title: $("#jobs").val(),
+                    parent: $("#inputGroupSelect01").val(),
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            $.ajax({
+                url: '{% url 'projects:jobsapi' %}',
+                type: "GET",
+                send: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    $('#inputGroupSelect01').find('option').remove().end()
+                    $("#inputGroupSelect01").append($('<option>', {value: 0, text: ''}))
+                    data.forEach(function (element) {
+                        $("#inputGroupSelect01").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            $.ajax({
+                url: '{% url 'projects:jobs' %}',
+                method: 'GET',
+                data: {},
+                success: function (data) {
+                    $('#jobTabale').replaceWith($('#jobTabale', data));
+                },
+                error: function (error) {
+                    console.log(error);
+                    console.log("error");
+                }
+            });
+        })
+    </script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0"></h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body"><!-- Basic Tables start -->
+                <div class="row" id="basic-table">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary float-right shadow mr-1 mb-1" data-toggle="modal"
+                                        data-target="#inlineForm">انتخاب کارشناسی
+                                </button>
+                                <div class="table-responsive" id="jobTabale">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>کارشناسی</th>
+                                            <th>زیر مجموعه ها</th>
+                                            <th>توضیحات</th>
+                                            <th>تاریخ ایجاد</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for job in jobs %}
+                                            <tr>
+                                                <td class="text-bold-500">{{ job.title }}</td>
+                                                <td>{% if job.parent %}{{ job.parent.title }}{% endif %}</td>
+                                                <td class="text-bold-500">{{ job.description }}</td>
+                                                <td class="text-bold-500">{{ job.created_at|jformat:"%Y/%m/%d" }}</td>
+                                                <td><a href="{% url 'projects:delete-job' job.id %}"><i
+                                                        class="badge-circle badge-circle-light-secondary bx bx-trash font-medium-1"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن مشاغل</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'projects:jobs' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <label>نام شغل/زیر مجموعه: </label>
+                        <div class="form-group">
+                            <input name="job" id="jobs" type="text" placeholder="مشاور املاک" class="form-control">
+
+                            <div class="input-group mt-1">
+                                <select class="form-control" id="inputGroupSelect01">
+                                    <option selected>Choose...</option>
+
+                                    <option value="1"></option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1" data-dismiss="modal">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ذخیره</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}
