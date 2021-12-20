@@ -1,7 +1,7 @@
 from .imports import *
 
 
-def adduserjobfield(request):
+def addproject(request):
     context = {}
     if request.method == "POST":
         context['req'] = {}
@@ -16,4 +16,4 @@ def adduserjobfield(request):
             userjobfield.experience = jdatetime.datetime.strptime(request.POST.get('experience'), "%Y/%m/%d").togregorian()
         userjobfield.save()
         return HttpResponseRedirect(reverse('projects:userjob'))
-    return render(request, 'project/add-userjob.html', context)
+    return render(request, 'project/new-project.html', context)

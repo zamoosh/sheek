@@ -2,9 +2,18 @@
 {% load static %}
 {% block title %}انتخاب کارشناشی - آرمان سنجش{% endblock %}
 {% load jformat %}
-{% block css %}{% endblock %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+{% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#data-input").persianDatepicker();
+        });
+    </script>
     <script>
         $.ajax({
             url: '{% url 'projects:jobsapi' %}',
@@ -23,43 +32,25 @@
                 console.log(error);
             }
         });
-
-        function getCookie(job) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, job.length + 1) === (job + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(job.length + 1));
-                        break;
-                    }
-                }
+        $.ajax({
+            url: '{% url 'state:stateapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#state').find('option').remove().end()
+                $("#state").append($('<option>', {value: 0, text: ''}))
+                data.forEach(function (element) {
+                    $("#state").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
             }
-            return cookieValue;
-        }
+        });
 
-        const csrftoken = getCookie('csrftoken');
-        $('[type="submit"]').on('click', function (e) {
-            e.preventDefault()
-            // Making the AJAX Request
-            $.ajax({
-                url: $("form")[0].action,
-                type: "POST",
-                data: {
-                    title: $("#jobs").val(),
-                    parent: $("#expert").val(),
-                },
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                },
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+
             $.ajax({
                 url: '{% url 'projects:jobsapi' %}',
                 type: "GET",
@@ -77,10 +68,10 @@
                     console.log(error);
                 }
             });
-        });
+
         $("#expert").change(function(){
             $.ajax({
-                url: '{% url 'projects:adduserjobapi' %}'+$("#expert").val()+'/',
+                url: '{% url 'projects:adduserjob' %}'+$("#expert").val()+'/',
                 type: "GET",
                 send: function (xhr) {
                 },
@@ -88,6 +79,23 @@
                     $('#subexpert').find('option').remove().end()
                     data.forEach(function (element) {
                         $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+        $("#state").change(function(){
+            $.ajax({
+                url: '{% url 'state:stateapi' %}'+$("#state").val()+'/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#city').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#city").append($('<option>', {value: element['id'], text: element['title']}))
                     });
                 },
                 error: function (error) {
@@ -125,14 +133,15 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form form-vertical">
+                                <form class="form form-vertical" method="POST" action="{% url 'projects:adduserjob' %}">
+                                    {% csrf_token %}
                                     <div class="form-body">
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label for="first-name-vertical">کارشناسی</label>
                                                     <div class="input-group mt-1">
-                                                        <select class="form-control" id="expert">
+                                                        <select class="form-control" name="expert" id="expert">
                                                             <option selected>Choose...</option>
                                                             <option value="1"></option>
                                                         </select>
@@ -143,7 +152,7 @@
                                                 <div class="form-group">
                                                     <label for="first-name-vertical">زیر کارشناسی</label>
                                                     <div class="input-group mt-1">
-                                                        <select class="form-control" id="subexpert">
+                                                        <select class="form-control" name="subexpert" id="subexpert">
                                                             <option selected>Choose...</option>
                                                             <option value="1"></option>
                                                         </select>
@@ -152,31 +161,40 @@
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
-                                                    <label for="contact-info-vertical">Mobile</label>
-                                                    <input type="number" id="contact-info-vertical" class="form-control"
-                                                           name="contact"
-                                                           placeholder="Mobile">
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="password-vertical">Password</label>
-                                                    <input type="password" id="password-vertical" class="form-control"
-                                                           name="contact"
-                                                           placeholder="Password">
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <div class="checkbox">
-                                                        <input type="checkbox" class="checkbox-input" id="checkbox3">
-                                                        <label for="checkbox3">Remember me</label>
+                                                    <label for="first-name-vertical">استان</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="state" id="state">
+                                                            <option selected>Choose...</option>
+                                                            <option value="1"></option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">شهر</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="city" id="city">
+                                                            <option selected>Choose...</option>
+                                                            <option value="1"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <div class="controls">
+                                                                        <label>سابقه از</label>
+                                                                        <input type="text" required class="form-control"
+                                                                               readonly id="data-input"
+                                                                               placeholder="شروع سابقه کاری"
+                                                                               value=""
+                                                                               name="experience">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                             <div class="col-12 d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary mr-1">Submit</button>
-                                                <button type="reset" class="btn btn-light-secondary">Reset</button>
+                                                <button type="submit" class="btn btn-primary mr-1">ثبت</button>
                                             </div>
                                         </div>
                                     </div>
