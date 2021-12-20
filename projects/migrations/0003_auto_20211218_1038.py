@@ -12,12 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='userjobfield',
-            name='state',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='state.state'),
-            preserve_default=False,
-        ),
         migrations.AlterField(
             model_name='project',
             name='status_jobField_user',
