@@ -117,9 +117,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <button type="button" class="btn btn-primary float-right shadow mr-1 mb-1" data-toggle="modal"
-                                        data-target="#inlineForm">انتخاب کارشناسی
-                                </button>
+                                <a class="btn btn-primary float-right shadow mr-1 mb-1" href="{% url 'projects:adduserjob' %}">افزودن کارشناسی
+                                </a>
                                 <div class="table-responsive" id="jobTabale">
                                     <table class="table">
                                         <thead>
@@ -128,20 +127,24 @@
                                             <th>شهر و استان</th>
                                             <th>سابقه</th>
                                             <th>وضعیت</th>
+                                            {% if request.user.is_superuser %}
                                             <th>عملیات</th>
+                                            {% endif %}
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for job in jobs %}
+                                        {% for userjob in userjobs %}
                                             <tr>
-                                                <td class="text-bold-500">{{ job.title }}/{% if job.parent %}{{ job.parent.title }}{% endif %}</td>
-                                                <td>شهر و استان</td>
-                                                <td class="text-bold-500">سابقه</td>
-                                                <td class="text-bold-500">وضعیت</td>
-                                                <td><a href="{% url 'projects:delete-job' job.id %}"><i
+                                                <td class="text-bold-500">{{ userjob.jobField.parent.title }}/{{ userjob.jobField.title }}</td>
+                                                <td class="text-bold-500">{{ userjob.state.parent.title }}/{{ userjob.state.title }}</td>
+                                                <td class="text-bold-500">{{ userjob.experience|jformat:"%Y/%m/%d" }}</td>
+                                                <td class="text-bold-500">{% if userjob.status %} فعال {% else %} غیرفعال {% endif %}</td>
+                                            {% if request.user.is_superuser %}
+                                                <td><a href=""><i
                                                         class="badge-circle badge-circle-light-secondary bx bx-trash font-medium-1"></i></a>
                                                 </td>
                                             </tr>
+                                            {% endif %}
                                         {% endfor %}
                                         </tbody>
                                     </table>

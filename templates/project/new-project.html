@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}پروژه جدید - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/wizard.min.css" %}">
+{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script src="{% static "app-assets/vendors/js/extensions/jquery.steps.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/forms/wizard-steps.min.js" %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#data-input").persianDatepicker();
+        });
+    </script>
+    <script>
+        $.ajax({
+            url: '{% url 'projects:jobsapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#expert').find('option').remove().end()
+                $("#expert").append($('<option>', {value: 0, text: ''}))
+                data.forEach(function (element) {
+                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $.ajax({
+            url: '{% url 'state:stateapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#state').find('option').remove().end()
+                $("#state").append($('<option>', {value: 0, text: ''}))
+                data.forEach(function (element) {
+                    $("#state").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+
+        $.ajax({
+            url: '{% url 'projects:jobsapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#expert').find('option').remove().end()
+                $("#expert").append($('<option>', {value: 0, text: ''}))
+                data.forEach(function (element) {
+                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+        $("#expert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#subexpert').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+        $("#state").change(function () {
+            $.ajax({
+                url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#city').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#city").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0"></h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section id="info-tabs-">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card icon-tab">
+                            <div class="card-body mt-2">
+                                <form class="form wizard-horizontal" method="POST" action="{% url 'projects:adduserjob' %}">
+                                    {% csrf_token %}
+                                    <!-- Step 1 -->
+                                    <h6>
+                                        <i class="step-icon"></i>
+                                        <span>انتخاب شهر و استان</span>
+                                    </h6>
+                                    <!-- Step 1 end-->
+                                    <!-- body content of step 1 -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">استان</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="state" id="state">
+                                                            <option selected>Choose...</option>
+                                                            <option value="1"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">شهر</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="city" id="city">
+                                                            <option selected>Choose...</option>
+                                                            <option value="1"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- body content of step 1 end-->
+                                    <!-- Step 2-->
+                                    <h6>
+                                        <i class="step-icon"></i>
+                                        <span>انتخاب رشته کارشناسی</span>
+                                    </h6>
+                                    <!-- Step 2 end-->
+                                    <!-- body content of step 2 -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">کارشناسی</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="expert" id="expert">
+                                                            <option selected>Choose...</option>
+                                                            <option value="1"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">زیر کارشناسی</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="subexpert" id="subexpert">
+                                                            <option selected>Choose...</option>
+                                                            <option value="1"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- body content of step 2 end-->
+                                    <!-- Step 3-->
+                                    <h6>
+                                        <i class="step-icon"></i>
+                                        <span class="fonticon-wrap">
+                <i class="livicon-evo"
+                   data-options="name:users.svg; size: 50px; style:lines; strokeColor:#adb5bd;"></i>
+              </span>
+                                        <span>Nominee</span>
+                                    </h6>
+                                    <!-- Step 3 end-->
+                                    <!-- body content of step 3 -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h6 class="py-50">Enter Nominate Details</h6>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
+                                                        ad, consectetur animi magni
+                                                        magnam nihil error, quaerat pariatur dolores unde quod sequi
+                                                        modi temporibus libero eos
+                                                        consequuntur ab maxime alias!
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Nomination Name</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Nomination Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Nominee's Relation</label>
+                                                    <input type="text" class="form-control" placeholder="Relation">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Nominee Age</label>
+                                                    <input type="number" class="form-control" placeholder="Age">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Nominee Documents</label>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                               id="inputGroupFile05">
+                                                        <label class="custom-file-label" for="inputGroupFile05">Choose
+                                                            file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <h6 class="py-50">Terms and conditions for nominee</h6>
+                                                <p>
+                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+                                                    odit sunt facilis,
+                                                    exercitationem placeat in maiores, ullam doloribus aperiam sint
+                                                    culpa, quo ducimus tempore
+                                                    perferendis ipsum laborum officia ut dignissimos!
+                                                </p>
+                                                <p>
+                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. In beatae
+                                                    quibusdam enim neque animi
+                                                    fugiat harum tempora ipsum excepturi, cupiditate illum hic
+                                                    dignissimos, quaerat dolore! Minus rem
+                                                    sed accusamus corrupti?
+                                                </p>
+                                                <p>
+                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. In beatae
+                                                    quibusdam enim neque animi
+                                                    fugiat harum tempora ipsum excepturi, cupiditate illum hic
+                                                    dignissimos, quaerat dolore! Minus rem
+                                                    sed accusamus corrupti?
+                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+                                                    odit sunt
+                                                    facilis,
+                                                    exercitationem placeat in maiores, ullam doloribus aperiam sint
+                                                    culpa, quo ducimus tempore
+                                                    perferendis ipsum laborum officia ut dignissimos!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- body content of step 3 end-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}
