@@ -6,12 +6,16 @@
     <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
     <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/wizard.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
 {% endblock %}
 {% block js %}
+    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
+    <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
     <script src="{% static "app-assets/vendors/js/extensions/jquery.steps.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/forms/wizard-steps.min.js" %}"></script>
+
     <script type="text/javascript">
         $(function () {
             $("#data-input").persianDatepicker();
@@ -43,7 +47,7 @@
             },
             success: function (data) {
                 $('#state').find('option').remove().end()
-                $("#state").append($('<option>', {value: 0, text: ''}))
+                $("#state").append($('<option>', {value: 0, text: 'انتخاب استان'}))
                 data.forEach(function (element) {
                     $("#state").append($('<option>', {value: element['id'], text: element['title']}))
                 });
@@ -52,8 +56,6 @@
                 console.log(error);
             }
         });
-
-
         $.ajax({
             url: '{% url 'projects:jobsapi' %}',
             type: "GET",
@@ -71,7 +73,6 @@
                 console.log(error);
             }
         });
-
         $("#expert").change(function () {
             $.ajax({
                 url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
@@ -100,6 +101,38 @@
                     data.forEach(function (element) {
                         $("#city").append($('<option>', {value: element['id'], text: element['title']}))
                     });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#button_1").click(function () {
+            $.ajax({
+                url: '{% url 'projects:addproject_api' %}',
+                type: "GET",
+                data: {
+                    state: $("#city").val(), // < note use of 'this' here
+                    user_jobfield: $("#subexpert").val()
+                },
+                send: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    $("#experts").empty();
+                    if (data.length) {
+                        html = '';
+
+                        data.forEach(function (element) {
+                            html = `<div class='media'><img src='{% static "app-assets/images/portrait/small/avatar-s-16.jpg" %}' class="rounded mr-75" alt="profile image" height="64" width="64"><div class='media-body mt-25'><div class='col-12 px-0 d-flex flex-sm-row flex-column justify-content-start'><span>${element.name}</span></div><div class='col-12 px-0 d-flex flex-sm-row flex-column justify-content-start'><span>${element.last_name}</span></div><div class='col-12 px-0 d-flex flex-sm-row flex-column justify-content-start'><span>${element.birthday}</span><a href"#">مشاهده پروفایل</a></span></div></div></div>`;
+                            $("#experts").append(html);
+                        });
+                    } else {
+                        html = `<h2 class="text-center" style="color: red;margin-bottom: 10px;">نتیجه ای یافت نشد.</h2>`;
+                        $("#experts").append(html);
+                    }
                 },
                 error: function (error) {
                     console.log(error);
@@ -136,11 +169,12 @@
                     <div class="col-12">
                         <div class="card icon-tab">
                             <div class="card-body mt-2">
-                                <form class="form wizard-horizontal" method="POST" action="{% url 'projects:adduserjob' %}">
+                                <form class="wizard-validation" method="POST"
+                                      action="{% url 'projects:addproject' %}">
                                     {% csrf_token %}
                                     <!-- Step 1 -->
                                     <h6>
-                                        <i class="step-icon"></i>
+
                                         <span>انتخاب شهر و استان</span>
                                     </h6>
                                     <!-- Step 1 end-->
@@ -151,8 +185,7 @@
                                                 <div class="form-group">
                                                     <label for="first-name-vertical">استان</label>
                                                     <div class="input-group mt-1">
-                                                        <select class="form-control" name="state" id="state">
-                                                            <option selected>Choose...</option>
+                                                        <select class="form-control" name="state" id="state" required>
                                                             <option value="1"></option>
                                                         </select>
                                                     </div>
@@ -162,8 +195,8 @@
                                                 <div class="form-group">
                                                     <label for="first-name-vertical">شهر</label>
                                                     <div class="input-group mt-1">
-                                                        <select class="form-control" name="city" id="city">
-                                                            <option selected>Choose...</option>
+                                                        <select class="form-control required" name="city" id="city" required>
+                                                            <option selected>انتخاب شهر</option>
                                                             <option value="1"></option>
                                                         </select>
                                                     </div>
@@ -174,7 +207,7 @@
                                     <!-- body content of step 1 end-->
                                     <!-- Step 2-->
                                     <h6>
-                                        <i class="step-icon"></i>
+
                                         <span>انتخاب رشته کارشناسی</span>
                                     </h6>
                                     <!-- Step 2 end-->
@@ -186,7 +219,8 @@
                                                     <label for="first-name-vertical">کارشناسی</label>
                                                     <div class="input-group mt-1">
                                                         <select class="form-control" name="expert" id="expert">
-                                                            <option selected>Choose...</option>
+                                                            <option selected>انتخاب رشته کارشناسی</option>
+                                                            subexpert
                                                             <option value="1"></option>
                                                         </select>
                                                     </div>
@@ -197,7 +231,7 @@
                                                     <label for="first-name-vertical">زیر کارشناسی</label>
                                                     <div class="input-group mt-1">
                                                         <select class="form-control" name="subexpert" id="subexpert">
-                                                            <option selected>Choose...</option>
+                                                            <option selected>انتخاب کارشناسی</option>
                                                             <option value="1"></option>
                                                         </select>
                                                     </div>
@@ -208,94 +242,83 @@
                                     <!-- body content of step 2 end-->
                                     <!-- Step 3-->
                                     <h6>
-                                        <i class="step-icon"></i>
-                                        <span class="fonticon-wrap">
-                <i class="livicon-evo"
-                   data-options="name:users.svg; size: 50px; style:lines; strokeColor:#adb5bd;"></i>
-              </span>
-                                        <span>Nominee</span>
+                                        <span>انتخاب کارشناس</span>
                                     </h6>
                                     <!-- Step 3 end-->
                                     <!-- body content of step 3 -->
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-12">
-                                                <h6 class="py-50">Enter Nominate Details</h6>
+                                                <h6 class="py-50">کارشناس خود را انتخاب کنید</h6>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-                                                        ad, consectetur animi magni
-                                                        magnam nihil error, quaerat pariatur dolores unde quod sequi
-                                                        modi temporibus libero eos
-                                                        consequuntur ab maxime alias!
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Nomination Name</label>
-                                                    <input type="text" class="form-control"
-                                                           placeholder="Nomination Name">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Nominee's Relation</label>
-                                                    <input type="text" class="form-control" placeholder="Relation">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Nominee Age</label>
-                                                    <input type="number" class="form-control" placeholder="Age">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Nominee Documents</label>
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input"
-                                                               id="inputGroupFile05">
-                                                        <label class="custom-file-label" for="inputGroupFile05">Choose
-                                                            file</label>
+                                                    <div class="controls">
+                                                        <label>عنوان پروژه</label>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="عنوان پروژه"
+                                                               value=""
+                                                               name="project-title">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <h6 class="py-50">Terms and conditions for nominee</h6>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
-                                                    odit sunt facilis,
-                                                    exercitationem placeat in maiores, ullam doloribus aperiam sint
-                                                    culpa, quo ducimus tempore
-                                                    perferendis ipsum laborum officia ut dignissimos!
-                                                </p>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. In beatae
-                                                    quibusdam enim neque animi
-                                                    fugiat harum tempora ipsum excepturi, cupiditate illum hic
-                                                    dignissimos, quaerat dolore! Minus rem
-                                                    sed accusamus corrupti?
-                                                </p>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. In beatae
-                                                    quibusdam enim neque animi
-                                                    fugiat harum tempora ipsum excepturi, cupiditate illum hic
-                                                    dignissimos, quaerat dolore! Minus rem
-                                                    sed accusamus corrupti?
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
-                                                    odit sunt
-                                                    facilis,
-                                                    exercitationem placeat in maiores, ullam doloribus aperiam sint
-                                                    culpa, quo ducimus tempore
-                                                    perferendis ipsum laborum officia ut dignissimos!
-                                                </p>
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>توضیحات پروژه</label>
+                                                        <input type="text-area" class="form-control"
+                                                               placeholder="توضیحات پروژه"
+                                                               value=""
+                                                               name="project-description">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </fieldset>
                                     <!-- body content of step 3 end-->
+                                    <!-- Step 2-->
+                                    <h6>
+
+                                        <span>انتخاب کارشناسی</span>
+                                    </h6>
+                                    <!-- Step 2 end-->
+                                    <!-- body content of step 2 -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <h5>جستجو و انتخاب کارشناس</h5>
+                                                            <p>می‌توانید از بین کارشناسان پیشنهادی آرمان سنجش، یک
+                                                                کارشناس را انتخاب کنید تا درخواست برای وی ارسال شود.</p>
+                                                            <button type="button" id="button_1"
+                                                                    class="btn btn-lg btn-block font-medium-1 btn-sheek-primary mb-1 text-nowrap">
+                                                                جستجو
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <h5>ثبت درخواست بدون انتخاب کارشناس</h5>
+                                                            <p>درخواست شما ثبت می‌شود و هر کدام از کارشناسان که مایل
+                                                                باشند به درخواست پاسخ می‌دهند.</p>
+                                                            <a class="btn btn-lg btn-block font-medium-1 btn-sheek-primary mb-1 block-element text-nowrap">
+                                                                ثبت درخواست
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12" id="experts">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- body content of step 2 end-->
                                 </form>
                             </div>
                         </div>

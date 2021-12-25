@@ -13,7 +13,7 @@ manual_parameter = [
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_choice(request):
-    context = {}
+    context = []
     jobField = request.GET.get('jobField')
     state = State.objects.get(id=request.GET.get('state'))
     q = Q()
