@@ -1,5 +1,6 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from .imports import *
+import jwt
 from unidecode import unidecode
 
 
@@ -9,36 +10,27 @@ from unidecode import unidecode
 def login(request):
     context = {}
     username = unidecode(request.data.get('username'))
-    print("1")
     is_mobile_number = re.compile("^09?\d{9}$", re.IGNORECASE)
     user = None
     if request.data.get('code', None):
-        print("2")
         verify_token = VerificationCode.objects.filter(code=request.data.get('code'), name=request.data.get('username'))
         if len(verify_token) > 0:
-            print("3")
             q = Q(cellphone=request.data.get('username')) | Q(email=request.data.get('username'))
             user = User.objects.get(q)
         if not user:
-            print("4")
             try:
-                print("5")
                 verify = VerificationCode.objects.get(name=request.POST.get('username'))
                 verify.trying += 1
                 verify.save()
                 if verify.trying > 4:
-                    print("6")
                     verify.delete()
                     pass
             except:
                 pass
     elif request.data.get('password', None):
-        print("7")
         if is_mobile_number.match(username):
-            print("8")
             username = User.objects.get(cellphone=request.data.get('username')).username
         else:
-            print("9")
             username = User.objects.get(email=request.data.get('username')).username
         user = authenticate(username=username, password=request.data.get('password', None))
     if user:
@@ -46,10 +38,9 @@ def login(request):
         context['access'] = str(refresh.access_token)
         context['refresh'] = str(refresh)
         context['msg'] = "ورود با موفقیت انجام شد"
-        context.update(UserSerializer(user).data)
+        context.update(UserSerializer(user, many=False).data)
         status_code = HTTP_200_OK
     else:
-
         context['msg'] = 'نام کاربری یا کد ارسال شده اشتباه می باشد'
         status_code = HTTP_400_BAD_REQUEST
     return Response(context, status=status_code)

@@ -20,6 +20,10 @@
         $(function () {
             $("#data-input").persianDatepicker();
         });
+        $('.media').click(function() {
+          $('.hli').removeClass('hli');
+          $(this).addClass('hli').find('input').prop('checked', true)
+        });
     </script>
     <script>
         $.ajax({
@@ -121,18 +125,31 @@
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 },
                 success: function (data) {
-                    $("#experts").empty();
-                    if (data.length) {
-                        html = '';
 
-                        data.forEach(function (element) {
-                            html = `<div class='media'><img src='{% static "app-assets/images/portrait/small/avatar-s-16.jpg" %}' class="rounded mr-75" alt="profile image" height="64" width="64"><div class='media-body mt-25'><div class='col-12 px-0 d-flex flex-sm-row flex-column justify-content-start'><span>${element.name}</span></div><div class='col-12 px-0 d-flex flex-sm-row flex-column justify-content-start'><span>${element.last_name}</span></div><div class='col-12 px-0 d-flex flex-sm-row flex-column justify-content-start'><span>${element.birthday}</span><a href"#">مشاهده پروفایل</a></span></div></div></div>`;
-                            $("#experts").append(html);
-                        });
-                    } else {
-                        html = `<h2 class="text-center" style="color: red;margin-bottom: 10px;">نتیجه ای یافت نشد.</h2>`;
-                        $("#experts").append(html);
-                    }
+                    $("#experts").empty();
+                    data.forEach( data => {
+                      const card = `<div class="media">
+                       <input id="chb1" type="radio" value="${data.id}" name="expert-list"/>
+                        <img src="{% static 'app-assets/images/portrait/small/avatar-s-16.jpg' %}" class="rounded mr-75" alt="profile image" height="64" width="64">
+                        <div class="media-body mt-25">
+                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                        <span>${data.name}</span>
+                        </div>
+                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                        <span>${data.last_name}</span>
+                        </div>
+                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                        <span>${data.birthday}</span>
+                        <a href="#">مشاهده پروفایل</a>
+                        </span>
+                        </div>
+                        </div>
+                        <a href="#" id="big" class="big">انتخاب کارشناس</a>
+                        </div>`
+                      const ele = document.createElement('div');
+                      ele.innerHTML = card;
+                      $("#experts").append(ele);
+                    })
                 },
                 error: function (error) {
                     console.log(error);
@@ -317,6 +334,7 @@
                                             <div class="col-12" id="experts">
                                             </div>
                                         </div>
+                                        <button type="submit" class="btn btn-primary glow">ثبت درخواست</button>
                                     </fieldset>
                                     <!-- body content of step 2 end-->
                                 </form>
