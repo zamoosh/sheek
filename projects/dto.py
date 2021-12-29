@@ -13,7 +13,6 @@ class JobFieldViewDto(serializers.Serializer):
 class ProjectCreateDto(serializers.Serializer):
     title = serializers.CharField()
     description = serializers.CharField()
-    owner = serializers.IntegerField()
     user_jobField = serializers.IntegerField(required=False)
     state = serializers.IntegerField()
 

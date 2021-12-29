@@ -43,6 +43,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('api/state/', include('state.apiurls')),
     path('api/projects/', include('projects.apiurls')),
+    path('api/request/', include('request.apiurls')),
     path('accounts/', include('client.urls')),
     path('state/', include('state.urls')),
     path('jobs/', include('projects.urls')),

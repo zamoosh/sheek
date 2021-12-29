@@ -1,6 +1,8 @@
 from projects.models import *
 from .imports import *
 from datetime import timedelta
+import datetime
+from ..serializer import ExpertSerializer
 
 manual_parameter = [
     openapi.Parameter('state', openapi.IN_QUERY, description="state id", type=openapi.TYPE_INTEGER,
@@ -9,7 +11,8 @@ manual_parameter = [
                       required=True)]
 
 
-@swagger_auto_schema(method='GET', manual_parameters=[manual_parameter], responses={200: UserViewDto(many=True)})
+# show user jobfields for choice expert
+@swagger_auto_schema(method='GET', manual_parameters=manual_parameter, responses={200: UserJobFieldViewDto(many=True)})
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_choice(request):
