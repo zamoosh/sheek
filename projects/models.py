@@ -47,6 +47,7 @@ class Project(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
 
 
+
 class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
