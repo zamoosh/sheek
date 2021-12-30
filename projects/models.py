@@ -45,7 +45,8 @@ class Project(models.Model):
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE, null=True, blank=True)
     user_jobField = models.ForeignKey(UserJobField, on_delete=models.CASCADE, null=True, blank=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
-
+    update_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Message(models.Model):
@@ -55,3 +56,11 @@ class Message(models.Model):
     expert_view = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class Report(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=250)
+    description = models.TextField()
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
