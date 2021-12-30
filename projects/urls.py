@@ -11,4 +11,8 @@ urlpatterns = [
     path('adduserjob/', adduserjobfield, name="adduserjob"),
     path('adduserjob/<int:parent>/', jobs_api, name="adduserjob"),
     path('addproject/', addproject, name="addproject"),
+    path('addproject-api/', userjob_api, name="addproject_api"),
+    path('project-done/', redierct, name="redierct"),
+    path('projects/', get_projects, name="projects"),
+    path('project/<int:id>', view_project, name="view_project"),
 ]

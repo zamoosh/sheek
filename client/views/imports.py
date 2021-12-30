@@ -9,3 +9,4 @@ User = get_user_model()
 from state.models import State
 import re
 from library.smsir import Smsir
+from projects.models import *

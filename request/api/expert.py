@@ -16,50 +16,7 @@ manual_parameter = [
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_choice(request):
-    context = {}
-    expert_list = []
-    jobField = request.GET.get('jobField')
-    state = State.objects.get(id=request.GET.get('state'))
-    q = Q()
-    q = q & Q(status=True, jobField=JobField.objects.get(id=jobField))
-    experience = UserJobField.objects.values_list('experience', flat=True).filter(q)
-    print(experience)
-    five_delta = datetime.datetime.now() - datetime.timedelta(days=1825)
-    ten_delta = datetime.datetime.now() - datetime.timedelta(days=3650)
-    if experience >= five_delta:
-        experts = UserJobField.objects.filter(q, state=state)
-        if experts not in expert_list:
-            expert_list.append(experts)
-    elif ten_delta <= experience < five_delta:
-        experts = UserJobField.objects.filter(q, state__in=State.objects.filter(
-            parent_id=state.parent))
-        if experts not in expert_list:
-            expert_list.append(experts)
-    elif experience < ten_delta:
-        experts = UserJobField.objects.filter(q)
-        if experts not in expert_list:
-            expert_list.append(experts)
-
-    serializer = ExpertSerializer(expert_list, many=True)
-    context = serializer.data
-    status_code = HTTP_200_OK
-
-    return Response(context, status=status_code)
-
-
-manual_parameter = [
-    openapi.Parameter('state', openapi.IN_QUERY, description="state id", type=openapi.TYPE_INTEGER,
-                      required=True),
-    openapi.Parameter('jobField', openapi.IN_QUERY, description="jobfield id ", type=openapi.TYPE_INTEGER,
-                      required=True)]
-
-
-# send sms for expert have this permision
-@swagger_auto_schema(method='GET', manual_parameters=manual_parameter, responses={200: UserViewDto(many=True)})
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def send_sms(request):
-    context = {}
+    context = []
     jobField = request.GET.get('jobField')
     state = State.objects.get(id=request.GET.get('state'))
     q = Q()

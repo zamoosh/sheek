@@ -22,6 +22,7 @@ def get_verify_code(request):
 
             sms = Smsir()
             code = VerificationCode.objects.create(code=randrange(1000, 9999, 1), name=username).code
+            print(code)
             sms.sendwithtemplate({'verificationCode': code}, username, 55907)
             context['msg'] = 'رمز یک بار مصرف برای شما پیامک گردید'
             context['new_user'] = False

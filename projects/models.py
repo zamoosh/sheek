@@ -42,8 +42,10 @@ class Project(models.Model):
     status_jobField_user = models.IntegerField(choices=TYPE, default=1)
     description = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    jobField = models.ForeignKey(JobField, on_delete=models.CASCADE, null=True, blank=True)
     user_jobField = models.ForeignKey(UserJobField, on_delete=models.CASCADE, null=True, blank=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
+
 
 
 class Message(models.Model):
