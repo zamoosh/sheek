@@ -11,6 +11,20 @@
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/pages/app-chat.min.js" %}"></script>
     <script>
+        function getCookie(messageText) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, messageText.length + 1) === (messageText + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(messageText.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
         const csrftoken = getCookie('csrftoken');
         $("#sendMessageBtn").click(function(){
             $.ajax({
@@ -19,7 +33,7 @@
                 data: {
                     messageText: $("#messageText").val(),
                 },
-                send: function (xhr) {
+                beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 },
                 success: function (data) {
@@ -29,10 +43,48 @@
                     console.log(error);
                 }
             });
-            alert("sadsaasf1211111111111111");
-            $("#showreport").load(location.href + " #showreport");
+            $("#message-carts").load(location.href + " #message-carts");
         });
     </script>
+    <script>
+    function getCookie(reportTitle) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, reportTitle.length + 1) === (reportTitle + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(reportTitle.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    $('[type="submit"]').on('click', function (e) {
+        e.preventDefault()
+        $.ajax({
+            url: $("form")[0].action,
+            type: "POST",
+            data: {
+                reportTitle: $("#reportTitle").val(),
+                reportDescription: $("#reportDescription").val(),
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $("#showreport").load(location.href + " #showreport");
+    });
+    </script>
+
 
 
 {% endblock %}
