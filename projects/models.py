@@ -39,7 +39,7 @@ class Project(models.Model):
         (1, 'progress'),
         (2, 'done'),
     )
-    status_jobField_user = models.IntegerField(choices=TYPE, default=1)
+    status_jobField_user = models.IntegerField(choices=TYPE, default=0)
     description = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE, null=True, blank=True)

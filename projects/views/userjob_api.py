@@ -1,5 +1,5 @@
 from .imports import *
-from datetime import timedelta
+
 
 @login_required
 def userjob_api(request):

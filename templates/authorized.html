@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}دسترسی{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 1-column  navbar-sticky footer-static bg-full-screen-image  blank-page" data-open="click" data-menu="vertical-menu-modern" data-col="1-column"{% endblock %}
+{% block body %}
+    <div class="app-content content">
+      <div class="content-overlay"></div>
+      <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body"><!-- not authorized start -->
+<section class="row flexbox-container">
+  <div class="col-xl-7 col-md-8 col-12">
+    <div class="card bg-transparent shadow-none">
+      <div class="card-body text-center bg-transparent">
+        <img src="app-assets/images/pages/not-authorized.png" class="img-fluid" alt="not authorized" width="400">
+        <h1 class="my-2 error-title">You are not authorized!</h1>
+        <p>You do not have permission to view this directory or page using the credentials that you supplied.</p>
+        <a href="{% url 'client:dashboard' %}" class="btn btn-primary round glow mt-2">بازگشت به داشبورد</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- not authorized end -->
+
+        </div>
+      </div>
+    </div>
+    <!-- END: Content-->
+{% endblock %}
