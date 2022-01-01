@@ -11,6 +11,42 @@
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/pages/app-chat.min.js" %}"></script>
     <script>
+        function getCookie(messageText) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, messageText.length + 1) === (messageText + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(messageText.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        $("#sendMessageBtn").click(function(){
+            $.ajax({
+                url: '{% url 'projects:getMessage' project_details.id %}',
+                type: "POST",
+                data: {
+                    messageText: $("#messageText").val(),
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            $("#message-carts").load(location.href + " #message-carts");
+        });
+    </script>
+    <script>
     function getCookie(reportTitle) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -48,9 +84,9 @@
         $("#showreport").load(location.href + " #showreport");
     });
     </script>
-    <script>
 
-    </script>
+
+
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -117,8 +153,13 @@
                                                     class="d-none d-md-block">گزارش</span></a>
                                         </li>
                                     </ul>
-                                    {% if project_details.status_jobField_user == 1 %}<a href="{% url 'projects:end_project' project_details.id %}" type="button" class="btn btn-success ml-auto mr-2">اعلام اتمام پروژه</a>{% endif %}
-                                    {% if project_details.status_jobField_user == 0 %}<div class="btn btn-warning ml-auto mr-2">پروژه شما هنوز توسط کارشناس تایید نشده است .</div>{% endif %}
+                                    {% if project_details.status_jobField_user == 1 %}
+                                        <a href="{% url 'projects:end_project' project_details.id %}" type="button"
+                                           class="btn btn-success ml-auto mr-2">اعلام اتمام پروژه</a>{% endif %}
+                                    {% if project_details.status_jobField_user == 0 %}
+                                        <div class="btn btn-warning ml-auto mr-2">پروژه شما هنوز توسط کارشناس تایید نشده
+                                            است .
+                                        </div>{% endif %}
                                 </div>
                             </div>
                             <div class="row">
@@ -153,27 +194,31 @@
                                             </div>
                                             <!-- user profile nav tabs activity start -->
                                         </div>
-                                        <div class="tab-pane " id="message" aria-labelledby="message-tab" role="tabpanel">
+                                        <div class="tab-pane " id="message" aria-labelledby="message-tab"
+                                             role="tabpanel">
                                             <!-- user profile nav tabs activity start -->
-                                            {% if project_details.status_jobField_user == 1 %}<button class="btn btn-primary mb-2 ml-auto" id="messageSend" data-toggle="modal"
-                                        data-target="#inlineForm1">ارسال پیام جدید</button>{% endif %}
+                                            {% if project_details.status_jobField_user == 1 %}
+                                                <button class="btn btn-primary mb-2 ml-auto" id="messageSend"
+                                                        data-toggle="modal"
+                                                        data-target="#inlineForm1">ارسال پیام جدید
+                                                </button>{% endif %}
                                             <div class="col-12 col-lg-12">
                                                 <div class="row" id="message-carts">
-                                                {% load getmessage %}
-                                                {% for message_project in project_details|message %}
-                                                    <div class="col-8 col-lg-8 pb-1">
-                                                        <div class="card mb-0 {% if message_project.owner_id == 0 %}badge-circle-light-dark{% elif message_project.owner_id == request.user.id %}badge-circle-light-withe{% else %}alert alert-secondary{% endif %}">
-                                                            <div class="card-body">
-                                                                <div class="col-12">
-                                                                    <div class="row">
-                                                                        {{ message_project.text }}
+                                                    {% load getmessage %}
+                                                    {% for message_project in project_details|message %}
+                                                        <div class="col-8 col-lg-8 pb-1">
+                                                            <div class="card mb-0 {% if message_project.owner_id == 0 %}badge-circle-light-dark{% elif message_project.owner_id == request.user.id %}badge-circle-light-withe{% else %}alert alert-secondary{% endif %}">
+                                                                <div class="card-body">
+                                                                    <div class="col-12">
+                                                                        <div class="row">
+                                                                            {{ message_project.text }}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <small>{{ message_project.created_at|jformat:"%Y/%m/%d , %H:%m" }}</small>
                                                         </div>
-                                                        <small>{{ message_project.created_at|jformat:"%Y/%m/%d , %H:%m" }}</small>
-                                                    </div>
-                                                {% endfor %}
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                         </div>
@@ -302,29 +347,31 @@
                                         <div class="tab-pane" id="reports" aria-labelledby="reports-tab"
                                              role="tabpanel">
                                             <!-- user profile nav tabs profile start -->
-                                            {% if project_details.status_jobField_user == 1 %}<button class="btn btn-primary mb-2 ml-auto" data-toggle="modal"
-                                        data-target="#inlineForm">ارسال گزارش جدید</button>{% endif %}
+                                            {% if project_details.status_jobField_user == 1 %}
+                                                <button class="btn btn-primary mb-2 ml-auto" data-toggle="modal"
+                                                        data-target="#inlineForm">ارسال گزارش جدید
+                                                </button>{% endif %}
                                             <div id="showreport">
                                                 {% for report in reports %}
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <h5>
-                                                                {{ report.title }}
-                                                                <small class="float-right">
-                                                                    {{ report.created_at|jformat:"%Y/%m/%d" }}
-                                                                </small>
-                                                            </h5>
-                                                            <hr>
-                                                            <p>
-                                                               {{ report.description }}
-                                                            </p>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <h5>
+                                                                        {{ report.title }}
+                                                                        <small class="float-right">
+                                                                            {{ report.created_at|jformat:"%Y/%m/%d" }}
+                                                                        </small>
+                                                                    </h5>
+                                                                    <hr>
+                                                                    <p>
+                                                                        {{ report.description }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
@@ -354,10 +401,12 @@
                     <div class="modal-body">
                         <label>عنوان گزارش: </label>
                         <div class="form-group">
-                            <input name="report-title" id="reportTitle" type="text" placeholder="عنوان" class="form-control">
+                            <input name="report-title" id="reportTitle" type="text" placeholder="عنوان"
+                                   class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type="text" id="reportDescription" name="report-description" placeholder="گزارش" class="form-control">
+                            <input type="text" id="reportDescription" name="report-description" placeholder="گزارش"
+                                   class="form-control">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -384,12 +433,13 @@
                         <i class="bx bx-x"></i>
                     </button>
                 </div>
-                <form method="POST" action="{% url 'projects:getMessage' project_details.id %}">
+                <form method="POST" id="sendMessageForm" action="{% url 'projects:getMessage' project_details.id %}">
                     {% csrf_token %}
-                    <div class="modal-body">
+                    <div class="modal-9body">
                         <label>متن پیام: </label>
                         <div class="form-group">
-                            <input type="text" id="messageText" name="messageText" placeholder="پیام خود را بنویسید" class="form-control">
+                            <input type="text" id="messageText" name="messageText" placeholder="پیام خود را بنویسید"
+                                   class="form-control">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -397,7 +447,7 @@
                             <i class="bx bx-x d-block d-sm-none"></i>
                             <span class="d-none d-sm-block">انصراف</span>
                         </button>
-                        <button type="submit" class="btn btn-primary ml-1" data-dismiss="modal">
+                        <button type="button" id="sendMessageBtn" class="btn btn-primary ml-1" data-dismiss="modal">
                             <i class="bx bx-check d-block d-sm-none"></i>
                             <span class="d-none d-sm-block">ارسال</span>
                         </button>

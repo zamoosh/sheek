@@ -13,12 +13,12 @@
             <div class="content-header row">
                 <div class="content-header-left col-12 mb-2 mt-1">
                     <div class="breadcrumbs-top">
-                        <h5 class="content-header-title float-left pr-1 mb-0">پروژه ها</h5>
+                        <h5 class="content-header-title float-left pr-1 mb-0">پیام ها</h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block">
                             <ol class="breadcrumb p-0 mb-0 pl-1">
                                 <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
                                 </li>
-                                <li class="breadcrumb-item active">پروژه ها
+                                <li class="breadcrumb-item active">پیام های من
                                 </li>
                             </ol>
                         </div>
@@ -30,16 +30,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                {% if result %}
-                                    <div class="alert alert-success mb-2" role="alert">
-                                        پروژه <strong>{{ project.title }}</strong> توسط شما تایید شد . هم اکنون میتوانید آن را مدیریت کنید .
-                                    </div>
-                                {% endif %}
-                                <div class="table-responsive" id="jobTabale">
+                                <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>عنوان پروژه</th>
+                                            <th>پیام</th>
                                             <th>درخواست کننده</th>
                                             <th>تاریخ ایجاد</th>
                                             <th>وضعیت</th>
@@ -60,7 +55,10 @@
                                                 </td>{% load getmessage %}
                                                 <td class="text-bold-500">{{ project|message|length }}</td>
                                                 <td>
+                                                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="تایید پروژه" {% if project.status_jobField_user == 0 %}href="{% url 'projects:confirm_project' project.id %}"{% endif %}><i class="badge-circle {% if project.status_jobField_user == 1 %}badge-circle-light-success{% else %}badge-circle-light-secondary{% endif %} bx bx-check font-medium-1"></i></a>
+                                                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="رد پروژه" {% if project.status_jobField_user == 1 %}class="disabled"{% endif %} {% if project.status_jobField_user == 0 %}href="{% url 'projects:reject_project' project.id %}"{% endif %}><i class="badge-circle badge-circle-light-secondary bx bx-x font-medium-1"></i></a>
                                                     <a data-toggle="tooltip" data-placement="top" title="" data-original-title="مشاهده پروژه" href="{% url 'projects:view_project' project.id %}"><i class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
+
                                                 </td>
                                             </tr>
                                         {% endfor %}
