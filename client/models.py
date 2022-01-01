@@ -9,8 +9,12 @@ def user_image(instance, filename):
     return "%s/%s/%s" % ('profile', instance.id, filename)
 
 
+def national_card_image(instance, filename):
+    return "%s/%s/%s" % ('national_card', instance.id, filename)
+
+
 class User(AbstractUser):
-    upload_file = models.ImageField(blank=True, null=True, upload_to=user_image)
+    national_card = models.ImageField(blank=True, null=True, upload_to=national_card_image)
     cellphone = models.CharField(max_length=15, unique=True, blank=True, null=True)
     national_code = models.CharField(max_length=10, blank=True, null=True, unique=True)
     birthday = models.DateField(null=True, blank=True)
@@ -19,6 +23,8 @@ class User(AbstractUser):
     gender = models.BooleanField(default=True)
     has_jobField = models.BooleanField(default=False)
     state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
+    description = models.TextField()
+    social = models.CharField(max_length=250)
 
     def save(self, *args, **kwargs):
         if self.cellphone:

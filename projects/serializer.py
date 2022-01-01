@@ -9,6 +9,12 @@ class JobFieldSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class LowProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = '__all__'
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     jobField = serializers.SerializerMethodField()
     jobField_parent = serializers.SerializerMethodField()

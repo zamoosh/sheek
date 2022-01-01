@@ -15,28 +15,22 @@ manual_parameter = [
 @swagger_auto_schema(method='GET', manual_parameters=manual_parameter, responses={200: UserJobFieldViewDto(many=True)})
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-def get_choice(request):
-    context = []
+def get_expert(request):
+    expert_list = []
     jobField = request.GET.get('jobField')
     state = State.objects.get(id=request.GET.get('state'))
     q = Q()
     q = q & Q(status=True, jobField=JobField.objects.get(id=jobField))
-    experience = UserJobField.objects.values_list('experience', flat=True).filter(q)
-    five_delta = datetime.now() - datetime.timedelta(days=1825)
-    ten_delta = datetime.now() - datetime.timedelta(days=3650)
-    if experience >= five_delta:
-        expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, state=state).distinct()
-        expert = User.objects.filter(id__in=expert_id)
-    elif ten_delta <= experience < five_delta:
-        expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, state__in=State.objects.filter(
-            parent_id=state.parent)).distinct()
-        expert = User.objects.filter(id__in=expert_id)
-    elif experience < ten_delta:
-        expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q).distinct()
-        expert = User.objects.filter(id__in=expert_id)
-
-    serializer = UserSerializer(expert, many=True)
-    context = serializer.data
-    status_code = HTTP_200_OK
-
-    return Response(context, status=status_code)
+    five_delta = datetime.date.today() - datetime.timedelta(days=5 * 365)
+    ten_delta = datetime.date.today() - datetime.timedelta(days=10 * 365)
+    experience_five = UserJobField.objects.values_list('owner', flat=True).filter(q, experience__gte=five_delta,
+                                                                                  state=state)
+    experience_ten = UserJobField.objects.values_list('owner', flat=True).filter(q, experience__lt=five_delta,
+                                                                                 experience__gte=ten_delta,
+                                                                                 state__parent=state.parent)
+    experience_full = UserJobField.objects.values_list('owner', flat=True).filter(q, experience__lte=ten_delta)
+    expert_list += experience_five
+    expert_list += experience_ten
+    expert_list += experience_full
+    users = UserSerializer(User.objects.filter(id__in=expert_list),many=True).data
+    return Response(users, status=HTTP_200_OK)

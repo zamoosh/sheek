@@ -14,11 +14,13 @@ class ProjectCreateDto(serializers.Serializer):
     title = serializers.CharField()
     description = serializers.CharField()
     user_jobField = serializers.IntegerField(required=False)
+    jobField = serializers.IntegerField()
     state = serializers.IntegerField()
 
 
 class ProjectViewDto(serializers.Serializer):
     title = serializers.CharField()
+    jobField = serializers.IntegerField()
     description = serializers.CharField()
     owner = serializers.IntegerField()
     user_jobField = serializers.IntegerField()
