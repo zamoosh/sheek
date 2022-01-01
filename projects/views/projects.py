@@ -3,8 +3,15 @@ from .imports import *
 
 def get_projects(request):
     context = {}
-    context['projects'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True).order_by('-created_at')
+    context['projects'] = Project.objects.filter(owner_id=request.user.id, status=True).order_by('-created_at')
     return render(request, 'project/projects.html', context)
+
+
+def get_expert_projects(request):
+    context = {}
+    context['projects'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True).order_by(
+        '-created_at')
+    return render(request, 'project/expert-projects.html', context)
 
 
 def confirm_project(request, id):
