@@ -10,7 +10,6 @@
                                 class="nav-link nav-menu-main menu-toggle hidden-xs" href="javascript:void(0);"><i
                                 class="ficon bx bx-menu"></i></a></li>
                     </ul>
-
                 </div>
                 <ul class="nav navbar-nav float-right">
                     <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i
@@ -35,7 +34,7 @@
                                 <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span
                                         class="notification-title">شما {{ request.message|length }} پیام خوانده نشده دارید</span></div>
                             </li>
-                            {% for message in request.message %}
+                            {% for message in request.message|slice:":4" %}
                             <li class="scrollable-container media-list">
                                 <a class="d-flex justify-content-between" href="javascript:void(0);">
                                     <div class="media d-flex align-items-center">
@@ -46,7 +45,7 @@
                                                     height="39" width="39"></div>
                                         </div>
                                         <div class="media-body">
-                                            <h6 class="media-heading"><span class="text-bold-500">{{ message.text }}</span></h6><small class="notification-text">{{ message.created_at|jformat:"%Y/%M/%d , %H:%M" }}</small>
+                                            <h6 class="media-heading"><span class="text-bold-500">{{ message.text }}</span></h6>{% if message.project.title %}<smal>پروژه : {{ message.project.title }}</smal><br>{% endif %}<small class="notification-text">{{ message.created_at|jformat:"%Y/%M/%d , %H:%M" }}</small>
                                         </div>
                                     </div>
                                 </a>

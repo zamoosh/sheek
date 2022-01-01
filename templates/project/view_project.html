@@ -4,440 +4,407 @@
 {% load jformat %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/pages/page-user-profile.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/pages/app-chat.min.css" %}">
 {% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/pages/page-user-profile.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/pages/app-chat.min.js" %}"></script>
+    <script>
+    function getCookie(reportTitle) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, reportTitle.length + 1) === (reportTitle + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(reportTitle.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    $('[type="submit"]').on('click', function (e) {
+        e.preventDefault()
+        $.ajax({
+            url: $("form")[0].action,
+            type: "POST",
+            data: {
+                reportTitle: $("#reportTitle").val(),
+                reportDescription: $("#reportDescription").val(),
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $("#showreport").load(location.href + " #showreport");
+    });
+    </script>
+    <script>
+
+    </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
 {% block body %}
     {% include "header.html" %}
-        <div class="app-content content">
-      <div class="content-overlay"></div>
-      <div class="content-wrapper">
-        <div class="content-header row">
-        </div>
-        <div class="content-body"><!-- page user profile start -->
-<section class="page-user-profile">
-  <div class="row">
-    <div class="col-12">
-      <!-- user profile heading section start -->
-      <div class="card">
-        <div class="user-profile-images">
-          <!-- user timeline image -->
-          <img src="{% static "app-assets/images/logo/bgproject.png" %}"
-            class="img-fluid rounded-top user-timeline-image" alt="user timeline image">
-          <!-- user profile image -->
-        </div>
-        <div class="user-profile-text">
-          <h4 class="mb-0 text-bold-500 profile-text-color">{{ project_details.id }}</h4>
-          <small>{{ project_details.jobField.parent.title }}/{{ project_details.jobField.title }}</small>
-        </div>
-        <!-- user profile nav tabs start -->
-        <div class="card-body px-0">
-          <ul
-            class="nav user-profile-nav justify-content-center justify-content-md-start nav-pills border-bottom-0 mb-0"
-            role="tablist">
-            <li class="nav-item mb-0">
-              <a class=" nav-link d-flex px-1 active" id="feed-tab" data-toggle="tab" href="#feed"
-                aria-controls="feed" role="tab" aria-selected="true"><i class="bx bx-home"></i><span
-                  class="d-none d-md-block">درباره پروژه</span></a>
-            </li>
-            <li class="nav-item mb-0">
-              <a class="nav-link d-flex px-1" id="activity-tab" data-toggle="tab" href="#activity"
-                aria-controls="activity" role="tab" aria-selected="false"><i class="bx bx-user"></i><span
-                  class="d-none d-md-block">کارشناس</span></a>
-            </li>
-            <li class="nav-item mb-0">
-              <a class="nav-link d-flex px-1" id="friends-tab" data-toggle="tab" href="#friends"
-                aria-controls="friends" role="tab" aria-selected="false"><i class="bx bx-message-alt"></i><span
-                  class="d-none d-md-block">اسناد</span></a>
-            </li>
-            <li class="nav-item mb-0 mr-0">
-              <a class="nav-link d-flex px-1" id="profile-tab" data-toggle="tab" href="#profile"
-                aria-controls="profile" role="tab" aria-selected="false"><i class="bx bx-copy-alt"></i><span
-                  class="d-none d-md-block">گزارش</span></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="tab-content">
-            <div class="tab-pane active" id="feed" aria-labelledby="feed-tab" role="tabpanel">
-              <!-- user profile nav tabs feed start -->
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title mb-1">{{ project_details.title }}</h5>
-                      <p>
-                          {{ project_details.description }}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- user profile nav tabs feed ends -->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
             </div>
-            <div class="tab-pane " id="activity" aria-labelledby="activity-tab" role="tabpanel">
-              <!-- user profile nav tabs activity start -->
-              <div class="card">
-                <div class="card-body">
-                    {{ project_details.user_jobField.owner.first_name }} {{ project_details.user_jobField.owner.last_name }}
-                    {{ project_details.user_jobField.created_at|jformat:"%Y/%M/%d" }}
-                  <div class="text-center">
-                    <button class="btn btn-primary">مشاهده پروفایل کارشناس</button>
-                  </div>
-                </div>
-              </div>
-              <!-- user profile nav tabs activity start -->
-            </div>
-            <div class="tab-pane" id="friends" aria-labelledby="friends-tab" role="tabpanel">
-              <!-- user profile nav tabs friends start -->
-              <div class="card">
-                <div class="card-body">
-                  <h5>Friends</h5>
-                  <div class="row">
-                    <div class="col-sm-6 col-12">
-                      <ul class="list-unstyled mb-0">
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-2.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-online"></span>
+            <div class="content-body"><!-- page user profile start -->
+                <section class="page-user-profile">
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- user profile heading section start -->
+                            <div class="card">
+                                <div class="user-profile-images{% if project_details.status_jobField_user == 0 %} yellow-header{% elif project_details.status_jobField_user == 1 %} blue-header{% elif project_details.status_jobField_user == 2 %} green-header{% endif %}">
+                                    <img src="{% static "app-assets/images/logo/bgproject.png" %}"
+                                         class="img-fluid rounded-top user-timeline-image" alt="user timeline image">
+                                    <!-- user profile image -->
+                                </div>
+                                <div class="user-profile-text">
+                                    <h4 class="mb-0 text-bold-500 profile-text-color">{{ project_details.id }}</h4>
+                                    <small>{{ project_details.jobField.parent.title }}/{{ project_details.jobField.title }}</small>
+                                </div>
+                                <!-- user profile nav tabs start -->
+                                <div class="card-body px-0 d-flex">
+                                    <ul
+                                            class="nav user-profile-nav justify-content-center justify-content-md-start nav-pills border-bottom-0 mb-0"
+                                            role="tablist">
+                                        <li class="nav-item mb-0">
+                                            <a class=" nav-link d-flex px-1 active" id="home-tab" data-toggle="tab"
+                                               href="#home"
+                                               aria-controls="home" role="tab" aria-selected="true"><i
+                                                    class="bx bx-home"></i><span
+                                                    class="d-none d-md-block">درباره پروژه</span></a>
+                                        </li>
+                                        <li class="nav-item mb-0">
+                                            <a class="nav-link d-flex px-1" id="expert-tab" data-toggle="tab"
+                                               href="#expert"
+                                               aria-controls="expert" role="tab" aria-selected="false"><i
+                                                    class="bx bx-user"></i><span
+                                                    class="d-none d-md-block">کارشناس</span></a>
+                                        </li>
+                                        <li class="nav-item mb-0">
+                                            <a class="nav-link d-flex px-1" id="message-tab" data-toggle="tab"
+                                               href="#message"
+                                               aria-controls="message" role="tab" aria-selected="false"><i
+                                                    class="bx bx-message-alt"></i><span
+                                                    class="d-none d-md-block">پیام ها</span></a>
+                                        </li>
+                                        <li class="nav-item mb-0">
+                                            <a class="nav-link d-flex px-1" id="docs-tab" data-toggle="tab"
+                                               href="#docs"
+                                               aria-controls="docs" role="tab" aria-selected="false"><i
+                                                    class="bx bx-video"></i><span
+                                                    class="d-none d-md-block">اسناد</span></a>
+                                        </li>
+                                        <li class="nav-item mb-0 mr-0">
+                                            <a class="nav-link d-flex px-1" id="reports-tab" data-toggle="tab"
+                                               href="#reports"
+                                               aria-controls="reports" role="tab" aria-selected="false"><i
+                                                    class="bx bx-copy-alt"></i><span
+                                                    class="d-none d-md-block">گزارش</span></a>
+                                        </li>
+                                    </ul>
+                                    {% if project_details.status_jobField_user == 1 %}<a href="{% url 'projects:end_project' project_details.id %}" type="button" class="btn btn-success ml-auto mr-2">اعلام اتمام پروژه</a>{% endif %}
+                                    {% if project_details.status_jobField_user == 0 %}<div class="btn btn-warning ml-auto mr-2">پروژه شما هنوز توسط کارشناس تایید نشده است .</div>{% endif %}
+                                </div>
                             </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Petey Cruiser</a></h6>
-                            <small class="text-muted">Flask</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-3.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-offline"></span>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="home" aria-labelledby="home-tab"
+                                             role="tabpanel">
+                                            <!-- user profile nav tabs feed start -->
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title mb-1">{{ project_details.title }}</h5>
+                                                            <p>
+                                                                {{ project_details.description }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- user profile nav tabs feed ends -->
+                                        </div>
+                                        <div class="tab-pane " id="expert" aria-labelledby="expert-tab"
+                                             role="tabpanel">
+                                            <button class="btn btn-primary mb-2 ml-auto">مشاهده پروفایل کارشناس</button>
+                                            <!-- user profile nav tabs activity start -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    {{ project_details.user_jobField.owner.first_name }} {{ project_details.user_jobField.owner.last_name }}
+                                                    {{ project_details.user_jobField.created_at|jformat:"%Y/%M/%d" }}
+                                                </div>
+                                            </div>
+                                            <!-- user profile nav tabs activity start -->
+                                        </div>
+                                        <div class="tab-pane " id="message" aria-labelledby="message-tab" role="tabpanel">
+                                            <!-- user profile nav tabs activity start -->
+                                            {% if project_details.status_jobField_user == 1 %}<button class="btn btn-primary mb-2 ml-auto" id="messageSend" data-toggle="modal"
+                                        data-target="#inlineForm1">ارسال پیام جدید</button>{% endif %}
+                                            <div class="col-12 col-lg-12">
+                                                <div class="row" id="message-carts">
+                                                {% load getmessage %}
+                                                {% for message_project in project_details|message %}
+                                                    <div class="col-8 col-lg-8 pb-1">
+                                                        <div class="card mb-0 {% if message_project.owner_id == 0 %}badge-circle-light-dark{% elif message_project.owner_id == request.user.id %}badge-circle-light-withe{% else %}alert alert-secondary{% endif %}">
+                                                            <div class="card-body">
+                                                                <div class="col-12">
+                                                                    <div class="row">
+                                                                        {{ message_project.text }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <small>{{ message_project.created_at|jformat:"%Y/%m/%d , %H:%m" }}</small>
+                                                    </div>
+                                                {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="docs" aria-labelledby="docs-tab"
+                                             role="tabpanel">
+                                            <!-- user profile nav tabs friends start -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5>Friends</h5>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-12">
+                                                            sdfsdfs
+                                                        </div>
+                                                    </div>
+                                                    <h5 class="mt-2">Mutual Friends</h5>
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-12">
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li class="media my-50">
+                                                                    <a href="JavaScript:void(0);">
+                                                                        <div class="avatar mr-1">
+                                                                            <img src="app-assets/images/portrait/small/avatar-s-26.jpg"
+                                                                                 alt="avtar images"
+                                                                                 width="32" height="32">
+                                                                            <span class="avatar-status-online"></span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <h6 class="media-heading mb-0"><a
+                                                                                href="javaScript:void(0);">jackeu
+                                                                            decoy</a></h6>
+                                                                        <small class="text-muted">Network</small>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="media my-50">
+                                                                    <a href="JavaScript:void(0);">
+                                                                        <div class="avatar mr-1">
+                                                                            <img src="app-assets/images/portrait/small/avatar-s-25.jpg"
+                                                                                 alt="avtar images"
+                                                                                 width="32" height="32">
+                                                                            <span class="avatar-status-offline"></span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <h6 class="media-heading mb-0"><a
+                                                                                href="javaScript:void(0);">Sthesia
+                                                                            Anna</a></h6>
+                                                                        <small class="text-muted">Devloper</small>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="media my-50">
+                                                                    <a href="JavaScript:void(0);">
+                                                                        <div class="avatar mr-1">
+                                                                            <img src="app-assets/images/portrait/small/avatar-s-24.jpg"
+                                                                                 alt="avtar images"
+                                                                                 width="32" height="32">
+                                                                            <span class="avatar-status-busy"></span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <h6 class="media-heading mb-0"><a
+                                                                                href="javaScript:void(0);">Molive
+                                                                            Paul</a></h6>
+                                                                        <small class="text-muted">Designer</small>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-sm-6 col-12">
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li class="media my-50">
+                                                                    <a href="JavaScript:void(0);">
+                                                                        <div class="avatar mr-1">
+                                                                            <img src="app-assets/images/portrait/small/avatar-s-23.jpg"
+                                                                                 alt="avtar images"
+                                                                                 width="32" height="32">
+                                                                            <span class="avatar-status-busy"></span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <h6 class="media-heading mb-0"><a
+                                                                                href="javaScript:void(0);">Mull Anna</a>
+                                                                        </h6>
+                                                                        <small class="text-muted">Worker</small>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="media my-50">
+                                                                    <a href="JavaScript:void(0);">
+                                                                        <div class="avatar mr-1">
+                                                                            <img src="app-assets/images/portrait/small/avatar-s-22.jpg"
+                                                                                 alt="avtar images"
+                                                                                 width="32" height="32">
+                                                                            <span class="avatar-status-away"></span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <h6 class="media-heading mb-0"><a
+                                                                                href="javaScript:void(0);">Forcewind
+                                                                            Gail</a></h6>
+                                                                        <small class="text-muted">Lawyer</small>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="media my-50">
+                                                                    <a href="JavaScript:void(0);">
+                                                                        <div class="avatar mr-1">
+                                                                            <img src="app-assets/images/portrait/small/avatar-s-21.jpg"
+                                                                                 alt="avtar images"
+                                                                                 width="32" height="32">
+                                                                            <span class="avatar-status-offline"></span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <h6 class="media-heading mb-0"><a
+                                                                                href="javaScript:void(0);">Paige
+                                                                            Turner</a></h6>
+                                                                        <small class="text-muted">Student</small>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- user profile nav tabs friends ends -->
+                                        </div>
+                                        <div class="tab-pane" id="reports" aria-labelledby="reports-tab"
+                                             role="tabpanel">
+                                            <!-- user profile nav tabs profile start -->
+                                            {% if project_details.status_jobField_user == 1 %}<button class="btn btn-primary mb-2 ml-auto" data-toggle="modal"
+                                        data-target="#inlineForm">ارسال گزارش جدید</button>{% endif %}
+                                            <div id="showreport">
+                                                {% for report in reports %}
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <h5>
+                                                                {{ report.title }}
+                                                                <small class="float-right">
+                                                                    {{ report.created_at|jformat:"%Y/%m/%d" }}
+                                                                </small>
+                                                            </h5>
+                                                            <hr>
+                                                            <p>
+                                                               {{ report.description }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Anna Sthesia</a></h6>
-                            <small class="text-muted">Devloper</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-4.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-busy"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Paul Molive</a></h6>
-                            <small class="text-muted">Designer</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-5.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-busy"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Anna Mull</a></h6>
-                            <small class="text-muted">Worker</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-5.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-away"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Gail Forcewind</a></h6>
-                            <small class="text-muted">Lawyer</small>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-sm-6 col-12">
-                      <ul class="list-unstyled mb-0">
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-16.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-offline"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Paige Turner</a></h6>
-                            <small class="text-muted">Student</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-7.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-busy"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Bob Frapples</a></h6>
-                            <small class="text-muted">Professor</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-8.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-online"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Mario super</a></h6>
-                            <small class="text-muted">Scientist</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-2.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-online"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Petey Cruiser</a></h6>
-                            <small class="text-muted">Flask</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-3.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-offline"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Anna Sthesia</a></h6>
-                            <small class="text-muted">Devloper</small>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <h5 class="mt-2">Mutual Friends</h5>
-                  <div class="row">
-                    <div class="col-sm-6 col-12">
-                      <ul class="list-unstyled mb-0">
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-26.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-online"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">jackeu decoy</a></h6>
-                            <small class="text-muted">Network</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-25.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-offline"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Sthesia Anna</a></h6>
-                            <small class="text-muted">Devloper</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-24.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-busy"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Molive Paul</a></h6>
-                            <small class="text-muted">Designer</small>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-sm-6 col-12">
-                      <ul class="list-unstyled mb-0">
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-23.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-busy"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Mull Anna</a></h6>
-                            <small class="text-muted">Worker</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-22.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-away"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Forcewind Gail</a></h6>
-                            <small class="text-muted">Lawyer</small>
-                          </div>
-                        </li>
-                        <li class="media my-50">
-                          <a href="JavaScript:void(0);">
-                            <div class="avatar mr-1">
-                              <img src="app-assets/images/portrait/small/avatar-s-21.jpg" alt="avtar images"
-                                width="32" height="32">
-                              <span class="avatar-status-offline"></span>
-                            </div>
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading mb-0"><a href="javaScript:void(0);">Paige Turner</a></h6>
-                            <small class="text-muted">Student</small>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- user profile nav tabs friends ends -->
-            </div>
-            <div class="tab-pane" id="profile" aria-labelledby="profile-tab" role="tabpanel">
-              <!-- user profile nav tabs profile start -->
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="row">
-                        <div class="col-12 col-sm-3 text-center mb-1 mb-sm-0">
-                          <img src="app-assets/images/portrait/small/avatar-s-16.jpg" class="rounded"
-                            alt="group image" height="120" width="120" />
+                            <!-- user profile content section start -->
                         </div>
-                        <div class="col-12 col-sm-9">
-                          <div class="row">
-                            <div class="col-12 text-center text-sm-left">
-                              <h6 class="media-heading mb-0">valintini_007<i
-                                  class="cursor-pointer bx bxs-star text-warning ml-50 align-middle"></i></h6>
-                              <small class="text-muted align-top">Martina Ash</small>
-                            </div>
-                            <div class="col-12 text-center text-sm-left">
-                              <div class="mb-1">
-                                <span class="mr-1">122 <small>Posts</small></span>
-                                <span class="mr-1">4.7k <small>Followers</small></span>
-                                <span class="mr-1">652 <small>Following</small></span>
-                              </div>
-                              <p>Algolia helps businesses across industries quickly create relevant😎, scalable😀, and
-                                lightning😍
-                                fast search and discovery experiences.</p>
-                              <div>
-                                <div class="badge badge-light-primary badge-round mr-1 mb-1" data-toggle="tooltip"
-                                  data-placement="bottom" title="with 7% growth @valintini_007 is on top 5k"><i
-                                    class="cursor-pointer bx bx-check-shield"></i>
-                                </div>
-                                <div class="badge badge-light-warning badge-round mr-1 mb-1" data-toggle="tooltip"
-                                  data-placement="bottom" title="last 55% growth @valintini_007 is on weedday"><i
-                                    class="cursor-pointer bx bx-badge-check"></i>
-                                </div>
-                                <div class="badge badge-light-success badge-round mb-1" data-toggle="tooltip"
-                                  data-placement="bottom" title="got premium profile here"><i
-                                    class="cursor-pointer bx bx-award"></i>
-                                </div>
-                              </div>
-                              <button class="btn btn-sm d-none d-sm-block float-right btn-light-primary">
-                                <i class="cursor-pointer bx bx-edit font-small-3 mr-50"></i><span>Edit</span>
-                              </button>
-                              <button class="btn btn-sm d-block d-sm-none btn-block text-center btn-light-primary">
-                                <i class="cursor-pointer bx bx-edit font-small-3 mr-25"></i><span>Edit</span></button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Basic details</h5>
-                  <ul class="list-unstyled">
-                    <li><i class="cursor-pointer bx bx-map mb-1 mr-50"></i>California</li>
-                    <li><i class="cursor-pointer bx bx-phone-call mb-1 mr-50"></i>(+56) 454 45654 </li>
-                    <li><i class="cursor-pointer bx bx-time mb-1 mr-50"></i>July 10</li>
-                    <li><i class="cursor-pointer bx bx-envelope mb-1 mr-50"></i>Jonnybravo@gmail.com</li>
-                  </ul>
-                  <div class="row">
-                    <div class="col-sm-6 col-12">
-                      <h6><small class="text-muted">Cell Phone</small></h6>
-                      <p>(+46) 456 54432</p>
-                    </div>
-                    <div class="col-sm-6 col-12">
-                      <h6><small class="text-muted">Family Phone</small></h6>
-                      <p>(+46) 454 22432</p>
-                    </div>
-                    <div class="col-sm-6 col-12">
-                      <h6><small class="text-muted">Reporter</small></h6>
-                      <p>John Doe</p>
-                    </div>
-                    <div class="col-sm-6 col-12">
-                      <h6><small class="text-muted">Manager</small></h6>
-                      <p>Richie Rich</p>
-                    </div>
-                    <div class="col-12">
-                      <h6><small class="text-muted">Bio</small></h6>
-                      <p>Built-in customizer enables users to change their admin panel look & feel based on their
-                        preferences Beautifully crafted, clean & modern designed admin theme with 3 different demos &
-                        light - dark versions.</p>
-                    </div>
-                  </div>
-                  <button class="btn btn-sm d-none d-sm-block float-right btn-light-primary mb-2">
-                    <i class="cursor-pointer bx bx-edit font-small-3 mr-50"></i><span>Edit</span>
-                  </button>
-                  <button class="btn btn-sm d-block d-sm-none btn-block text-center btn-light-primary">
-                    <i class="cursor-pointer bx bx-edit font-small-3 mr-25"></i><span>Edit</span></button>
-                </div>
-              </div>
-              <!-- user profile nav tabs profile ends -->
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- user profile content section start -->
-    </div>
-  </div>
-</section>
-<!-- page user profile ends -->
+                </section>
+                <!-- page user profile ends -->
 
+            </div>
         </div>
-      </div>
+    </div>
+    <div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">گزارش جدید</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'projects:getReport' project_details.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <label>عنوان گزارش: </label>
+                        <div class="form-group">
+                            <input name="report-title" id="reportTitle" type="text" placeholder="عنوان" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="reportDescription" name="report-description" placeholder="گزارش" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1" data-dismiss="modal">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ذخیره</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="inlineForm1" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel34">ارسال پیام</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'projects:getMessage' project_details.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <label>متن پیام: </label>
+                        <div class="form-group">
+                            <input type="text" id="messageText" name="messageText" placeholder="پیام خود را بنویسید" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1" data-dismiss="modal">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ارسال</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
     {% include "footer.html" %}
 {% endblock %}
