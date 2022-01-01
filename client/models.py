@@ -23,7 +23,6 @@ class User(AbstractUser):
     gender = models.BooleanField(default=True)
     has_jobField = models.BooleanField(default=False)
     state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
-    description = models.TextField()
     social = models.CharField(max_length=250)
 
     def save(self, *args, **kwargs):

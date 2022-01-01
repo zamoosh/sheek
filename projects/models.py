@@ -28,6 +28,7 @@ class UserJobField(models.Model):
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
+    description = models.TextField()
 
 
 class Project(models.Model):

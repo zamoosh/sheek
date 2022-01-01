@@ -18,3 +18,9 @@ class ExpertSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_jobField(obj):
         return obj.jobField.title
+
+
+class UserJobFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserJobField
+        fields = '__all__'
