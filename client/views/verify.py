@@ -7,9 +7,6 @@ def verify(request):
         context = request.session['user']
         if request.method == 'POST':
             if request.POST.get("verify_code", "") == str(request.session['key']):
-                pattern = re.compile("^\+989?\d{9}$", re.IGNORECASE)
-                if pattern.match(context['cellphone']) is None:
-                    context['cellphone'] = "+989" + context['cellphone'][2:]
                 if User.objects.filter(cellphone=context['cellphone']).exists():
                     user = User.objects.get(cellphone=context['cellphone'])
                     if user is not None:

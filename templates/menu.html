@@ -21,19 +21,40 @@
             <li class=" nav-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">داشبورد</span></a></li>
             <li class=" nav-item"><a href="{% url 'client:profile' %}"><i class="bx bx-user"></i><span
-                    class="menu-title text-truncate" data-i18n="Dashboard">حساب کاربری</span></a></li>
-            <li class=" nav-item"><a href="{% url 'state:state' %}"><i class="bx bx-user"></i><span
-                    class="menu-title text-truncate" data-i18n="Dashboard">شهر ها و استان ها</span></a></li>
-            <li class=" nav-item"><a href="{% url 'projects:jobs' %}"><i class="bx bx-user"></i><span
-                    class="menu-title text-truncate" data-i18n="Dashboard">مشاغل</span></a></li>
+                    class="menu-title text-truncate" data-i18n="Dashboard">حساب کاربری</span></a>
+                <ul class="menu-content">
+                    <li><a class="d-flex align-items-center" href="{% url 'client:profile' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">پروفایل</span></a>
+                    </li>
+                    <li><a class="d-flex align-items-center" href="#"><i class="bx bx-right-arrow-alt"></i><span
+                            class="menu-item text-truncate" data-i18n="View">پیام ها</span></a>
+                    </li>
+                </ul>
+            </li>
+            {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'state:state' %}"><i class="bx bx-user"></i><span
+                    class="menu-title text-truncate" data-i18n="Dashboard">شهر ها و استان ها</span></a></li>{% endif %}
+            {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'projects:jobs' %}"><i class="bx bx-user"></i><span
+                    class="menu-title text-truncate" data-i18n="Dashboard">مشاغل</span></a></li>{% endif %}
             <li class=" nav-item"><a href="{% url 'projects:userjob' %}"><i class="bx bx-user"></i><span
-                    class="menu-title text-truncate" data-i18n="Dashboard">کارشناسی</span></a></li>
-            <li class=" nav-item"><a href="{% url 'projects:adduserjob' %}"><i class="bx bx-user"></i><span
-                    class="menu-title text-truncate" data-i18n="Dashboard">انتخاب کارشناسی</span></a></li>
-            <li class=" nav-item"><a href="{% url 'projects:addproject' %}"><i class="bx bx-user"></i><span
-                    class="menu-title text-truncate" data-i18n="Dashboard">پروژه جدید</span></a></li>
-            <li class=" nav-item"><a href="{% url 'projects:projects' %}"><i class="bx bx-user"></i><span
-                    class="menu-title text-truncate" data-i18n="Dashboard">پروژه ها</span></a></li>
+                    class="menu-title text-truncate" data-i18n="Dashboard">کارشناسی</span></a>
+                <ul class="menu-content">
+                    {% if request.user.has_jobField %}<li><a class="d-flex align-items-center" href="{% url 'projects:adduserjob' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">انتخاب کارشناسی</span></a>
+                    </li>{% endif %}
+                    <li><a class="d-flex align-items-center" href="{% url 'projects:addproject' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="View">پروژه جدید</span></a>
+                    </li>
+                    <li><a class="d-flex align-items-center" href="{% url 'projects:projects' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">پروژه ها</span></a>
+                    </li>
+                    {% if request.user.has_jobField %}<li><a class="d-flex align-items-center" href="{% url 'projects:expert-projects' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">پروژه های من</span></a>
+                    </li>{% endif %}
+                    {% if request.user.has_jobField %}<li><a class="d-flex align-items-center" href="{% url 'projects:userjob' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">کارشناسی</span></a>
+                    </li>{% endif %}
+                </ul>
+            </li>
         </ul>
     </div>
 </div>
