@@ -15,7 +15,6 @@ urlpatterns = [
     path('project-done/', redierct, name="redierct"),
     path('projects/', get_projects, name="projects"),
     path('expert-projects/', get_expert_projects, name="expert-projects"),
-    path('project/<int:id>/confirm/', confirm_project, name="confirm_project"),
     path('project/<int:id>/reject/', reject_project, name="reject_project"),
     path('project/<int:id>/end/', end_project, name="end_project"),
     path('project/<int:id>/', view_project, name="view_project"),
