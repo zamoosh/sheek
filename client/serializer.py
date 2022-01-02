@@ -19,6 +19,12 @@ class UserSerializer(serializers.ModelSerializer):
         return None
 
 
+class UserSafeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'image' ]
+
+
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission

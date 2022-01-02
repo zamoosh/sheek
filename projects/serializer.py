@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from projects.models import *
+from client.serializer import UserSafeSerializer
 
 
 class JobFieldSerializer(serializers.ModelSerializer):
@@ -18,6 +19,7 @@ class LowProjectSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     jobField = serializers.SerializerMethodField()
     jobField_parent = serializers.SerializerMethodField()
+    userdata = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
@@ -30,3 +32,9 @@ class ProjectSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_jobField_parent(obj):
         return obj.jobField.parent.title
+
+    @staticmethod
+    def get_userdata(obj):
+        if obj.user_jobField:
+            return UserSafeSerializer(obj.user_jobField.owner, many=False).data
+        return {}

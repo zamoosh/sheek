@@ -1,5 +1,5 @@
 from .imports import *
-from projects.models import Project, JobField
+from projects.models import Project, JobField, UserJobField
 from projects.serializer import ProjectSerializer, LowProjectSerializer
 
 
@@ -15,7 +15,7 @@ def create_projects(request):
     if request.data.get('user_jobField') == 0:
         pass
     else:
-        project.user_jobField = request.data.get('user_jobField', 0)
+        project.user_jobField = UserJobField.objects.get(id=request.data.get('user_jobField', 0))
     project.save()
     serializer = LowProjectSerializer(project, many=False)
     context.update(serializer.data)

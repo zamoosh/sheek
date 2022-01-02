@@ -41,6 +41,7 @@ def get_user(request):
 @permission_classes((IsAuthenticated,))
 def get_expert(request):
     expert_list = []
+    context = {}
     jobField = request.GET.get('jobField')
     state = State.objects.get(id=request.GET.get('state'))
     q = Q()
@@ -56,5 +57,19 @@ def get_expert(request):
     expert_list += experience_five
     expert_list += experience_ten
     expert_list += experience_full
-    users = ExpertSerializer(expert_list, many=True).data
-    return Response(users, status=HTTP_200_OK)
+    serializer = ExpertSerializer(expert_list, many=True)
+    context = serializer.data
+
+    return Response(context, status=HTTP_200_OK)
+
+
+@swagger_auto_schema(method='GET', manual_parameters=[], responses={200: UserJobFieldViewDto(many=True)})
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_expert_one(request, id):
+    context = {}
+    expert = UserJobField.objects.get(id=id)
+    serializer = ExpertSerializer(expert, many=False)
+    context = serializer.data
+
+    return Response(context, status=HTTP_200_OK)
