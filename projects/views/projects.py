@@ -9,18 +9,15 @@ def get_projects(request):
 
 def get_expert_projects(request):
     context = {}
+    if 'confirm' in request.GET:
+        context['project'] = Project.objects.get(id=int(request.GET.get('confirm')))
+        if context['project'].status_jobField_user == 0:
+            context['project'].status_jobField_user = 1
+            context['project'].save()
+            context['result'] = True
     context['projects'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True).order_by(
         '-created_at')
     return render(request, 'project/expert-projects.html', context)
-
-
-def confirm_project(request, id):
-    context = {}
-    context['project'] = Project.objects.get(id=id)
-    context['project'].status_jobField_user = 1
-    context['project'].save()
-    context['result'] = True
-    return render(request, 'project/projects.html', context)
 
 
 def reject_project(request, id):
