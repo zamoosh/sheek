@@ -71,5 +71,5 @@ def get_expert_one(request, id):
     expert = UserJobField.objects.get(id=id)
     serializer = ExpertSerializer(expert, many=False)
     context = serializer.data
-
-    return Response(context, status=HTTP_200_OK)
+    status_code = HTTP_200_OK
+    return Response(context, status=status_code)

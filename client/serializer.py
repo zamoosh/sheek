@@ -20,9 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSafeSerializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'image' ]
+        fields = ['first_name', 'last_name', 'image']
 
 
 class PermissionSerializer(serializers.ModelSerializer):
