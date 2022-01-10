@@ -25,6 +25,6 @@ def userjob_api(request):
                 expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, owner=item.owner_id).distinct()
                 expert = User.objects.filter(id__in=expert_id)
             for i in expert:
-                context.append({'id': i.pk, 'name': i.first_name, 'last_name': i.last_name, 'birthday': i.birthday})
+                context.append({'id': i.pk, 'name': i.first_name, 'last_name': i.last_name, 'birthday': i.birthday, 'profile':i.image.url})
         return JsonResponse(context, safe=False)
 

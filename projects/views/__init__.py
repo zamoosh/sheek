@@ -8,3 +8,4 @@ from .projects import *
 from .view_project import *
 from .report import *
 from .message_api import *
+from .project_request import *
