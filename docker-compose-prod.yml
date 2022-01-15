@@ -11,3 +11,10 @@ services:
       VERSION: "${VERSION}"
 #    volumes:
 #      - /var/www/prodmedia:/media/
+  web_migrate:
+    image: "website:${VERSION}"
+    env_file:
+      - cicd/.env
+    environment:
+      VERSION: "${VERSION}"
+    entrypoint: python /app/manage.py migrate
