@@ -79,8 +79,14 @@
                 url: '{% url 'projects:jobs' %}',
                 method: 'GET',
                 data: {},
+                beforeSend: function(){
+                    $('.overlay').show();
+                    $('.loader').show();
+                },
                 success: function (data) {
                     $('#jobTabale').replaceWith($('#jobTabale', data));
+                    $('.loader').hide();
+                    $('.overlay').hide();
                 },
                 error: function (error) {
                     console.log(error);
@@ -122,6 +128,8 @@
                                 </button>
                                 <div class="table-responsive" id="jobTabale">
                                     <table class="table">
+                                    <div class="overlay"></div>
+                                    <div class="loader"></div>
                                         <thead>
                                         <tr>
                                             <th>شغل</th>

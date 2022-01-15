@@ -17,7 +17,9 @@ urlpatterns = [
     path('expert-projects/', get_expert_projects, name="expert-projects"),
     path('project/<int:id>/reject/', reject_project, name="reject_project"),
     path('project/<int:id>/end/', end_project, name="end_project"),
+    path('project-request/', project_request, name="project-request"),
     path('project/<int:id>/', view_project, name="view_project"),
     path('report/api/<int:id>/', report_api, name="getReport"),
     path('message/api/<int:id>/', message_api, name="getMessage"),
+    path('message/readmsg/<int:id>/', setreadmessage, name="ReadMessage"),
 ]
