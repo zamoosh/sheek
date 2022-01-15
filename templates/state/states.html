@@ -79,8 +79,14 @@
                 url: '{% url 'state:state' %}',
                 method: 'GET',
                 data: {},
+                beforeSend: function(){
+                    $('.overlay').show();
+                    $('.loader').show();
+                },
                 success: function (data) {
                     $('#stateTabale').replaceWith($('#stateTabale', data));
+                    $('.loader').hide();
+                    $('.overlay').hide();
                 },
                 error: function (error) {
                     console.log(error);
@@ -120,8 +126,11 @@
                                 <button type="button" class="btn btn-primary float-right shadow mr-1 mb-1" data-toggle="modal"
                                         data-target="#inlineForm">اضافه کردن شهر
                                 </button>
+
                                 <div class="table-responsive" id="stateTabale">
                                     <table class="table">
+                                    <div class="overlay"></div>
+                                    <div class="loader"></div>
                                         <thead>
                                         <tr>
                                             <th>استان</th>

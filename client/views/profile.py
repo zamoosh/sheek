@@ -26,6 +26,10 @@ def profile(request):
         # request.user.state = context['req']['state']
         if request.POST.get('state'):
             user.state_id = int(request.POST.get('state'))
+        if 'profile-picture' in request.FILES:
+            user.image = request.FILES['profile-picture']
+        if 'national-card' in request.FILES:
+            user.national_card = request.FILES['national-card']
         user.save()
         return HttpResponseRedirect(reverse('client:profile'))
     return render(request, 'client/profile.html', context)

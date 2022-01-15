@@ -10,20 +10,20 @@ def verify(request):
                 if User.objects.filter(cellphone=context['cellphone']).exists():
                     user = User.objects.get(cellphone=context['cellphone'])
                     if user is not None:
-                        # the password verified for the user
                         if user.is_active:
                             login(request, user)
                             if len(request.GET.get("next", "/")) == 0:
                                 return HttpResponseRedirect("/")
                             return HttpResponseRedirect(request.GET.get("next", "/"))
                     else:
-                        # the authentication system was unable to verify the username and password
                         print("The username and password were incorrect.")
                 else:
                     user = User.objects.create_user(
                         cellphone=context['cellphone'],
                         username=context['cellphone']
                     )
+                    if context['expertRegister']:
+                        user.has_jobField = True
                     user.save()
                     del request.session['user']
                     context['register'] = 1

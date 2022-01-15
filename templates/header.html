@@ -32,7 +32,7 @@
                         <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                             <li class="dropdown-menu-header">
                                 <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span
-                                        class="notification-title">شما {{ request.message|length }} پیام خوانده نشده دارید</span></div>
+                                        class="notification-title">{% if request.message|length == 0 %}شما پیامی ندارید{% else %}شما {{ request.message|length }} پیام خوانده نشده دارید{% endif %}</span></div>
                             </li>
                             {% for message in request.message|slice:":4" %}
                             <li class="scrollable-container media-list">
@@ -40,7 +40,7 @@
                                     <div class="media d-flex align-items-center">
                                         <div class="media-left pr-0">
                                             <div class="avatar mr-1 m-0"><img
-                                                    src="{% static "app-assets/images/portrait/small/avatar-s-11.jpg" %}"
+                                                    src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                                     alt="avatar"
                                                     height="39" width="39"></div>
                                         </div>
@@ -51,9 +51,7 @@
                                 </a>
                             </li>
                             {% endfor %}
-                            <li class="dropdown-menu-footer"><a
-                                    class="dropdown-item p-50 text-primary justify-content-center"
-                                    href="javascript:void(0)">دیدن همه پیام ها</a></li>
+
                         </ul>
                     </li>
                     <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link"
@@ -63,7 +61,7 @@
                                 class="user-status text-muted">{{ request.user.first_name }} {{ request.user.last_name }}</span>
                         </div>
                         <span>
-                            <img class="round" src="{% static "app-assets/images/portrait/small/avatar-s-11.jpg" %}"
+                            <img class="round" src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                  alt="avatar"
                                  height="40" width="40">
                             </span></a>
@@ -72,7 +70,7 @@
                                 class="bx bx-user mr-50"></i> ویرایش پروفایل</a><a class="dropdown-item"
                                                                                  href=""><i
                                 class="bx bx-envelope mr-50"></i> کیف پول</a>
-                            <a class="dropdown-item" href="app-chat.html"><i class="bx bx-message mr-50"></i> پیام ها</a>
+
                             <div class="dropdown-divider mb-0"></div>
                             <a class="dropdown-item" href="{% url 'client:logout' %}"><i class="bx bx-power-off mr-50"></i> خروج </a>
                         </div>

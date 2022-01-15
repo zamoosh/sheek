@@ -21,7 +21,7 @@ class JobField(models.Model):
 class UserJobField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=True)
+    status = models.BooleanField(default=False)
     delete = models.BooleanField(default=False)
     status_comment = models.CharField(max_length=250)
     experience = models.DateField()
