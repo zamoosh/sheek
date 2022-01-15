@@ -23,9 +23,15 @@ class UserViewDto(serializers.Serializer):
     gender = serializers.BooleanField()
 
 
+class UpdateProfileCreateDto(serializers.Serializer):
+    image = serializers.CharField(required=False)
+    birthday = serializers.DateField(required=False)
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+
+
 class Verify(serializers.Serializer):
     username = serializers.CharField()
-    device_id = serializers.CharField()
 
 
 class UpdateProfileCreateDto(serializers.Serializer):
@@ -66,3 +72,47 @@ class PermissionsDto(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     codename = serializers.CharField()
+
+
+class UserInfoDto(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    has_password = serializers.BooleanField()
+
+
+class UserInfoGetDto(serializers.Serializer):
+    username = serializers.CharField()
+
+
+class UserGroupUpdateDto(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    group_id = serializers.IntegerField()
+
+
+class UserUpdatePermsDto(serializers.Serializer):
+    id = serializers.IntegerField()
+    permission = serializers.ListField(
+        child=serializers.IntegerField(min_value=0, max_value=100)
+    )
+
+
+class UserInfoDto(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    has_password = serializers.BooleanField()
+
+
+class UserInfoGetDto(serializers.Serializer):
+    username = serializers.CharField()
+
+
+class UserGroupUpdateDto(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    group_id = serializers.IntegerField()
+
+
+class UserUpdatePermsDto(serializers.Serializer):
+    id = serializers.IntegerField()
+    permission = serializers.ListField(
+        child=serializers.IntegerField(min_value=0, max_value=100)
+    )

@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}پروژه - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/pages/page-user-profile.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/pages/app-chat.min.css" %}">
+{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/js/scripts/pages/page-user-profile.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/pages/app-chat.min.js" %}"></script>
+    <script>
+        function getCookies(reportTitle) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, reportTitle.length + 1) === (reportTitle + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(reportTitle.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookies('csrftoken');
+        $('[type="submit"]').on('click', function (e) {
+            e.preventDefault()
+            $.ajax({
+                url: $("form")[0].action,
+                type: "POST",
+                data: {
+                    reportTitle: $("#reportTitle").val(),
+                    reportDescription: $("#reportDescription").val(),
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            $("#showreport").load(location.href + " #showreport");
+        });
+    </script>
+    <script>
+
+        $("#sendMessageBtn").click(function () {
+            $.ajax({
+                url: '{% url 'projects:getMessage' project_details.id %}',
+                type: "POST",
+                data: {
+                    messageText: $("#messageText").val(),
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    $('.overlay').show();
+                    $('.loader').show();
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            $('.loader').hide();
+            $('.overlay').hide();
+            $("#message-carts").load(location.href + " #message-carts");
+        });
+        $("#message-tab").click(function () {
+            $.ajax({
+                url: '{% url 'projects:ReadMessage' project_details.id %}',
+                type: "POST",
+                data: {
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+
+
+
+
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body"><!-- page user profile start -->
+                <section class="page-user-profile">
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- user profile heading section start -->
+                            <div class="card">
+                                <div class="user-profile-images{% if project_details.status_jobField_user == 0 %} yellow-header{% elif project_details.status_jobField_user == 1 %} blue-header{% elif project_details.status_jobField_user == 2 %} green-header{% endif %}">
+                                    <img src="{% static "app-assets/images/logo/bgproject.png" %}"
+                                         class="img-fluid rounded-top user-timeline-image" alt="user timeline image">
+                                    <!-- user profile image -->
+                                </div>
+                                <div class="user-profile-text">
+                                    <h4 class="mb-0 text-bold-500 profile-text-color">{{ project_details.id }}</h4>
+                                    <small>{{ project_details.jobField.parent.title }}/{{ project_details.jobField.title }}</small>
+                                </div>
+                                <!-- user profile nav tabs start -->
+                                <div class="card-body px-0 d-flex">
+                                    <ul
+                                            class="nav user-profile-nav justify-content-center justify-content-md-start nav-pills border-bottom-0 mb-0"
+                                            role="tablist">
+                                        <li class="nav-item mb-0">
+                                            <a class=" nav-link d-flex px-1 active" id="home-tab" data-toggle="tab"
+                                               href="#home"
+                                               aria-controls="home" role="tab" aria-selected="true"><i
+                                                    class="bx bx-home"></i><span
+                                                    class="d-none d-md-block">درباره پروژه</span></a>
+                                        </li>
+                                        {% if project_details.user_jobField %}<li class="nav-item mb-0">
+                                            <a class="nav-link d-flex px-1" id="expert-tab" data-toggle="tab"
+                                               href="#expert"
+                                               aria-controls="expert" role="tab" aria-selected="false"><i
+                                                    class="bx bx-user"></i><span
+                                                    class="d-none d-md-block">کارشناس</span></a>
+                                        </li>{% endif %}
+                                        <li class="nav-item mb-0">
+                                            <a class="nav-link d-flex px-1" id="message-tab" data-toggle="tab"
+                                               href="#message"
+                                               aria-controls="message" role="tab" aria-selected="false"><i
+                                                    class="bx bx-message-alt"></i><span
+                                                    class="d-none d-md-block">پیام ها</span></a>
+                                        </li>
+                                        <li class="nav-item mb-0">
+                                            <a class="nav-link d-flex px-1" id="docs-tab" data-toggle="tab"
+                                               href="#docs"
+                                               aria-controls="docs" role="tab" aria-selected="false"><i
+                                                    class="bx bx-video"></i><span
+                                                    class="d-none d-md-block">اسناد</span></a>
+                                        </li>
+                                        <li class="nav-item mb-0 mr-0">
+                                            <a class="nav-link d-flex px-1" id="reports-tab" data-toggle="tab"
+                                               href="#reports"
+                                               aria-controls="reports" role="tab" aria-selected="false"><i
+                                                    class="bx bx-copy-alt"></i><span
+                                                    class="d-none d-md-block">گزارش</span></a>
+                                        </li>
+                                    </ul>
+                                    {% if project_details.status_jobField_user == 1 %}
+                                        <a href="{% url 'projects:end_project' project_details.id %}" type="button"
+                                           class="btn btn-success ml-auto mr-2">اعلام اتمام پروژه</a>{% endif %}
+                                    {% if project_details.status_jobField_user == 0 %}
+                                        <div class="btn btn-warning ml-auto mr-2">پروژه شما هنوز توسط کارشناس تایید نشده
+                                            است .
+                                        </div>{% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="home" aria-labelledby="home-tab"
+                                             role="tabpanel">
+                                            <!-- user profile nav tabs feed start -->
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title mb-1">{{ project_details.title }}</h5>
+                                                            <p>
+                                                                {{ project_details.description }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- user profile nav tabs feed ends -->
+                                        </div>
+                                        <div class="tab-pane " id="expert" aria-labelledby="expert-tab"
+                                             role="tabpanel">
+                                            <button class="btn btn-primary mb-2 ml-auto">مشاهده پروفایل کارشناس</button>
+                                            <!-- user profile nav tabs activity start -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    {{ project_details.user_jobField.owner.first_name }} {{ project_details.user_jobField.owner.last_name }}
+                                                    {{ project_details.user_jobField.created_at|jformat:"%Y/%M/%d" }}
+                                                </div>
+                                            </div>
+                                            <!-- user profile nav tabs activity start -->
+                                        </div>
+                                        <div class="tab-pane " id="message" aria-labelledby="message-tab"
+                                             role="tabpanel">
+                                            <!-- user profile nav tabs activity start -->
+                                            {% if project_details.status_jobField_user == 1 %}
+                                                <button class="btn btn-primary mb-2 ml-auto" id="messageSend"
+                                                        data-toggle="modal"
+                                                        data-target="#inlineForm1">ارسال پیام جدید
+                                                </button>{% endif %}
+                                            <div class="col-12 col-lg-12">
+                                            <div class="overlay"></div>
+                                            <div class="loader"></div>
+                                                <div class="row" id="message-carts">
+                                                    {% load getmessage %}
+                                                    {% for message_project in project_details|message %}
+                                                        <div class="col-8 col-lg-8 pb-1">
+                                                            <div class="card mb-0 {% if message_project.owner_id == 0 %}badge-circle-light-dark{% elif message_project.owner_id == request.user.id %}badge-circle-light-withe{% else %}alert alert-secondary{% endif %}">
+                                                                <div class="card-body">
+                                                                    <div class="col-12">
+                                                                        <div class="row fl">
+                                                                            {{ message_project.text }}
+                                                                            {% if message_project.user_view %}
+                                                                                <i class="bx bx-check-double"></i>
+                                                                            {% else %}
+                                                                                <i class="bx bx-check"></i>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <small>{{ message_project.created_at|jformat:"%Y/%m/%d , %H:%m" }}</small>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="docs" aria-labelledby="docs-tab"
+                                             role="tabpanel">
+                                            <!-- user profile nav tabs friends start -->
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                </div>
+                                            </div>
+                                            <!-- user profile nav tabs friends ends -->
+                                        </div>
+                                        <div class="tab-pane" id="reports" aria-labelledby="reports-tab"
+                                             role="tabpanel">
+                                            <!-- user profile nav tabs profile start -->
+                                            {% if project_details.status_jobField_user == 1 %}
+                                                <button class="btn btn-primary mb-2 ml-auto" data-toggle="modal"
+                                                        data-target="#inlineForm">ارسال گزارش جدید
+                                                </button>{% endif %}
+                                            <div id="showreport">
+                                                {% for report in reports %}
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <h5>
+                                                                        {{ report.title }}
+                                                                        <small class="float-right">
+                                                                            {{ report.created_at|jformat:"%Y/%m/%d" }}
+                                                                        </small>
+                                                                    </h5>
+                                                                    <hr>
+                                                                    <p>
+                                                                        {{ report.description }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- user profile content section start -->
+                        </div>
+                    </div>
+                </section>
+                <!-- page user profile ends -->
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">گزارش جدید</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'projects:getReport' project_details.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <label>عنوان گزارش: </label>
+                        <div class="form-group">
+                            <input name="report-title" id="reportTitle" type="text" placeholder="عنوان"
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="reportDescription" name="report-description" placeholder="گزارش"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1" data-dismiss="modal">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ذخیره</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="inlineForm1" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel34">ارسال پیام</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" id="sendMessageForm" action="{% url 'projects:getMessage' project_details.id %}">
+                    {% csrf_token %}
+                    <div class="modal-9body">
+                        <label>متن پیام: </label>
+                        <div class="form-group">
+                            <input type="text" id="messageText" name="messageText" placeholder="پیام خود را بنویسید"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="button" id="sendMessageBtn" class="btn btn-primary ml-1" data-dismiss="modal">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ارسال</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

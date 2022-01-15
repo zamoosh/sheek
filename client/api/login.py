@@ -1,8 +1,7 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from .imports import *
+import jwt
 from unidecode import unidecode
-
-from ..dto import *
 
 
 @swagger_auto_schema(method='POST', request_body=TokenCreateDto, responses={200: TokenViewDto(many=False)})
@@ -39,7 +38,7 @@ def login(request):
         context['access'] = str(refresh.access_token)
         context['refresh'] = str(refresh)
         context['msg'] = "ورود با موفقیت انجام شد"
-        context.update(UserSerializer(user).data)
+        context.update(UserSerializer(user, many=False).data)
         status_code = HTTP_200_OK
     else:
         context['msg'] = 'نام کاربری یا کد ارسال شده اشتباه می باشد'

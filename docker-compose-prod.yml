@@ -1,0 +1,13 @@
+version: "0.0.0"
+services:
+  web_prod:
+    image: "website:${VERSION}"
+    ports:
+      - "8002:80"
+    restart: on-failure
+    env_file:
+    - cicd/.env
+    environment:
+      VERSION: "${VERSION}"
+#    volumes:
+#      - /var/www/prodmedia:/media/

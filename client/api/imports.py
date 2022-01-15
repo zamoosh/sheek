@@ -19,8 +19,19 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.status import *
 
+from ..dto import *
 from client.dto import UserViewDto
 from client.models import *
 from client.serializer import UserSerializer
+from ..dto import UpdateProfileCreateDto
 
 
+def send_mail_func(message, email_address):
+    status = send_mail(
+        "درخواست فعال سازی حساب کاربری {title}".format(title="ویدان"),
+        str(message),
+        'app@vidone.org',
+        [email_address],
+        # fail_silently=False,
+    )
+    print(status)

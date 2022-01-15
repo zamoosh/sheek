@@ -8,3 +8,6 @@ class State(models.Model):
     title = models.CharField(max_length=50)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
+    def delete(self, *args, **kwargs):
+        self.status = False
+        self.save()

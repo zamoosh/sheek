@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}پروژه ها - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0">پروژه ها</h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">پروژه ها
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body"><!-- Basic Tables start -->
+                <div class="row" id="basic-table">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                {% if result %}
+                                    <div class="alert alert-success mb-2" role="alert">
+                                        پروژه <strong>{{ project.title }}</strong> توسط شما تایید شد . هم اکنون میتوانید آن را مدیریت کنید .
+                                    </div>
+                                {% endif %}
+                                    <div class="table-responsive" id="jobTabale">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>عنوان پروژه</th>
+                                            <th>درخواست کننده</th>
+                                            <th>تاریخ ایجاد</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for project in projects %}
+                                            <tr {% if project.status_jobField_user == 2 %}class="badge-circle-light-success"{% endif %}>
+                                                <td class="text-bold-500">{{ project.title }}</td>
+                                                <td class="text-bold-500">{{ project.owner.first_name }} {{ project.owner.last_name }}</td>
+                                                <td class="text-bold-500">{{ project.created_at|jformat:"%Y/%m/%d" }}</td>
+                                                <td>
+                                                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="قبول پروژه" href="{% url 'projects:project-request' %}?confirm={{ project.id }}"><i class="badge-circle badge-circle-light-secondary bx bx-check font-medium-1"></i></a>
+                                                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="مشاهده پروژه" href="{% url 'projects:view_project' project.id %}"><i class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

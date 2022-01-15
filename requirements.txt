@@ -1,4 +1,4 @@
-django==4
+django==3.2.9
 unidecode
 pillow
 minio
@@ -8,8 +8,8 @@ djangorestframework
 drf_yasg
 django-cors-headers
 djangorestframework_simplejwt
-PyJWT==v1.7.1
+PyJWT
 django_jalali
 suds-py3
 requests
-pycurl
+pytz

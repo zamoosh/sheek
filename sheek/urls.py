@@ -18,6 +18,9 @@ from django.urls import path, include, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework_simplejwt import views as jwt_views
+from .views import *
+from django.conf import settings
+from django.conf.urls.static import static
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -25,7 +28,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description="This api uses for Application.",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="info@vidone.org"),
+        contact=openapi.Contact(email="info@sheek.org"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
@@ -36,5 +39,14 @@ urlpatterns = [
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/client/', include('client.apiurls'))
+    path('api/client/', include('client.apiurls')),
+    path('', index, name='index'),
+    path('api/state/', include('state.apiurls')),
+    path('api/projects/', include('projects.apiurls')),
+    path('api/request/', include('request.apiurls')),
+    path('accounts/', include('client.urls')),
+    path('state/', include('state.urls')),
+    path('jobs/', include('projects.urls')),
 ]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

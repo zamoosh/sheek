@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'projects',
     'state',
+    'django_jalali',
+    'request',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'library.message.SimpleMiddleware',
 ]
 
 ROOT_URLCONF = 'sheek.urls'
@@ -65,7 +68,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates", os.environ.get("TEMPLATE", "theme1"))],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        ,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +78,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'builtins':[
+                'projects.templatetags.getmessage'
+            ]
         },
     },
 ]
@@ -83,10 +90,20 @@ WSGI_APPLICATION = 'sheek.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get("DATABASE_ENGINE", "django.db.backends.mysql"),
+        'NAME': os.environ.get("DATABASE_NAME", "sheek_fcghfd"),
+        'USER': os.environ.get("DATABASE_USER", "sheek_sdvcsadvsa"),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD", "Bo-L9=7JjO%A"),
+        'HOST': os.environ.get("DATABASE_HOST", "cpanel.vps-vds.com"),
+        'PORT': os.environ.get("DATABASE_PORT", ''),
     }
 }
 
@@ -118,6 +135,17 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
+
 SWAGGER_SETTINGS = {
     'LOGIN_URL': 'rest_framework:login',
     'LOGOUT_URL': 'rest_framework:logout',
@@ -146,7 +174,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': 'VIDONE!!0110LKJfdosduijfa@#$#@ALKSDJFSDFlkjfsd2324!!@#FDSLFKJI*',
+    'SIGNING_KEY': 'SHEEK!!0110LKJfdosduijfa@#$#@ALKSDJFSDFlkjfsd2324!!@#FDSLFKJI*',
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,
@@ -191,9 +219,22 @@ CORS_ALLOW_HEADERS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = os.environ.get("STATIC_URL", '/static/')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+MEDIA_ROOT = os.environ.get("MEDIA_ROOT", os.path.join(BASE_DIR, 'media'))
+
+MEDIA_URL = os.environ.get("MEDIA_URL", '/media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SMSIR_APIKEY = '278a88dfede55fc1d8488df'
+SMSIR_SECRETKEY = '@qwer3!!234TebyA'
+
+SMSIR_NUMBER = '30004554552802'
