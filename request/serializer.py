@@ -4,7 +4,6 @@ from projects.models import UserJobField
 
 
 class ExpertSerializer(serializers.ModelSerializer):
-    description = serializers.SerializerMethodField()
     state = serializers.SerializerMethodField()
     jobField = serializers.SerializerMethodField()
     owner_first = serializers.SerializerMethodField()
@@ -29,10 +28,6 @@ class ExpertSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_jobField(obj):
         return obj.jobField.title
-
-    @staticmethod
-    def get_description(obj):
-        return obj.UserJobField.description
 
 
 class UserJobFieldSerializer(serializers.ModelSerializer):
