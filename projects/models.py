@@ -65,3 +65,8 @@ class Report(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+
+class Comment(models.Model):
+    text = models.TextField()
+    projects = models.ForeignKey(Project, on_delete=models.CASCADE)
