@@ -60,6 +60,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'sheek.urls'
+LOGIN_URL = '/accounts/auth/'
+LOGIN_REDIRECT_URL = '/accounts/dashboard/'
 AUTH_USER_MODEL = "client.User"
 
 USE_X_FORWARDED_HOST = True

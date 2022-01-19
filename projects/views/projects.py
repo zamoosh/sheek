@@ -1,12 +1,12 @@
 from .imports import *
 
-
+@login_required
 def get_projects(request):
     context = {}
     context['projects'] = Project.objects.filter(owner_id=request.user.id, status=True).order_by('-created_at')
     return render(request, 'project/projects.html', context)
 
-
+@login_required
 def get_expert_projects(request):
     context = {}
     if 'confirm' in request.GET:
@@ -19,7 +19,7 @@ def get_expert_projects(request):
         '-created_at')
     return render(request, 'project/expert-projects.html', context)
 
-
+@login_required
 def reject_project(request, id):
     context = {}
     context['project'] = Project.objects.get(id=id)
@@ -33,7 +33,7 @@ def reject_project(request, id):
     message.save()
     return HttpResponseRedirect(reverse('projects:projects'))
 
-
+@login_required
 def end_project(request, id):
     context = {}
     context['project_details'] = Project.objects.get(id=id)

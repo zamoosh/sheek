@@ -119,6 +119,7 @@
                             <div class="card-body">
                                 <a class="btn btn-primary float-right shadow mr-1 mb-1" href="{% url 'projects:adduserjob' %}">افزودن کارشناسی
                                 </a>
+                            {% if userjobs %}
                                 <div class="table-responsive" id="jobTabale">
                                     <table class="table">
                                         <thead>
@@ -149,6 +150,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            {% else %}
+                            شما هنوز رشته ای را انتخاب نکرده اید
+                            {% endif %}
                             </div>
                         </div>
                     </div>

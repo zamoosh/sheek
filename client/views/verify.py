@@ -24,6 +24,10 @@ def verify(request):
                     )
                     if context['expertRegister']:
                         user.has_jobField = True
+                    if context['existential'] == "realperson":
+                        user.existential = False
+                    if context['existential'] == "legalperson":
+                        user.existential = True
                     user.save()
                     del request.session['user']
                     context['register'] = 1

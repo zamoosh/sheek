@@ -1,6 +1,6 @@
 from .imports import *
 
-
+@login_required
 def userjobfield(request):
     context = {}
     context['userjobs'] = UserJobField.objects.filter(owner=request.user.id)

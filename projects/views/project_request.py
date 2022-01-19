@@ -3,7 +3,7 @@ from .imports import *
 from datetime import timedelta
 import datetime
 
-
+@login_required
 def project_request(request):
     context = {}
     curent_user = UserJobField.objects.filter(owner=request.user.id)

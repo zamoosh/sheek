@@ -35,12 +35,12 @@
                                         پروژه <strong>{{ project.title }}</strong> توسط شما تایید شد . هم اکنون میتوانید آن را مدیریت کنید .
                                     </div>
                                 {% endif %}
+                                {% if projects %}
                                 <div class="table-responsive" id="jobTabale">
                                     <table class="table">
                                         <thead>
                                         <tr>
                                             <th>عنوان پروژه</th>
-                                            <th>درخواست کننده</th>
                                             <th>کارشناس</th>
                                             <th>تاریخ ایجاد</th>
                                             <th>وضعیت</th>
@@ -52,7 +52,6 @@
                                         {% for project in projects %}
                                             <tr {% if project.status_jobField_user == 2 %}class="badge-circle-light-success"{% endif %}>
                                                 <td class="text-bold-500">{{ project.title }}</td>
-                                                <td class="text-bold-500">{{ project.owner.first_name }} {{ project.owner.last_name }}</td>
                                                 <td class="text-bold-500">{{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}</td>
                                                 <td class="text-bold-500">{{ project.created_at|jformat:"%Y/%m/%d" }}</td>
                                                 <td class="text-bold-500">
@@ -73,6 +72,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {% else %}
+                                پروژه ای وجود ندارد
+                                {% endif %}
                             </div>
                         </div>
                     </div>

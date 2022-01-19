@@ -1,6 +1,6 @@
 from .imports import *
 
-
+@login_required
 def view_project(request, id):
     context = {}
     if Project.objects.filter(Q(user_jobField__owner_id=request.user.id) | Q(id=id) | Q(owner_id=request.user.id)):

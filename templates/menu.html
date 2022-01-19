@@ -32,10 +32,12 @@
                     class="menu-title text-truncate" data-i18n="Dashboard">شهر ها و استان ها</span></a></li>{% endif %}
             {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'projects:jobs' %}"><i class="bx bx-briefcase-alt"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">مشاغل</span></a></li>{% endif %}
+            {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'projects:experts' %}"><i class="bx bx-location-plus"></i><span
+                        class="menu-title text-truncate" data-i18n="Dashboard">تایید کارشناسان</span></a></li>{% endif %}
             <li class=" nav-item"><a href="{% url 'projects:userjob' %}"><i class="bx bxs-user-detail"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">کارشناسی</span></a>
                 <ul class="menu-content">
-                    {% if request.user.has_jobField %}<li><a class="d-flex align-items-center" href="{% url 'projects:adduserjob' %}"><i
+                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:adduserjob' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">انتخاب کارشناسی</span></a>
                     </li>{% endif %}
                     <li><a class="d-flex align-items-center" href="{% url 'projects:addproject' %}"><i
@@ -44,13 +46,13 @@
                     <li><a class="d-flex align-items-center" href="{% url 'projects:projects' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">پروژه ها</span></a>
                     </li>
-                    {% if request.user.has_jobField %}<li><a class="d-flex align-items-center" href="{% url 'projects:expert-projects' %}"><i
+                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:expert-projects' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">پروژه های من</span></a>
                     </li>{% endif %}
-                    {% if request.user.has_jobField %}<li><a class="d-flex align-items-center" href="{% url 'projects:project-request' %}"><i
+                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:project-request' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">دریافت پروژه</span></a>
                     </li>{% endif %}
-                    {% if request.user.has_jobField %}<li><a class="d-flex align-items-center" href="{% url 'projects:userjob' %}"><i
+                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:userjob' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">کارشناسی</span></a>
                     </li>{% endif %}
                 </ul>

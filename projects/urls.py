@@ -22,4 +22,5 @@ urlpatterns = [
     path('report/api/<int:id>/', report_api, name="getReport"),
     path('message/api/<int:id>/', message_api, name="getMessage"),
     path('message/readmsg/<int:id>/', setreadmessage, name="ReadMessage"),
+    path('experts/', experts, name="experts"),
 ]

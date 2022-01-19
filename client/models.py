@@ -23,7 +23,7 @@ class User(AbstractUser):
     gender = models.BooleanField(default=True)
     has_jobField = models.BooleanField(default=False)
     state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
-    existential = models.BooleanField(default=True)
+    existential = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if 'linkedin' not in self.extra:

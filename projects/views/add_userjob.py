@@ -1,6 +1,6 @@
 from .imports import *
 
-
+@login_required
 def adduserjobfield(request):
     context = {}
     if request.method == "POST":
