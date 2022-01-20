@@ -44,8 +44,11 @@ class User(AbstractUser):
                 self.cellphone = self.username
         super(User, self).save()
         if self.image:
-            img = Image.open(self.image)
-            img.save(self.image.path, quality=95)
+            try:
+                img = Image.open(self.image)
+                img.save(self.image.path, quality=95)
+            except:
+                pass
 
 
 class VerificationCode(models.Model):
