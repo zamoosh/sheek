@@ -35,14 +35,22 @@ def reject_project(request, id):
 
 @login_required
 def end_project(request, id):
-    context = {}
-    context['project_details'] = Project.objects.get(id=id)
-    context['project'] = Project.objects.get(id=id)
-    context['project'].status_jobField_user = 2
-    context['project'].save()
-    message = Message()
-    message.text = "پروژه شما به اتمام رسید."
-    message.project = Project.objects.get(id=id)
-    message.owner_id = request.user.id
-    message.save()
-    return HttpResponseRedirect(reverse('projects:projects'))
+    if request.method == "POST":
+        context = {}
+        context['rate'] = request.POST.get('rating')
+        context['rate_description'] = request.POST.get('rate_description')
+        context['project_details'] = Project.objects.get(id=id)
+        context['project'] = Project.objects.get(id=id)
+        context['project'].status_jobField_user = 2
+        context['project'].rate = context['rate']
+        context['project'].save()
+        context['comment'] = Comment()
+        context['comment'].projects_id = id
+        context['comment'].text = context['rate_description']
+        context['comment'].save()
+        message = Message()
+        message.text = "پروژه شما به اتمام رسید."
+        message.project = Project.objects.get(id=id)
+        message.owner_id = request.user.id
+        message.save()
+    return HttpResponseRedirect(reverse('projects:expert-projects'))

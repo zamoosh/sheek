@@ -14,7 +14,8 @@ def userjob_api(request):
             five_delta = datetime.date.today() - datetime.timedelta(days=1825)
             ten_delta = datetime.date.today() - datetime.timedelta(days=3650)
             if item.experience > five_delta:
-                expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, owner=item.owner_id, state=state).distinct()
+                expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, owner=item.owner_id,
+                                                                                        state=state).distinct()
                 expert = User.objects.filter(id__in=expert_id)
             elif item.experience > ten_delta:
                 expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, owner=item.owner_id,
@@ -22,9 +23,12 @@ def userjob_api(request):
                                                                                             parent_id=state.parent)).distinct()
                 expert = User.objects.filter(id__in=expert_id)
             else:
-                expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, owner=item.owner_id).distinct()
+                expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q,
+                                                                                        owner=item.owner_id).distinct()
                 expert = User.objects.filter(id__in=expert_id)
             for i in expert:
-                context.append({'id': i.pk, 'name': i.first_name, 'last_name': i.last_name, 'birthday': i.birthday, 'profile':i.image.url})
+                tmp = {'id': i.pk, 'name': i.first_name, 'last_name': i.last_name, 'birthday': i.birthday}
+                if i.image:
+                    tmp['profile'] = i.image.url
+                context.append(tmp)
         return JsonResponse(context, safe=False)
-

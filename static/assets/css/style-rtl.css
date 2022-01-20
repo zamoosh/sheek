@@ -286,3 +286,81 @@ label {
     border-radius: 10px;
     box-shadow: 0 0 6px 4px #eee;
 }
+.rating {
+    display: flex;
+    align-items: center;
+    align-content: stretch;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    width: 30%;
+    margin: auto;
+}
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:250%;
+    line-height:1.2;
+    color:#ddd;
+}
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+.rating > input:checked ~ label {
+    color: gold;
+}
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+}
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+}
+.rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
+#status, button {
+    margin: 20px 0;
+}
+.center {
+  text-align: center;
+}
+.expert-image img {
+  border-radius: 100px;
+  width: 130px;
+  height: 130px;
+  margin-top: 40px;
+}
+.expert-rate h4{
+    padding-top: 10px;
+}
+.expert-rate textarea {
+  width: 85%;
+  margin: auto;
+}
+.no-expert {
+  padding: 0 30px 50px 0;
+  font-size: 19px;
+}
+.actions.clearfix ul li:last-child {
+  display: none !important;
+}
+.btnformsub {
+  position: absolute;
+  left: 0;
+  bottom: -58px;
+}

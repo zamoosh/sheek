@@ -11,6 +11,17 @@
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/pages/app-chat.min.js" %}"></script>
     <script>
+    $(document).ready(function() {
+        e.preventDefault(); // prevent the default click action from being performed
+        if ($("#ratingForm :radio:checked").length == 0) {
+            $('#status').html("nothing checked");
+            return false;
+        } else {
+            $('#status').html( 'You picked ' + $('input:radio[name=rating]:checked').val() );
+        }
+    });
+    </script>
+    <script>
         function getCookies(reportTitle) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -50,7 +61,6 @@
         });
     </script>
     <script>
-
         $("#sendMessageBtn").click(function () {
             $.ajax({
                 url: '{% url 'projects:getMessage' project_details.id %}',
@@ -84,6 +94,28 @@
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 },
                 success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#endproject").click(function () {
+            $.ajax({
+                url: '{% url 'projects:end_project' project_details.id %}',
+                type: "POST",
+                data: {
+                    rating: $('input[name=rating]:checked', '#ratingForm').val(),
+                    rate_description: $("#rate-description").val()
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    window.location.replace("{% url 'projects:expert-projects' %}");
                     console.log(data);
                 },
                 error: function (error) {
@@ -163,8 +195,8 @@
                                         </li>
                                     </ul>
                                     {% if project_details.status_jobField_user == 1 %}
-                                        <a href="{% url 'projects:end_project' project_details.id %}" type="button"
-                                           class="btn btn-success ml-auto mr-2">اعلام اتمام پروژه</a>{% endif %}
+                                        <a class="btn btn-success ml-auto mr-2"  data-toggle="modal"
+                                        data-target="#inlineForms">اعلام اتمام پروژه</a>{% endif %}
                                     {% if project_details.status_jobField_user == 0 %}
                                         <div class="btn btn-warning ml-auto mr-2">پروژه شما هنوز توسط کارشناس تایید نشده
                                             است .
@@ -357,6 +389,46 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="inlineForms" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel333" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="center expert-rate">
+                    <div class="expert-image">
+                        {% if project_details.user_jobField.owner.image %}<img src="{{ project_details.user_jobField.owner.image.url }}" alt="{{ project_details.user_jobField.owner.first_name }}">{% endif %}
+                    </div>
+                    <div class="expert-detail">
+                        <h4>{{ project_details.user_jobField.owner.first_name }} {{ project_details.user_jobField.owner.last_name }}</h4>
+                        <p>{{ project_details.user_jobField.jobField.parent.title }} / {{ project_details.user_jobField.jobField.title }}</p>
+                        <h4>به کارشناس امتیاز بدهید</h4>
+                        <form method="POST" id="ratingForm">
+                        {% csrf_token %}
+                            <fieldset class="rating">
+                                <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="Rocks!">5 stars</label>
+                                <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="Pretty good">4 stars</label>
+                                <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="Meh">3 stars</label>
+                                <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="Kinda bad">2 stars</label>
+                                <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="Sucks big time">1 star</label>
+                            </fieldset>
+                            <h4 class="pt-2">در صورت تمایل نظرتان را بنویسید</h4>
+                            <textarea type="text-area" class="form-control"
+                                                               placeholder="اینجا بنویسید ..."
+                                                               value="" rows="10" id="rate-description"
+                                                               name="rate-description"></textarea>
+                            <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                                <i class="bx bx-x d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">انصراف</span>
+                            </button>
+                            <button type="button" id="endproject" class="btn btn-success ml-1">
+                                <i class="bx bx-check d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">اتمام پروژه</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
