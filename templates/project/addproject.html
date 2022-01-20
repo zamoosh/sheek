@@ -68,7 +68,7 @@
             },
             success: function (data) {
                 $('#expert').find('option').remove().end()
-                $("#expert").append($('<option>', {value: 0, text: ''}))
+                $("#expert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
                 data.forEach(function (element) {
                     $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
                 });
@@ -130,7 +130,7 @@
 
                     $("#experts").empty();
                     data.forEach( data => {
-                      const card = `<div class="media get-expert">
+                        const card = `<div class="media get-expert">
                        <input id="chb1" type="radio" value="${data.id}" name="expert-list"/>
                         <img src="${data.profile}" class="rounded mr-75" alt="profile image" height="64" width="64">
                         <div class="media-body mt-25">
@@ -149,14 +149,23 @@
                         </div>`
                       const ele = document.createElement('div');
                       ele.innerHTML = card;
-                      $('.loader').hide();
-                      $('.overlay').hide();
                       $("#experts").append(ele);
+
                     })
+                    if (data.length == 0) {
+                        const card =`<div class="no-expert">کارشناسی برای ارائه به این درخواست وجود ندارد.<br><br>شما میتوانید از گزینه " ثبت درخواست بدون انتخاب کارشناس " استفاده نمایید.</div>`
+                         const ele = document.createElement('div');
+                         ele.innerHTML = card;
+                         $("#experts").append(ele);
+                    }
                 },
                 error: function (error) {
                     $('.overlay').hide();
                     $('.loader').hide();
+                    const card =`<div class="no-expert">استان و یا کارشناسی به درستی انتخاب نشده است.</div>`
+                         const ele = document.createElement('div');
+                         ele.innerHTML = card;
+                         $("#experts").append(ele);
                     console.log(error);
                 }
             });
@@ -242,7 +251,6 @@
                                                     <div class="input-group mt-1">
                                                         <select class="form-control" name="expert" id="expert">
                                                             <option selected>انتخاب رشته کارشناسی</option>
-                                                            subexpert
                                                             <option value="1"></option>
                                                         </select>
                                                     </div>
@@ -288,10 +296,10 @@
                                                 <div class="form-group">
                                                     <div class="controls">
                                                         <label>توضیحات پروژه</label>
-                                                        <input type="text-area" class="form-control"
+                                                        <textarea type="text-area" class="form-control"
                                                                placeholder="توضیحات پروژه"
-                                                               value=""
-                                                               name="project-description">
+                                                               value="" rows="10"
+                                                                  name="project-description"></textarea>
                                                     </div>
                                                 </div>
                                             </div>

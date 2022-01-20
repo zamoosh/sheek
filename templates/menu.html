@@ -37,8 +37,8 @@
             <li class=" nav-item"><a href="{% url 'projects:userjob' %}"><i class="bx bxs-user-detail"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">کارشناسی</span></a>
                 <ul class="menu-content">
-                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:adduserjob' %}"><i
-                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">انتخاب کارشناسی</span></a>
+                   {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:userjob' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">کارشناسی</span></a>
                     </li>{% endif %}
                     <li><a class="d-flex align-items-center" href="{% url 'projects:addproject' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="View">پروژه جدید</span></a>
@@ -51,9 +51,6 @@
                     </li>{% endif %}
                     {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:project-request' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">دریافت پروژه</span></a>
-                    </li>{% endif %}
-                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:userjob' %}"><i
-                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">کارشناسی</span></a>
                     </li>{% endif %}
                 </ul>
             </li>
