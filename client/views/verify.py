@@ -1,8 +1,12 @@
+from django.urls import reverse
+
 from .imports import *
 
 
 def verify(request):
     context = {}
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('client:dashboard'))
     if 'user' in request.session:
         context = request.session['user']
         if request.method == 'POST':
@@ -12,6 +16,7 @@ def verify(request):
                     if user is not None:
                         if user.is_active:
                             login(request, user)
+                            del request.session['user']
                             if len(request.GET.get("next", "/")) == 0:
                                 return HttpResponseRedirect("/")
                             return HttpResponseRedirect(request.GET.get("next", "/"))
