@@ -18,6 +18,11 @@ class JobField(models.Model):
         self.save()
 
 
+class Tag(models.Model):
+    title = models.CharField(max_length=250, unique=True)
+    jobfield = models.ForeignKey(JobField, on_delete=models.CASCADE)
+
+
 class UserJobField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
