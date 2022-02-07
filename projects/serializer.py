@@ -10,15 +10,44 @@ class JobFieldSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class JobFieldTagSerializer(serializers.ModelSerializer):
+    jobField_parent = serializers.SerializerMethodField()
+    jobField_parent_parent = serializers.SerializerMethodField()
+
+    class Meta:
+        model = JobField
+        fields = '__all__'
+
+    @staticmethod
+    def get_jobField_parent(obj):
+        return obj.parent.title
+
+    @staticmethod
+    def get_jobField_parent_parent(obj):
+        return obj.parent.parent.title
+
+
 class LowProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
+        fields = '__all__'
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
         fields = '__all__'
 
 

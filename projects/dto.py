@@ -46,3 +46,16 @@ class ProjectViewCommentDto(serializers.Serializer):
     status = serializers.BooleanField()
     status_jobField_user = serializers.IntegerField()
     comment = serializers.CharField()
+
+
+class MessageCreateDto(serializers.Serializer):
+    text = serializers.CharField()
+
+
+class MessageViewDto(serializers.Serializer):
+    created_at = serializers.DateTimeField()
+    text = serializers.CharField()
+    user_view = serializers.BooleanField()
+    expert_view = serializers.BooleanField()
+    project = serializers.IntegerField()
+    owner = serializers.IntegerField()
