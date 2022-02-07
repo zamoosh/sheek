@@ -24,9 +24,7 @@ def search(request):
 @permission_classes((IsAuthenticated,))
 def get_jobfield_bytag(request, id):
     context = {}
-    job_field_id = Tag.objects.values('jobfield').filter(id=id)
-    job_field = JobField.objects.filter(id__in=job_field_id)
-    serializer = JobFieldTagSerializer(job_field, many=True)
+    serializer = JobFieldTagSerializer(Tag.objects.get(id=id).jobfield.all(), many=True)
     context = serializer.data
     status_code = HTTP_200_OK
     return Response(context, status=status_code)
