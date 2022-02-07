@@ -20,7 +20,7 @@ class JobField(models.Model):
 
 class Tag(models.Model):
     title = models.CharField(max_length=250, unique=True)
-    jobfield = models.ForeignKey(JobField, on_delete=models.CASCADE)
+    jobfield = models.ManyToManyField(JobField)
 
 
 class UserJobField(models.Model):
