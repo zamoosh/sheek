@@ -7,7 +7,6 @@ from projects.models import JobField, Tag
 def convert():
     df = pd.read_excel(os.path.join(settings.BASE_DIR, "library", '1.xlsx'))
     list = []
-    counter = 0
     for i in range(df.index.start, df.index.stop, df.index.step):
         data = {}
         try:
@@ -25,5 +24,7 @@ def convert():
         job, _ = JobField.objects.get_or_create(title=i[1], parent=job)
         job, _ = JobField.objects.get_or_create(title=i[2], parent=job)
         for j in i[3]:
+            if j == "":
+                continue
             tag, _ = Tag.objects.get_or_create(title=j)
             tag.jobfield.add(job)
