@@ -10,3 +10,4 @@ from .report import *
 from .message_api import *
 from .project_request import *
 from .experts import *
+from .job_search import *
