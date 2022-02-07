@@ -20,11 +20,14 @@ def convert():
         except:
             pass
     for i in list:
-        job, _ = JobField.objects.get_or_create(title=i[0])
-        job, _ = JobField.objects.get_or_create(title=i[1], parent=job)
-        job, _ = JobField.objects.get_or_create(title=i[2], parent=job)
-        for j in i[3]:
-            if j == "":
-                continue
-            tag, _ = Tag.objects.get_or_create(title=j)
-            tag.jobfield.add(job)
+        try:
+            job, _ = JobField.objects.get_or_create(title=i[0].strip())
+            job, _ = JobField.objects.get_or_create(title=i[1].strip(), parent=job)
+            job, _ = JobField.objects.get_or_create(title=i[2].strip(), parent=job)
+            for j in i[3]:
+                if j.strip() == "":
+                    continue
+                tag, _ = Tag.objects.get_or_create(title=j.strip())
+                tag.jobfield.add(job)
+        except:
+            pass
