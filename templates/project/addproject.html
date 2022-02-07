@@ -6,11 +6,12 @@
     <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
     <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/wizard.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
     <style>
-    .pointer{
-        cursor:pointer;
-    }
+        .pointer {
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 {% block js %}
@@ -25,12 +26,69 @@
         $(function () {
             $("#data-input").persianDatepicker();
         });
-        $('.media').click(function() {
-          $('.hli').removeClass('hli');
-          $(this).addClass('hli').find('input').prop('checked', true)
+        $('.media').click(function () {
+            $('.hli').removeClass('hli');
+            $(this).addClass('hli').find('input').prop('checked', true)
         });
     </script>
     <script>
+        $.ajax({
+            url: '{% url 'projects:jobsapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#expert').find('option').remove().end()
+                $("#expert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
+                data.forEach(function (element) {
+                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $("#expert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
+                type: "GET",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#subexpert').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+        $("#subexpert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:adduserjob' %}' + $("#subexpert").val() + '/',
+                type: "GET",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#salahiat').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#salahiat").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
         $.ajax({
             url: '{% url 'state:stateapi' %}',
             type: "GET",
@@ -84,7 +142,7 @@
                 success: function (data) {
 
                     $("#experts").empty();
-                    data.forEach( data => {
+                    data.forEach(data => {
                         const card = `<div class="media get-expert">
                        <input id="chb1" type="radio" value="${data.id}" name="expert-list"/>
                         <img src="${data.profile}" class="rounded mr-75" alt="profile image" height="64" width="64">
@@ -104,71 +162,77 @@
                         </div>
                         </div>
                         </div>`
-                      const ele = document.createElement('div');
-                      ele.innerHTML = card;
-                      $("#experts").append(ele);
+                        const ele = document.createElement('div');
+                        ele.innerHTML = card;
+                        $("#experts").append(ele);
 
                     })
                     if (data.length == 0) {
-                        const card =`<div class="no-expert">کارشناسی برای ارائه به این درخواست وجود ندارد.<br><br>شما میتوانید از گزینه " ثبت درخواست بدون انتخاب کارشناس " استفاده نمایید.</div>`
-                         const ele = document.createElement('div');
-                         ele.innerHTML = card;
-                         $("#experts").append(ele);
+                        const card = `<div class="no-expert">کارشناسی برای ارائه به این درخواست وجود ندارد.<br><br>شما میتوانید از گزینه " ثبت درخواست بدون انتخاب کارشناس " استفاده نمایید.</div>`
+                        const ele = document.createElement('div');
+                        ele.innerHTML = card;
+                        $("#experts").append(ele);
                     }
                 },
                 error: function (error) {
                     $('.overlay').hide();
                     $('.loader').hide();
-                    const card =`<div class="no-expert">استان و یا کارشناسی به درستی انتخاب نشده است.</div>`
-                         const ele = document.createElement('div');
-                         ele.innerHTML = card;
-                         $("#experts").append(ele);
+                    const card = `<div class="no-expert">استان و یا کارشناسی به درستی انتخاب نشده است.</div>`
+                    const ele = document.createElement('div');
+                    ele.innerHTML = card;
+                    $("#experts").append(ele);
                     console.log(error);
                 }
             });
         });
     </script>
     <script>
-    mamad= function (mamadvar){
-        $.ajax({
-            url: '{% url 'projects:jobsapi' %}',
-            type: "GET",
-            data: {
-                jobid: mamadvar,
-            },
-            send: function (xhr) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-            success: function (data) {
-                $('#expert').find('option').remove().end()
-                $("#expert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
-                data.forEach(function (element) {
-                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-        $("#expert").change(function () {
+        mamad = function (mamadvar) {
             $.ajax({
-                url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
+                url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
                 type: "GET",
                 send: function (xhr) {
                 },
                 success: function (data) {
-                    $('#subexpert').find('option').remove().end()
-                    data.forEach(function (element) {
-                        $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
-                    });
+                    $("#search-list").empty();
+                    data.forEach(data => {
+                        const card = `<li onclick="mamad2(${data.id})" class="pointer">${data.title}</li>`
+                        const ele = document.createElement('div');
+                        ele.innerHTML = card;
+                        $("#search-list").append(ele);
+                    })
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
-        });
-    }
-    $('#searchin').keyup(function(){
+        }
+        mamad2 = function (mamadvar) {
+            $.ajax({
+                url: '{% url 'projects:jobs_api_search2' %}' + mamadvar + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $("#search-list").empty();
+                    $("#expert").val(data.select_parent_parent);
+                    $("#expert").change();
+                    $("#subexpert").val(data.select_parent);
+                    $("#subexpert").change();
+                    $("#salahiat").val(data.selecte);
+                    /*data.forEach( data => {
+                        const card = `<li onclick="mamad2(${data.id})" class="pointer">${data.title}</li>`
+                        const ele = document.createElement('div');
+                        ele.innerHTML = card;
+                        $("#search-list").append(ele);
+                    })*/
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        $('#searchin').keyup(function () {
             $.ajax({
                 url: '{% url 'projects:job_search' %}',
                 type: "GET",
@@ -178,13 +242,13 @@
                 send: function (xhr) {
                 },
                 success: function (data) {
-                  $("#search-list").empty();
-                  data.forEach( data => {
-                      const card = `<li onclick="mamad(${data.id})" class="pointer">${data.title}</li>`
-                      const ele = document.createElement('div');
-                      ele.innerHTML = card;
-                      $("#search-list").append(ele);
-                  })
+                    $("#search-list").empty();
+                    data.forEach(data => {
+                        const card = `<li onclick="mamad(${data.id})" class="pointer">${data.title}</li>`
+                        const ele = document.createElement('div');
+                        ele.innerHTML = card;
+                        $("#search-list").append(ele);
+                    })
                 },
                 error: function (error) {
                     console.log(error);
@@ -246,7 +310,8 @@
                                                 <div class="form-group">
                                                     <label for="first-name-vertical">شهر</label>
                                                     <div class="input-group mt-1">
-                                                        <select class="form-control required" name="city" id="city" required>
+                                                        <select class="form-control required" name="city" id="city"
+                                                                required>
                                                             <option selected>انتخاب شهر</option>
                                                             <option value="1"></option>
                                                         </select>
@@ -265,7 +330,8 @@
                                                 <div class="form-group">
                                                     <label for="first-name-vertical">کلمه کلیدی رشته کارشناسی</label>
                                                     <div class="input-group mt-1">
-                                                        <input class="form-control" type="text" name="searchin" id="searchin">
+                                                        <input class="form-control" type="text" name="searchin"
+                                                               id="searchin">
                                                     </div>
                                                     <div class="jobsearch" id="search-list">
 
@@ -287,7 +353,8 @@
                                                     <div class="form-group">
                                                         <label for="first-name-vertical">زیر گروه</label>
                                                         <div class="input-group mt-1">
-                                                            <select class="form-control" name="subexpert" id="subexpert">
+                                                            <select class="form-control" name="subexpert"
+                                                                    id="subexpert">
                                                                 <option selected>انتخاب زیر گروه</option>
                                                             </select>
                                                         </div>
@@ -335,8 +402,8 @@
                                                     <div class="controls">
                                                         <label>توضیحات پروژه</label>
                                                         <textarea type="text-area" class="form-control"
-                                                               placeholder="توضیحات پروژه"
-                                                               value="" rows="10"
+                                                                  placeholder="توضیحات پروژه"
+                                                                  value="" rows="10"
                                                                   name="project-description"></textarea>
                                                     </div>
                                                 </div>
@@ -375,7 +442,8 @@
                                                             <h5>ثبت درخواست بدون انتخاب کارشناس</h5>
                                                             <p>درخواست شما ثبت می‌شود و هر کدام از کارشناسان که مایل
                                                                 باشند به درخواست پاسخ می‌دهند.</p>
-                                                            <button type="submit" class="btn btn-lg btn-block font-medium-1 btn-sheek-primary mb-1 block-element text-nowrap">
+                                                            <button type="submit"
+                                                                    class="btn btn-lg btn-block font-medium-1 btn-sheek-primary mb-1 block-element text-nowrap">
                                                                 ثبت درخواست
                                                             </button>
                                                         </div>
@@ -387,7 +455,8 @@
                                                 <div class="loader"></div>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary glow btnformsub">ثبت درخواست</button>
+                                        <button type="submit" class="btn btn-primary glow btnformsub">ثبت درخواست
+                                        </button>
                                     </fieldset>
                                     <!-- body content of step 2 end-->
                                 </form>
