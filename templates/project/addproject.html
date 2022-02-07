@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/wizard.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+    <style>
+    .pointer{
+        cursor:pointer;
+    }
+    </style>
 {% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
@@ -27,23 +32,6 @@
     </script>
     <script>
         $.ajax({
-            url: '{% url 'projects:jobsapi' %}',
-            type: "GET",
-            send: function (xhr) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-            success: function (data) {
-                $('#expert').find('option').remove().end()
-                $("#expert").append($('<option>', {value: 0, text: ''}))
-                data.forEach(function (element) {
-                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-        $.ajax({
             url: '{% url 'state:stateapi' %}',
             type: "GET",
             send: function (xhr) {
@@ -60,40 +48,7 @@
                 console.log(error);
             }
         });
-        $.ajax({
-            url: '{% url 'projects:jobsapi' %}',
-            type: "GET",
-            send: function (xhr) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-            success: function (data) {
-                $('#expert').find('option').remove().end()
-                $("#expert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
-                data.forEach(function (element) {
-                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-        $("#expert").change(function () {
-            $.ajax({
-                url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
-                type: "GET",
-                send: function (xhr) {
-                },
-                success: function (data) {
-                    $('#subexpert').find('option').remove().end()
-                    data.forEach(function (element) {
-                        $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
-                    });
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        });
+
         $("#state").change(function () {
             $.ajax({
                 url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
@@ -142,7 +97,9 @@
                         </div>
                         <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
                         <span>${data.birthday}</span>
+                        <div class="view-profile">
                         <a href="#">مشاهده پروفایل</a>
+                        </div>
                         </span>
                         </div>
                         </div>
@@ -170,6 +127,71 @@
                 }
             });
         });
+    </script>
+    <script>
+    mamad= function (mamadvar){
+        $.ajax({
+            url: '{% url 'projects:jobsapi' %}',
+            type: "GET",
+            data: {
+                jobid: mamadvar,
+            },
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#expert').find('option').remove().end()
+                $("#expert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
+                data.forEach(function (element) {
+                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $("#expert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#subexpert').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    }
+    $('#searchin').keyup(function(){
+            $.ajax({
+                url: '{% url 'projects:job_search' %}',
+                type: "GET",
+                data: {
+                    title: $("#searchin").val(),
+                },
+                send: function (xhr) {
+                },
+                success: function (data) {
+                  $("#search-list").empty();
+                  data.forEach( data => {
+                      const card = `<li onclick="mamad(${data.id})" class="pointer">${data.title}</li>`
+                      const ele = document.createElement('div');
+                      ele.innerHTML = card;
+                      $("#search-list").append(ele);
+                  })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -203,13 +225,11 @@
                                 <form class="wizard-validation" method="POST"
                                       action="{% url 'projects:addproject' %}">
                                     {% csrf_token %}
-                                    <!-- Step 1 -->
+
                                     <h6>
 
                                         <span>انتخاب شهر و استان</span>
                                     </h6>
-                                    <!-- Step 1 end-->
-                                    <!-- body content of step 1 -->
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-6">
@@ -235,42 +255,60 @@
                                             </div>
                                         </div>
                                     </fieldset>
-                                    <!-- body content of step 1 end-->
-                                    <!-- Step 2-->
                                     <h6>
 
-                                        <span>انتخاب رشته کارشناسی</span>
+                                        <span>جستجو در رشته های کارشناسی</span>
                                     </h6>
-                                    <!-- Step 2 end-->
-                                    <!-- body content of step 2 -->
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="form-group">
-                                                    <label for="first-name-vertical">کارشناسی</label>
+                                                    <label for="first-name-vertical">کلمه کلیدی رشته کارشناسی</label>
                                                     <div class="input-group mt-1">
-                                                        <select class="form-control" name="expert" id="expert">
-                                                            <option selected>انتخاب رشته کارشناسی</option>
-                                                            <option value="1"></option>
-                                                        </select>
+                                                        <input class="form-control" type="text" name="searchin" id="searchin">
+                                                    </div>
+                                                    <div class="jobsearch" id="search-list">
+
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="first-name-vertical">زیر کارشناسی</label>
-                                                    <div class="input-group mt-1">
-                                                        <select class="form-control" name="subexpert" id="subexpert">
-                                                            <option selected>انتخاب کارشناسی</option>
-                                                            <option value="1"></option>
-                                                        </select>
+                                            <div class="row col-12">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="first-name-vertical">سرگروه</label>
+                                                        <div class="input-group mt-1">
+                                                            <select class="form-control" name="expert" id="expert">
+                                                                <option selected>انتخاب سرگروه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="first-name-vertical">زیر گروه</label>
+                                                        <div class="input-group mt-1">
+                                                            <select class="form-control" name="subexpert" id="subexpert">
+                                                                <option selected>انتخاب زیر گروه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="first-name-vertical">صلاحیت</label>
+                                                        <div class="input-group mt-1">
+                                                            <select class="form-control" name="salahiat" id="salahiat">
+                                                                <option selected>انتخاب صلاحیت</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
                                     <!-- body content of step 2 end-->
-                                    <!-- Step 3-->
+                                    <!-- body content of step 1 end-->
+                                    <!-- Step 2-->
                                     <h6>
                                         <span>انتخاب کارشناس</span>
                                     </h6>

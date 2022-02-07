@@ -23,4 +23,5 @@ urlpatterns = [
     path('message/api/<int:id>/', message_api, name="getMessage"),
     path('message/readmsg/<int:id>/', setreadmessage, name="ReadMessage"),
     path('experts/', experts, name="experts"),
+    path('jobsearch/api/', job_search, name="job_search"),
 ]

@@ -126,6 +126,9 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-body">
+                                            {% if error %}
+                                                کد ملی وارد شده قبلا ثبت شده است.
+                                            {% endif %}
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active"
                                                      id="account-vertical-general"
