@@ -1,6 +1,7 @@
 import pandas as pd
 from django.conf import settings
 import os
+from projects.models import JobField, Tag
 
 
 def convert():
@@ -19,4 +20,10 @@ def convert():
             list.append(data)
         except:
             pass
-    print(list)
+    for i in list:
+        job, _ = JobField.objects.get_or_create(title=i[0])
+        job, _ = JobField.objects.get_or_create(title=i[1], parent=job)
+        job, _ = JobField.objects.get_or_create(title=i[2], parent=job)
+        for j in i[3]:
+            tag, _ = Tag.objects.get_or_create(title=j)
+            tag.jobfield.add(job)
