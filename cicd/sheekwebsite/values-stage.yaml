@@ -12,7 +12,7 @@ image:
 storage: "sheekstage"
 imagePullSecrets: []
 nameOverride: "sheek-stage"
-fullnameOverride: ""
+fullnameOverride: "sheek-stage"
 
 serviceAccount:
   # Specifies whether a service account should be created
