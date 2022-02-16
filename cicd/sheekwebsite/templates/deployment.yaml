@@ -17,7 +17,7 @@ spec:
       volumes:
         - name: default
           persistentVolumeClaim:
-            claimName: "{{ .Values.storage }}"-claim
+            claimName: "{{ .Values.storage }}-claim"
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
