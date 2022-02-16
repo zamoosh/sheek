@@ -1,0 +1,64 @@
+{{- if eq .Values.nameOverride "sheek" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: sheek
+data:
+    APP_NAME: "Laravel"
+    APP_ENV: "production"
+    APP_KEY: "base64:GK7YMcdvigC7nbdmQGgOiY8hDFAt4YsWhMI6SZJ0gIc="
+    APP_DEBUG: "true"
+    APP_URL: "https://stage2.rafed.net/"
+
+    LOG_CHANNEL: "stack"
+
+    DB_CONNECTION: "mysql"
+    DB_HOST: "rafedmysql"
+    DB_PORT: "3306"
+    DB_DATABASE: "reyhanalaravel_rafed_v3"
+    DB_USERNAME: "reyhanalaravel_reyhana"
+    DB_PASSWORD: "[f2ma1v0$H]6"
+
+    BROADCAST_DRIVER: "log"
+    CACHE_DRIVER: "redis"
+    QUEUE_CONNECTION: "database"
+    SESSION_DRIVER: "database"
+    SESSION_LIFETIME: "9000"
+
+
+    REDIS_URL: "redis-master:6379"
+    REDIS_MASTER: "tcp://redis-master:6379"
+    REDIS_SLAVE: "tcp://redis-slave:6379"
+    CACHE_REDIS_CONNECTION: "cache"
+    REDIS_DB: "7"
+    REDIS_CACHE_DB: "8"
+
+    MAIL_DRIVER: "smtp"
+    MAIL_HOST: "mail.rafed.net"
+    MAIL_PORT: "587"
+    MAIL_USERNAME: "reyhana@reyhana.rafed.net"
+    MAIL_PASSWORD: "Reyhana@rafed110"
+    MAIL_FROM_ADDRESS: "reyhana.rafed@gmail.com"
+    MAIL_FROM_NAME: "شبكة رافـد للتنمية الثقافية"
+    MAIL_ENCRYPTION: "tls"
+
+
+
+    STATIC_STORAGE: "/storage/"
+    STATIC_STORAGE_URL: "https://static.rafed.net"
+
+    AWS_ACCESS_KEY_ID: ""
+    AWS_SECRET_ACCESS_KEY: ""
+    AWS_DEFAULT_REGION: "us-east-1"
+    AWS_BUCKET: ""
+
+    PUSHER_APP_ID: ""
+    PUSHER_APP_KEY: ""
+    PUSHER_APP_SECRET: ""
+    PUSHER_APP_CLUSTER: "mt1"
+    LOCAL:  "ar"
+    MIX_PUSHER_APP_KEY: "${PUSHER_APP_KEY}"
+    MIX_PUSHER_APP_CLUSTER: "${PUSHER_APP_CLUSTER}"
+    STATIC_URL: "https://static.rafed.net/static/{{ .Values.staticversion }}/"
+    APPVERSION: "{{ .Values.image.tag }}"
+{{- end -}}
