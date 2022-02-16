@@ -4,7 +4,7 @@ from .imports import *
 def jobs(request):
     context = {}
     try:
-        context['jobs'] = JobField.objects.filter(status=True)
+        context['jobs'] = JobField.objects.filter(status=True).order_by('-created_at')
     except:
         pass
     if request.method == "POST":

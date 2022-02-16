@@ -26,7 +26,10 @@
             },
             success: function (data) {
                 $('#state').find('option').remove().end()
-                $("#state").append($('<option>', {value: {{ request.user.state.id }}, text: '{{ request.user.state.title }}'}))
+                $("#state").append($('<option>', {
+                    value: {{ request.user.state.id }},
+                    text: '{{ request.user.state.title }}'
+                }))
                 data.forEach(function (element) {
                     $("#state").append($('<option>', {value: element['id'], text: element['title']}))
                 });
@@ -35,9 +38,9 @@
                 console.log(error);
             }
         });
-        $("#state").change(function(){
+        $("#state").change(function () {
             $.ajax({
-                url: '{% url 'state:stateapi' %}'+$("#state").val()+'/',
+                url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
                 type: "GET",
                 send: function (xhr) {
                 },
@@ -81,9 +84,9 @@
                 <section id="page-account-settings">
                     <div class="row">
                         <div class="col-12">
-                            <div class="row">
+                            <div-- class="row">
                                 <!-- left menu section -->
-                                <div class="col-md-3 mb-2 mb-md-0 pills-stacked">
+                                <!--div class="col-md-3 mb-2 mb-md-0 pills-stacked">
                                     <ul class="nav nav-pills flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link d-flex align-items-center active"
@@ -93,14 +96,14 @@
                                                 <span>عمومی</span>
                                             </a>
                                         </li>
-                                        <!--li class="nav-item">
+                                        <li class="nav-item">
                                             <a class="nav-link d-flex align-items-center" id="account-pill-password"
                                                data-toggle="pill"
                                                href="#account-vertical-password" aria-expanded="false">
                                                 <i class="bx bx-lock"></i>
                                                 <span>تغییر پسورد</span>
                                             </a>
-                                        </li-->
+                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link d-flex align-items-center" id="account-pill-info"
                                                data-toggle="pill"
@@ -118,11 +121,14 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </div>
+                                </div-->
                                 <!-- right content section -->
-                                <div class="col-md-9">
+                                <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-body">
+                                            {% if error %}
+                                                کد ملی وارد شده قبلا ثبت شده است.
+                                            {% endif %}
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active"
                                                      id="account-vertical-general"
@@ -131,28 +137,32 @@
                                                     <form id="jquery-val-form" class="validate-form" method="POST"
                                                           novalidate="novalidate" enctype="multipart/form-data">
                                                         {% csrf_token %}
-                                                    <div class="media">
-                                                        <a href="javascript: void(0);">
-                                                            <img src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
-                                                                 class="rounded mr-75" alt="profile image" height="64"
-                                                                 width="64">
-                                                        </a>
-                                                        <div class="media-body mt-25">
-                                                            <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                                                                <label for="select-files"
-                                                                       class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
-                                                                    <span>آپلود عکس</span>
-                                                                    <input id="select-files" name="profile-picture" type="file" hidden>
-                                                                </label>
-                                                                <button class="btn btn-sm btn-light-secondary ml-50">
-                                                                    ریست
-                                                                </button>
+                                                        <div class="media">
+                                                            <a href="javascript: void(0);">
+                                                                <img src="
+                                                                        {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
+                                                                     class="rounded mr-75" alt="profile image"
+                                                                     height="64"
+                                                                     width="64">
+                                                            </a>
+                                                            <div class="media-body mt-25">
+                                                                <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                                    <label for="select-files"
+                                                                           class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
+                                                                        <span>آپلود عکس</span>
+                                                                        <input id="select-files" name="profile-picture"
+                                                                               type="file" hidden>
+                                                                    </label>
+                                                                    <button class="btn btn-sm btn-light-secondary ml-50">
+                                                                        ریست
+                                                                    </button>
+                                                                </div>
+                                                                <p class="text-muted ml-1 mt-50"><small>فرمت های مورد
+                                                                    قبول :
+                                                                    PNG , JPG حداکثر حجم : 150KB</small></p>
                                                             </div>
-                                                            <p class="text-muted ml-1 mt-50"><small>فرمت های مورد قبول :
-                                                                PNG , JPG حداکثر حجم : 150KB</small></p>
                                                         </div>
-                                                    </div>
-                                                    <hr>
+                                                        <hr>
                                                         <div class="row">
                                                             <div class="col-12">
                                                                 <div class="form-group">
@@ -205,7 +215,8 @@
                                                                         <input type="text" class="form-control"
                                                                                placeholder="کد ملی"
                                                                                value="{% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
-                                                                               name="national_code" minlength="10" required="required"/>
+                                                                               name="national_code" minlength="10"
+                                                                               required="required"/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -214,7 +225,8 @@
                                                                     <div class="controls">
                                                                         <label>استان</label>
                                                                         <div class="input-group">
-                                                                            <select class="form-control" name="state" id="state">
+                                                                            <select class="form-control" name="state"
+                                                                                    id="state">
 
                                                                                 <option value="1"></option>
                                                                             </select>
@@ -258,7 +270,7 @@
                                                                                         <input type="radio" id="gender1"
                                                                                                name="gender"
                                                                                                value="male"
-                                                                                                {% if request.user.gender == 1 %}checked {% endif %}>
+                                                                                               {% if request.user.gender == 1 %}checked {% endif %}>
                                                                                         <label for="gender1">مرد</label>
                                                                                     </div>
                                                                                 </fieldset>
@@ -282,213 +294,78 @@
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     {% if request.user.has_jobField %}
-                                                                        <label class="d-block">آپلود تصویر کارت ملی</label>
-                                                                    <div class="media">
-                                                                        <a href="javascript: void(0);">
-                                                                            <img src="{% if request.user.national_card %}{{ request.user.national_card.url }}{% endif %}"
-                                                                                 class="rounded mr-75" alt="profile image" height="200"
-                                                                                 width="300">
-                                                                        </a>
-                                                                        <div class="media-body mt-25">
-                                                                            <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                                                                                <label for="card-files"
-                                                                                       class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
-                                                                                    <span>آپلود عکس</span>
-                                                                                    <input id="card-files" name="national-card" type="file" hidden>
-                                                                                </label>
-                                                                                <button class="btn btn-sm btn-light-secondary ml-50">
-                                                                                    ریست
-                                                                                </button>
+                                                                        <label class="d-block">آپلود تصویر کارت
+                                                                            ملی</label>
+                                                                        <div class="media">
+                                                                            <a href="javascript: void(0);">
+                                                                                <img src="
+                                                                                        {% if request.user.national_card %}{{ request.user.national_card.url }}{% endif %}"
+                                                                                     class="rounded mr-75"
+                                                                                     alt="profile image" height="200"
+                                                                                     width="300">
+                                                                            </a>
+                                                                            <div class="media-body mt-25">
+                                                                                <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                                                    <label for="card-files"
+                                                                                           class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
+                                                                                        <span>آپلود عکس</span>
+                                                                                        <input id="card-files"
+                                                                                               name="national-card"
+                                                                                               type="file" hidden>
+                                                                                    </label>
+                                                                                    <button class="btn btn-sm btn-light-secondary ml-50">
+                                                                                        ریست
+                                                                                    </button>
+                                                                                </div>
+                                                                                <p class="text-muted ml-1 mt-50"><small>فرمت
+                                                                                    های مورد قبول :
+                                                                                    PNG , JPG حداکثر حجم : 150KB</small>
+                                                                                </p>
                                                                             </div>
-                                                                            <p class="text-muted ml-1 mt-50"><small>فرمت های مورد قبول :
-                                                                                PNG , JPG حداکثر حجم : 150KB</small></p>
                                                                         </div>
-                                                                    </div>
                                                                     {% endif %}
                                                                 </div>
                                                             </div>
-                                                            <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                <button type="submit"
-                                                                        class="btn btn-primary glow mr-sm-1 mb-1">ذخیره
-                                                                    تغییرات
-                                                                </button>
-                                                                <button type="reset" class="btn btn-light mb-1">ریست
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="tab-pane fade " id="account-vertical-password"
-                                                     role="tabpanel"
-                                                     aria-labelledby="account-pill-password" aria-expanded="false">
-                                                    <form class="validate-form">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <label>پسورد قدیمی</label>
-                                                                        <input type="password" class="form-control"
-                                                                               placeholder="Old Password"
-                                                                               name="old_password">
+                                                            <div class="mt-2 col-12 d-block">
+                                                                <h5>شبکه های اجتماعی</h5>
+                                                                <hr>
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label>LinkedIn</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   placeholder="Add link"
+                                                                                   name="linkedin"
+                                                                                   value="{% if request.user.extra.linkedin %}{{ request.user.extra.linkedin }}{% endif %}">
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <label>پسورد جدید</label>
-                                                                        <input type="password" class="form-control"
-                                                                               placeholder="New Password"
-                                                                               id="account-new-password"
-                                                                               name="new-password">
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label>Instagram</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   placeholder="Add link"
+                                                                                   name="instagram"
+                                                                                   value="{% if request.user.extra.instagram %}{{ request.user.extra.instagram }}{% endif %}">
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <label>تکرار پسورد جدید</label>
-                                                                        <input type="password"
-                                                                               class="form-control"
-                                                                               data-validation-match-match="password"
-                                                                               placeholder="New Password"
-                                                                               name="confirm-new-password">
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label>Whatsapp</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   placeholder="Add link"
+                                                                                   name="whatsapp"
+                                                                                   value="{% if request.user.extra.whatsapp %}{{ request.user.extra.whatsapp }}{% endif %}">
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                <button type="submit"
-                                                                        class="btn btn-primary glow mr-sm-1 mb-1">ذخیره
-                                                                    تغییرات
-                                                                </button>
-                                                                <button type="reset" class="btn btn-light mb-1">ریست
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="tab-pane fade" id="account-vertical-info" role="tabpanel"
-                                                     aria-labelledby="account-pill-info" aria-expanded="false">
-                                                    <form class="validate-form">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>درباره من</label>
-                                                                    <textarea class="form-control" id="accountTextarea"
-                                                                              rows="3"
-                                                                              placeholder="Your Bio data here..."></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <label>تاریخ تولد</label>
-                                                                        <input type="text"
-                                                                               class="form-control birthdate-picker"
-                                                                               placeholder="Birth date"
-                                                                               name="dob">
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label>Telegram</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   placeholder="Add link"
+                                                                                   name="telegram"
+                                                                                   value="{% if request.user.extra.telegram %}{{ request.user.extra.telegram }}{% endif %}">
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>کشور</label>
-                                                                    <select class="form-control" id="accountSelect">
-                                                                        <option>ایران</option>
-                                                                        <option>هند</option>
-                                                                        <option>کانادا</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>زبان</label>
-                                                                    <select class="form-control" id="languageselect2">
-                                                                        <option value="English" selected>فارسی
-                                                                        </option>
-                                                                        <option value="Spanish">اسپانیایی</option>
-                                                                        <option value="French">فرانسه</option>
-                                                                        <option value="Russian">روسیه</option>
-                                                                        <option value="German">آلمانی</option>
-                                                                        <option value="Arabic" selected>عربی</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <label>تلفن</label>
-                                                                        <input type="text" class="form-control"
-                                                                               placeholder="Phone number"
-                                                                               value="09190661327"
-                                                                               name="phone">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>وبسایت</label>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="Website address">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                <button type="submit"
-                                                                        class="btn btn-primary glow mr-sm-1 mb-1">ذخیره
-                                                                    تغییرات
-                                                                </button>
-                                                                <button type="reset" class="btn btn-light mb-1">ریست
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="tab-pane fade " id="account-vertical-social" role="tabpanel"
-                                                     aria-labelledby="account-pill-social" aria-expanded="false">
-                                                    <form>
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>Twitter</label>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="Add link"
-                                                                           value="https://www.twitter.com">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>Facebook</label>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="Add link">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>Google+</label>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="Add link">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>LinkedIn</label>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="Add link"
-                                                                           value="https://www.linkedin.com">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>Instagram</label>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="Add link">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label>Quora</label>
-                                                                    <input type="text" class="form-control"
-                                                                           placeholder="Add link">
                                                                 </div>
                                                             </div>
                                                             <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
@@ -506,14 +383,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
-                </section>
-                <!-- account setting page ends -->
-
             </div>
+            </section>
+            <!-- account setting page ends -->
+
         </div>
+    </div>
     </div>
     {% include "footer.html" %}
 {% endblock %}

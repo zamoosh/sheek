@@ -60,6 +60,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'sheek.urls'
+LOGIN_URL = '/accounts/auth/'
+LOGIN_REDIRECT_URL = '/accounts/dashboard/'
 AUTH_USER_MODEL = "client.User"
 
 USE_X_FORWARDED_HOST = True
@@ -99,9 +101,9 @@ WSGI_APPLICATION = 'sheek.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get("DATABASE_ENGINE", "django.db.backends.mysql"),
-        'NAME': os.environ.get("DATABASE_NAME", "sheek_fcghfd"),
-        'USER': os.environ.get("DATABASE_USER", "sheek_sdvcsadvsa"),
-        'PASSWORD': os.environ.get("DATABASE_PASSWORD", "Bo-L9=7JjO%A"),
+        'NAME': os.environ.get("DATABASE_NAME", "sheek_stage"),
+        'USER': os.environ.get("DATABASE_USER", "sheek_stage"),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD", "a40k6gP=vg(t"),
         'HOST': os.environ.get("DATABASE_HOST", "cpanel.vps-vds.com"),
         'PORT': os.environ.get("DATABASE_PORT", ''),
     }

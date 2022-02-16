@@ -2,5 +2,6 @@ from .imports import *
 
 
 def index(request):
-    context = {}
-    return render(request, 'site/index.html', context)
+    return redirect('/accounts/dashboard/')
+    # context = {}
+    # return render(request, 'site/index.html', context)

@@ -18,6 +18,11 @@ class JobField(models.Model):
         self.save()
 
 
+class Tag(models.Model):
+    title = models.CharField(max_length=250, unique=True)
+    jobfield = models.ManyToManyField(JobField)
+
+
 class UserJobField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
@@ -65,3 +70,8 @@ class Report(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+
+class Comment(models.Model):
+    text = models.TextField()
+    projects = models.ForeignKey(Project, on_delete=models.CASCADE)

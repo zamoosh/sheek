@@ -23,9 +23,18 @@ class User(AbstractUser):
     gender = models.BooleanField(default=True)
     has_jobField = models.BooleanField(default=False)
     state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
-    social = models.CharField(max_length=250)
+    existential = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
+        if 'linkedin' not in self.extra:
+            self.extra['linkedin'] = None
+        if 'instagram' not in self.extra:
+            self.extra['instagram'] = None
+        if 'whatsapp' not in self.extra:
+            self.extra['whatsapp'] = None
+        if 'telegram' not in self.extra:
+            self.extra['telegram'] = None
+
         if self.cellphone:
             self.cellphone = unidecode(self.cellphone)
         if self.cellphone is None:
@@ -35,8 +44,11 @@ class User(AbstractUser):
                 self.cellphone = self.username
         super(User, self).save()
         if self.image:
-            img = Image.open(self.image)
-            img.save(self.image.path, quality=95)
+            try:
+                img = Image.open(self.image)
+                img.save(self.image.path, quality=95)
+            except:
+                pass
 
 
 class VerificationCode(models.Model):

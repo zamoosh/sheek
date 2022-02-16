@@ -1,12 +1,12 @@
 from .imports import *
 
-
+@login_required
 def addproject(request):
     context = {}
     if request.method == "POST":
         context['req'] = {}
         context['req']['state'] = int(request.POST.get('city'))
-        context['req']['expert'] = int(request.POST.get('subexpert'))
+        context['req']['expert'] = int(request.POST.get('salahiat'))
         context['req']['title'] = request.POST.get('project-title', '').strip()
         context['req']['description'] = request.POST.get('project-description', '').strip()
         project = Project()

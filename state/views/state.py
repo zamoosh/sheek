@@ -18,7 +18,7 @@ def state(request):
         city.save()
     return render(request, 'state/states.html', context)
 
-
+@login_required
 def delete_state(request, id):
     context = {'state': State.objects.get(id=id)}
     context['state'].delete()

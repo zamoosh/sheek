@@ -1,6 +1,6 @@
 from .imports import *
 
-
+@login_required
 def report_api(request, id):
     context = {}
     if request.is_ajax and request.method == "POST":

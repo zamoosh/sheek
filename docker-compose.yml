@@ -9,5 +9,5 @@ services:
     - cicd/.env.stage
     environment:
       VERSION: "${VERSION}"
-#    volumes:
-#      - /var/www/stagemedia:/media/
+    volumes:
+      - /var/www/stagemedia:/media/

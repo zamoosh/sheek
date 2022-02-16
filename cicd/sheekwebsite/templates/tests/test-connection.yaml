@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "sheekwebsite.fullname" . }}-test-connection"
+  labels:
+    {{- include "sheekwebsite.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "sheekwebsite.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

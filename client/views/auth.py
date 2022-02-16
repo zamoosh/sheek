@@ -1,5 +1,6 @@
 from .imports import *
 
+
 def auth(request):
     context = {}
     if request.user.is_authenticated:
@@ -10,7 +11,7 @@ def auth(request):
         context['request'] = {}
         context['request']['cellphone'] = request.POST.get('cellphone', '').strip()
         context['request']['expertRegister'] = request.POST.get('expertRegister')
-        print(context['request']['expertRegister'])
+        context['request']['existential'] = request.POST.get('existential')
         request.session['user'] = context['request']
         return HttpResponseRedirect('/accounts/verify/')
     return render(request, 'client/auth.html', context)
