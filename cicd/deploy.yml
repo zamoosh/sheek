@@ -14,5 +14,5 @@ deploy:
   script:
     - pwd
     - export VERSION=$(cat cicd/version.txt)
-    - helm upgrade --install sheek-stage cicd/sheekwebsite --set image.tag=$VERSION -f cicd/sheekwebsite/values-stage.yaml
+    - helm upgrade --install sheek-stage cicd/sheekwebsite --set image.tag=$VERSION -f cicd/sheekwebsite/values.yaml
 
