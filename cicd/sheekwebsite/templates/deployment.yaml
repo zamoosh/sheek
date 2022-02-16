@@ -38,6 +38,9 @@ spec:
           volumeMounts:
             - mountPath: "/storage"
               name: default
+          envFrom:
+            - configMapRef:
+                name: "{{ .Values.nameOverride }}"
           ports:
             - name: http
               containerPort: 80
