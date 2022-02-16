@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-    name: "{{ .Values.storage }}"-claim
+    name: "{{ .Values.storage }}-claim"
     annotations:
         volume.beta.kubernetes.io/storage-class: "nfs-client"
 spec:
