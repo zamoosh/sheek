@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3
 # RUN apt-get update
 # RUN apt-get install -y build-essential cmake zlib1g-dev libcppunit-dev git subversion wget python3 python3-pip && rm -rf /var/lib/apt/lists/*
 # RUN wget https://ftp.openssl.org/source/old/1.0.2/openssl-1.0.2k.tar.gz -O - | tar -xz
