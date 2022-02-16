@@ -39,17 +39,24 @@ service:
   port: 80
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    #   cert-manager.io/issuer: "letsencrypt-staging"
+    cert-manager.io/issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
   hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    - host: karshenas.org
+      paths: ["/"]
+    - host: www.karshenas.org
+      paths: ["/"]
+
+  tls:
+    - hosts:
+        - karshenas.org
+        - www.karshenas.org
+      secretName: karshenas-cert
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
