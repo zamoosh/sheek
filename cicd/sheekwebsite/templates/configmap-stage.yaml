@@ -11,7 +11,7 @@ data:
   DATABASE_HOST: "185.53.143.186"
   DATABASE_PORT: ""
   DEBUG: "True"
-  STATIC_URL: "https://static.stage.karshenas.org/"
-  MEDIA_ROOT: "/media/"
+  STATIC_URL: "/static/"
+  MEDIA_ROOT: "/storage/"
   MEDIA_URL: "https://media.stage.karshenas.org/"
 {{- end -}}
