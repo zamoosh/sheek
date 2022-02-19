@@ -1,0 +1,17 @@
+{{- if eq .Values.nameOverride "sheek-stage" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sheek-stage
+data:
+  DATABASE_ENGINE: "django.db.backends.mysql"
+  DATABASE_NAME: "sheek_stage"
+  DATABASE_USER: "sheek_stage"
+  DATABASE_PASSWORD: "a40k6gP=vg(t"
+  DATABASE_HOST: "185.53.143.186"
+  DATABASE_PORT: ""
+  DEBUG: "True"
+  STATIC_URL: "/static/"
+  MEDIA_ROOT: "/storage/"
+  MEDIA_URL: "https://media.stage.karshenas.org/"
+{{- end -}}

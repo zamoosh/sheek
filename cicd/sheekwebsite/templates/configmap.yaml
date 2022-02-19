@@ -1,0 +1,17 @@
+{{- if eq .Values.nameOverride "sheek" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: sheek
+data:
+  DATABASE_ENGINE: "django.db.backends.mysql"
+  DATABASE_NAME: "sheek_fcghfd"
+  DATABASE_USER: "sheek_sdvcsadvsa"
+  DATABASE_PASSWORD: "Bo-L9=7JjO%A"
+  DATABASE_HOST: "185.53.143.186"
+  DATABASE_PORT: ""
+  DEBUG: "False"
+  STATIC_URL: "https://static.karshenas.org/"
+  MEDIA_ROOT: "/storage/"
+  MEDIA_URL: "https://media.karshenas.org/"
+{{- end -}}

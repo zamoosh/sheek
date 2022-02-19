@@ -1,7 +1,7 @@
 deploy_stage:
   stage: deploy
   variables:
-    IMAGE_ID: "website:"
+    IMAGE_ID: "scr.novinparva.com/sheek/website:"
   only:
     refs:
       - stage
@@ -15,6 +15,5 @@ deploy_stage:
     - pwd
     - export VERSION=$(cat cicd/version.txt)
     - docker build . -t $IMAGE_ID$VERSION
-    - docker-compose --env-file ./config/.env.stage config
-    - docker-compose -p domainerstage up -d
-    - rsync -avz static/ /var/www/html/stage/static/
+    - docker push $IMAGE_ID$VERSION
+    - helm upgrade --install sheek-stage cicd/sheekwebsite --set image.tag=$VERSION -f cicd/sheekwebsite/values-stage.yaml
