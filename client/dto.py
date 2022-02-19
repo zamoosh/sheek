@@ -35,10 +35,15 @@ class Verify(serializers.Serializer):
 
 
 class UpdateProfileCreateDto(serializers.Serializer):
-    image = serializers.CharField(required=False)
-    birthday = serializers.DateField(required=False)
-    first_name = serializers.CharField(required=False)
-    last_name = serializers.CharField(required=False)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    birthday = serializers.DateField()
+    national_code = serializers.CharField(required=False)
+    gender = serializers.BooleanField()
+    state = serializers.IntegerField(required=False)
+
+
+
 
 
 class UserInfoDto(serializers.Serializer):
