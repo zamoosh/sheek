@@ -19,7 +19,10 @@
     <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
-    <script src="{% static "app-assets/vendors/js/extensions/jquery.steps.min.js" %}"></script>
+    <$('.media').click(function () {
+            $('.hli').removeClass('hli');
+            $(this).addClass('hli').find('input').prop('checked', true)
+        });script src="{% static "app-assets/vendors/js/extensions/jquery.steps.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/forms/wizard-steps.min.js" %}"></script>
 
     <script type="text/javascript">

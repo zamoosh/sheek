@@ -6,7 +6,7 @@ from .imports import *
 @permission_classes((IsAuthenticated,))
 def api_get_me(request):
     context = {}
-    context['user'] = User.objects.filter(id=request.user.id)
+    context['user'] = User.objects.get(id=request.user.id)
     serializer = UserSerializer(instance=context['user'], many=True)
     context = serializer.data
     status_code = HTTP_200_OK

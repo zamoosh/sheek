@@ -33,3 +33,4 @@ urlpatterns = [
     path('jobsearch/api/', job_search, name="job_search"),
 ]
 app_name = ProjectsConfig.name
+app_name = ProjectsConfig.name
