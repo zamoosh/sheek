@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}انتخاب شهر و استان - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script>
+        $.ajax({
+            url: '{% url 'projects:userstateapi' getJobField.id %}',
+            type: "GET",
+            send: function (xhr) {
+            },
+            success: function (data) {
+                $("#show_experts").empty();
+                data.forEach(data => {
+                    $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                })
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    </script>
+    {% if experience_full %}
+        <script>
+            $.ajax({
+                url: '{% url 'state:stateapi' %}',
+                type: "GET",
+                send: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    $('#state').find('option').remove().end()
+                    $("#state").append($('<option>', {value: 0, text: 'انتخاب استان'}))
+                    data.forEach(function (element) {
+                        $("#state").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        </script>
+
+        <script>
+            $("#state").change(function () {
+                $.ajax({
+                    url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
+                    type: "GET",
+                    send: function (xhr) {
+                    },
+                    success: function (data) {
+                        $("#show_experts").empty();
+                        data.forEach(function (element) {
+
+                            $("#show_experts").append("<div class='form-check show-state form-check-primary pt-1'><input name='userstate' id='" + element.id + "' type='checkbox' value='" + element.id + "' /> <label for='" + element.id + "'>" + element.title + "</label> </div>");
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+    {% if experience_ten %}
+    <script>
+        $.ajax({
+            url: '{% url 'projects:userstateapi' getJobField.id %}',
+            type: "GET",
+            send: function (xhr) {
+            },
+            success: function (data) {
+                $("#show_experts").empty();
+                data.forEach(function (element) {
+                    $("#show_experts").append("<div class='form-check show-state form-check-primary pt-1'><input name='userstate' id='" + element.id + "' type='checkbox' value='" + element.id + "' /> <label for='" + element.id + "'>" + element.title + "</label> </div>");
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    </script>
+    {% endif %}
+    <script>
+        $.ajax({
+            url: '{% url 'projects:get_userstateapi' getJobField.id %}',
+            type: "GET",
+            send: function (xhr) {
+            },
+            success: function (data) {
+                $("#show_history").empty();
+                data.forEach(function (element) {
+                    $("#show_history").append("<div class='form-check show-state form-check-primary pt-1'><span>" + element.title + "</span> </div>");
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    </script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0"></h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row" id="basic-table">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                {% if experience_five %}
+                                    شما قابلیت انتخاب شهر یا استان را ندارید، سابقه شما کمتر از یک سال می باشد.
+                                {% else %}
+                                    <form class="form form-vertical" method="POST"
+                                          action="{% url 'projects:adduserstate' getJobField.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-body">
+                                            <div class="row">
+                                                {% if experience_full %}
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="first-name-vertical">استان</label>
+                                                        <div class="input-group mt-1">
+                                                            <select class="form-control" name="state" id="state"
+                                                                    required>
+                                                                <option value="1"></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+                                                <div class="col-12 mb-5">
+                                                    <div class="show_parent" id="show_experts">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-5">
+                                                <p>شما تا کنون این استان هارا انتخاب کرده اید</p>
+                                                <div class="show_parent" id="show_history">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-primary mr-1">ثبت</button>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

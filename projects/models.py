@@ -5,6 +5,10 @@ from state.models import State
 User = get_user_model()
 
 
+def document_image(instance, filename):
+    return "%s/%s/%s" % ('document_image', instance.id, filename)
+
+
 class JobField(models.Model):
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -29,11 +33,29 @@ class UserJobField(models.Model):
     status = models.BooleanField(default=False)
     delete = models.BooleanField(default=False)
     status_comment = models.CharField(max_length=250)
-    experience = models.DateField()
+    expiration = models.DateField()
+    issue = models.DateField()
+    jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    #state = models.ForeignKey(State, on_delete=models.CASCADE)
+    description = models.TextField()
+    inquiry_link = models.CharField(max_length=150)
+    document_image = models.ImageField(blank=True, null=True, upload_to=document_image)
+
+    class Meta:
+        unique_together = ['jobField', 'owner']
+
+
+class UserState(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
-    description = models.TextField()
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ['state', 'jobField']
 
 
 class Project(models.Model):

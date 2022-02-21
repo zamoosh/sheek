@@ -41,8 +41,6 @@ def profile(request):
             user.state_id = int(request.POST.get('state'))
         if 'profile-picture' in request.FILES:
             user.image = request.FILES['profile-picture']
-        if 'national-card' in request.FILES:
-            user.national_card = request.FILES['national-card']
         if 'error' not in context:
             user.save()
         return HttpResponseRedirect(reverse('client:profile'))

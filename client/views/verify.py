@@ -27,8 +27,6 @@ def verify(request):
                         cellphone=context['cellphone'],
                         username=context['cellphone']
                     )
-                    if context['expertRegister']:
-                        user.has_jobField = True
                     if context['existential'] == "realperson":
                         user.existential = False
                     if context['existential'] == "legalperson":

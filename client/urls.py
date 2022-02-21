@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout/', Logout, name="logout"),
     path('dashboard/', dashboard, name="dashboard"),
     path('profile/', profile, name="profile"),
+    path('expert_request/', expert_request, name="expert_request"),
 ]

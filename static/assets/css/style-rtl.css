@@ -364,3 +364,14 @@ label {
   left: 0;
   bottom: -58px;
 }
+.show_tags ul li {
+  display: block;
+  float: right;
+  width: 200px;
+  padding-bottom: 9px;
+}
+.show-state {
+  display: block;
+  width: 200px;
+  float: right;
+}
