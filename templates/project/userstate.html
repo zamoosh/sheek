@@ -106,6 +106,7 @@
                                 <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">
+                                    انتخاب شهر و استان
                                 </li>
                             </ol>
                         </div>
@@ -128,6 +129,7 @@
                                         <tr>
                                             <th>کارشناسی</th>
                                             <th>تاریخ صدور مدرک</th>
+                                            <th>تاریخ انقضا مدرک</th>
                                             <th>عملیات</th>
                                         </tr>
                                         </thead>
@@ -135,6 +137,7 @@
                                         {% for userJobField in userJobFields %}
                                             <tr>
                                                 <td class="text-bold-500">{{ userJobField.jobField.parent.title }}/{{ userJobField.jobField.title }}</td>
+                                                <td class="text-bold-500">{{ userJobField.expiration|jformat:"%Y/%m/%d" }}</td>
                                                 <td class="text-bold-500">{{ userJobField.issue|jformat:"%Y/%m/%d" }}</td>
                                                 <td>
                                                     <a href="{% url 'projects:adduserstate' userJobField.jobField.id %}"><i class="badge-circle badge-circle-light-secondary bx bx-location-plus font-medium-1"></i></a>

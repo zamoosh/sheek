@@ -30,6 +30,7 @@ def adduserstate(request, id):
         context['experience_full'] = True
     if request.method == "POST":
         context['userstate'] = request.POST.getlist('userstate')
+        print(context['userstate'])
         for i in context['userstate']:
             user_state = UserState()
             user_state.jobField_id = id
@@ -53,12 +54,23 @@ def userstateapi(request, id):
         experience_ten = UserJobField.objects.filter(q, owner=request.user.id, issue__lt=five_delta,
                                                      issue__gte=ten_delta)
         if experience_ten:
-            user_ten = State.objects.filter(parent=state.parent)
+            state_li = []
+            user_history_proj = UserState.objects.filter(owner=request.user.id, jobField=id)
+            for i in user_history_proj:
+                state_li.append(i.state.id)
+            user_ten = State.objects.filter(parent=state.parent).exclude(id__in=state_li)
             expert_list += user_ten
         for i in expert_list:
             state_list.append({'id': i.pk, 'title': i.title})
     return JsonResponse(state_list, safe=False)
 
+
+@login_required
+def dellstate(request, id):
+    rm = UserState.objects.get(state=id)
+    rm.status = 1
+    rm.save()
+    return render(request, 'project/add-userstate.html')
 
 @login_required
 def get_userstateapi(request, id):

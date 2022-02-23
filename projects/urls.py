@@ -11,6 +11,7 @@ urlpatterns = [
     path('user-state/', userstate, name="userstate"),
     path('add-userstate/<int:id>/', adduserstate, name="adduserstate"),
     path('add-userstateapi/<int:id>/', userstateapi, name="userstateapi"),
+    path('dell-userstateapi/<int:id>/', dellstate, name="dellstate"),
     path('get_userstateapi/<int:id>/', get_userstateapi, name="get_userstateapi"),
 
     path('adduserjob/', adduserjobfield, name="adduserjob"),
