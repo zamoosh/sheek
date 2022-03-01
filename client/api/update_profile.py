@@ -19,7 +19,7 @@ def update_profile(request):
     else:
         user.first_name = request.data.get('first_name', '')
         user.last_name = request.data.get('last_name', '')
-        user.state = request.data.get('state', 0)
+        user.state_id = request.data.get('state', 0)
         user.save()
 
     if request.data.get('password', None):
