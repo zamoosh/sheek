@@ -1,3 +1,5 @@
+from django.shortcuts import redirect
+
 from .imports import *
 
 
@@ -67,10 +69,11 @@ def userstateapi(request, id):
 
 @login_required
 def dellstate(request, id):
-    rm = UserState.objects.get(state=id)
-    rm.status = 1
-    rm.save()
-    return render(request, 'project/add-userstate.html')
+    rm = UserState.objects.get(id=id)
+    job_id = rm.jobField_id
+    print(job_id)
+    rm.delete()
+    return redirect(reverse('projects:adduserstate', args=(job_id,)))
 
 @login_required
 def get_userstateapi(request, id):

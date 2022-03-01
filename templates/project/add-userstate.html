@@ -96,10 +96,10 @@
             success: function (data) {
                 $("#show_history").empty();
                 let url = "{% url 'projects:dellstate' 1 %}";
-                str = url.substring(0, url.length - 1);
-                console.log(str);
+                url = url.substring(0, url.length - 2);
+                console.log(data)
                 data.forEach(function (element) {
-                    $("#show_history").append("<div class='form-check show-state form-check-primary pt-1'><span>" + element.title + "</span> <a href=" + str + element.id + "><i class=' bx bx-x font-medium-1'> </i></a> </div>");
+                    $("#show_history").append("<div class='form-check show-state form-check-primary pt-1'><span>" + element.title + "</span> <a href='" + url + element.id + "/'><i class=' bx bx-x font-medium-1'> </i></a> </div>");
                 });
             },
             error: function (error) {
