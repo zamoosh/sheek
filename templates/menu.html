@@ -26,6 +26,11 @@
                     <li><a class="d-flex align-items-center" href="{% url 'client:profile' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">پروفایل</span></a>
                     </li>
+                    {% if request.user.has_jobField == False %}
+                    <li><a class="d-flex align-items-center" href="{% url 'client:expert_request' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">ارتقا به کارشناسی</span></a>
+                    </li>
+                    {% endif %}
                 </ul>
             </li>
             {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'state:state' %}"><i class="bx bx-location-plus"></i><span
@@ -39,6 +44,9 @@
                 <ul class="menu-content">
                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:userjob' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">کارشناسی</span></a>
+                    </li>{% endif %}
+                    {% if request.user.has_jobField or request.user.is_superuser %}<li><a class="d-flex align-items-center" href="{% url 'projects:userstate' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="Edit">شهر ها و استان ها</span></a>
                     </li>{% endif %}
                     <li><a class="d-flex align-items-center" href="{% url 'projects:addproject' %}"><i
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="View">پروژه جدید</span></a>

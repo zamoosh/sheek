@@ -8,6 +8,12 @@ urlpatterns = [
     path('jobs/api/', jobs_api, name="jobsapi"),
     path('user-job/', userjobfield, name="userjob"),
 
+    path('user-state/', userstate, name="userstate"),
+    path('add-userstate/<int:id>/', adduserstate, name="adduserstate"),
+    path('add-userstateapi/<int:id>/', userstateapi, name="userstateapi"),
+    path('dell-userstateapi/<int:id>/', dellstate, name="dellstate"),
+    path('get_userstateapi/<int:id>/', get_userstateapi, name="get_userstateapi"),
+
     path('adduserjob/', adduserjobfield, name="adduserjob"),
     path('adduserjob/<int:parent>/', jobs_api, name="adduserjob"),
 
@@ -32,5 +38,6 @@ urlpatterns = [
     path('experts/', experts, name="experts"),
     path('jobsearch/api/', job_search, name="job_search"),
 ]
+
 app_name = ProjectsConfig.name
 app_name = ProjectsConfig.name

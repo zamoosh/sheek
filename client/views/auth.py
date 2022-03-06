@@ -10,7 +10,6 @@ def auth(request):
     if request.method == 'POST':
         context['request'] = {}
         context['request']['cellphone'] = request.POST.get('cellphone', '').strip()
-        context['request']['expertRegister'] = request.POST.get('expertRegister')
         context['request']['existential'] = request.POST.get('existential')
         request.session['user'] = context['request']
         return HttpResponseRedirect('/accounts/verify/')
