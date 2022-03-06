@@ -39,8 +39,8 @@ def profile(request):
         if request.POST.get('birthday'):
             user.birthday = jdatetime.datetime.strptime(request.POST.get('birthday'), "%Y/%m/%d").togregorian()
         # request.user.state = context['req']['state']
-        if request.POST.get('state'):
-            user.state_id = int(request.POST.get('state'))
+        if request.POST.get('city'):
+            user.state_id = int(request.POST.get('city'))
         if 'profile-picture' in request.FILES:
             user.image = request.FILES['profile-picture']
         if 'error' not in context:

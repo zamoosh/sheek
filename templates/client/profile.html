@@ -26,10 +26,17 @@
             },
             success: function (data) {
                 $('#state').find('option').remove().end()
+                $('#city').find('option').remove().end()
+                {%  if request.user.state %}
                 $("#state").append($('<option>', {
+                    value: {{ request.user.state.parent.id }},
+                    text: '{{ request.user.state.parent.title }}'
+                }))
+                $("#city").append($('<option>', {
                     value: {{ request.user.state.id }},
                     text: '{{ request.user.state.title }}'
                 }))
+                {% endif %}
                 data.forEach(function (element) {
                     $("#state").append($('<option>', {value: element['id'], text: element['title']}))
                 });
@@ -239,7 +246,7 @@
                                                                     <div class="controls">
                                                                         <label>شهر</label>
                                                                         <div class="input-group">
-                                                                            <select class="form-control" id="city">
+                                                                            <select class="form-control" name="city" id="city">
                                                                                 <option>انتخاب شهر</option>
                                                                                 <option value="1"></option>
                                                                             </select>
