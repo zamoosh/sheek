@@ -15,7 +15,7 @@ def addproject(request):
         project.title = context['req']['title']
         project.description = context['req']['description']
         if request.POST.get('expert-list'):
-            userjobfield = UserJobField.objects.get(owner=request.POST.get('expert-list')).id
+            userjobfield = UserJobField.objects.get(owner=request.POST.get('expert-list'),jobField=context['req']['expert']).id
             project.user_jobField_id = userjobfield
         project.owner_id = request.user.id
         project.save()

@@ -11,11 +11,11 @@ def project_request(request):
     ten_delta = datetime.date.today() - datetime.timedelta(days=10 * 365)
     context['projects'] = []
     for cuser in current_user:
-        if cuser.experience > five_delta:
-            context['projects'] += Project.objects.filter(user_jobField=None, state=cuser.state,
+        if cuser.expiration > five_delta:
+            context['projects'] += Project.objects.filter(user_jobField=None,
                                                          jobField=cuser.jobField).order_by('-created_at')
-        elif cuser.experience > ten_delta:
-            context['projects'] += Project.objects.filter(user_jobField=None, state__parent=cuser.state.parent,
+        elif cuser.expiration > ten_delta:
+            context['projects'] += Project.objects.filter(user_jobField=None,
                                                          jobField=cuser.jobField).order_by('-created_at')
         else:
             context['projects'] += Project.objects.filter(user_jobField=None, jobField=cuser.jobField).order_by('-created_at')
