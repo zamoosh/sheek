@@ -73,3 +73,15 @@ class ProjectSerializer(serializers.ModelSerializer):
         if obj.user_jobField:
             return UserSafeSerializer(obj.user_jobField.owner, many=False).data
         return {}
+
+
+class UserJobfieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserJobField
+        fields = '__all__'
+
+
+class UserStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserState
+        fields = '__all__'

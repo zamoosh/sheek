@@ -43,13 +43,14 @@ class UpdateProfileCreateDto(serializers.Serializer):
     state = serializers.IntegerField(required=False)
 
 
-
-
-
 class UserInfoDto(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     has_password = serializers.BooleanField()
+
+
+class UserExpertDto(serializers.Serializer):
+    national_card = serializers.FileField()
 
 
 class UserInfoGetDto(serializers.Serializer):

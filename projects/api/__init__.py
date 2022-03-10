@@ -4,3 +4,4 @@ from .list_of_projects import *
 from .project_status import *
 from .message import *
 from .search_by_tag import *
+from .create_userjobfield import *

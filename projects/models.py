@@ -37,7 +37,7 @@ class UserJobField(models.Model):
     issue = models.DateField()
     jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    #state = models.ForeignKey(State, on_delete=models.CASCADE)
+    # state = models.ForeignKey(State, on_delete=models.CASCADE)
     description = models.TextField()
     inquiry_link = models.CharField(max_length=150)
     document_image = models.ImageField(blank=True, null=True, upload_to=document_image)
@@ -49,13 +49,9 @@ class UserJobField(models.Model):
 class UserState(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    jobField = models.ForeignKey(JobField, on_delete=models.CASCADE)
-    #owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    userjobfield = models.ForeignKey(UserJobField, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
-
-    class Meta:
-        unique_together = ['state', 'jobField']
 
 
 class Project(models.Model):
