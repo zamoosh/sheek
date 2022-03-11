@@ -97,7 +97,42 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-12">
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+
+                                                                        <label class="d-block">آپلود تصویر کارت
+                                                                            ملی</label>
+                                                                        <div class="media">
+                                                                            <a href="javascript: void(0);">
+                                                                                <img src="
+                                                                                        {% if request.user.national_card %}{{ request.user.national_card.url }}{% endif %}"
+                                                                                     class="rounded mr-75"
+                                                                                     alt="profile image" height="200"
+                                                                                     width="300">
+                                                                            </a>
+                                                                            <div class="media-body mt-25">
+                                                                                <div class="col-12 px-0">
+                                                                                    <label for="card-files"
+                                                                                           class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
+                                                                                        <span>آپلود عکس</span>
+                                                                                        <input id="card-files"
+                                                                                               name="national-card"
+                                                                                               type="file" hidden>
+                                                                                    </label>
+                                                                                    <button class="btn btn-sm btn-light-secondary ml-50">
+                                                                                        ریست
+                                                                                    </button>
+                                                                                </div>
+                                                                                <p class="text-muted ml-1 mt-50"><small>فرمت
+                                                                                    های مورد قبول :
+                                                                                    PNG , JPG حداکثر حجم : 1MB</small>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+
+                                                                </div>
+                                                            </div>
+                                                            <!--div class="col-12">
                                                                 <div class="form-group">
                                                                     {% if request.user.has_jobField %}
                                                                         <label class="d-block">آپلود تصویر کارت
@@ -128,7 +163,7 @@
                                                                         </div>
                                                                     {% endif %}
                                                                 </div>
-                                                            </div>
+                                                            </div-->
                                                             <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
                                                                 <button type="submit"
                                                                         class="btn btn-primary glow mr-sm-1 mb-1">ثبت درخواست

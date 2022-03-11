@@ -107,13 +107,21 @@
     </script>
     <script>
         mamad = function (mamadvar) {
+
             $.ajax({
                 url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
                 type: "GET",
                 send: function (xhr) {
                 },
+                beforeSend: function(){
+                    $('.overlays').show();
+                    $('.loaders-expert').show();
+                },
                 success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
                     $("#show_experts").empty();
+                    $('.overlays').hide();
+                    $('.loaders-expert').hide();
                     data.forEach(data => {
                         $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
                     })
@@ -136,11 +144,18 @@
                     },
                     send: function (xhr) {
                     },
+                    beforeSend: function(){
+                        $('.overlays').show();
+                        $('.loaders').show();
+                    },
                     success: function (data) {
+                        $("#show_tags").addClass('show-before')
                         $("#show_tags").empty();
+                        $('.overlays').hide();
+                        $('.loaders').hide();
                         $("#show_tags").append(document.createElement('ul'));
                         data.forEach(data => {
-                            $("#show_tags>ul").append(`<li onclick="mamad(${data.id})" class="pointer">${data.title}</li>`);
+                            $("#show_tags>ul").append(`<li onclick="mamad(${data.id})" class="pointer" id="point">${data.title}</li>`);
                         })
                     },
                     error: function (error) {
@@ -150,6 +165,7 @@
             }, 500);
         });
     </script>
+
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -180,7 +196,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form form-vertical" method="POST" action="{% url 'projects:adduserjob' %}">
+                                <form class="form form-vertical" method="POST" novalidate="novalidate" enctype="multipart/form-data" action="{% url 'projects:adduserjob' %}">
                                     {% csrf_token %}
                                     <div class="form-body">
                                         <div class="row">
@@ -197,12 +213,16 @@
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="show_tags mt-3 mb-5" id="show_tags">
+                                                <div class="overlays"></div>
+                                                    <div class="loaders"></div>
+                                                <div class="show_tags w-100 mt-3 mb-5" id="show_tags">
 
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-5">
-                                                <div class="show_experts" id="show_experts">
+                                                <div class="overlays"></div>
+                                                    <div class="loaders-expert"></div>
+                                                <div class="show_experts w-100" id="show_experts">
 
                                                 </div>
                                             </div>
@@ -249,7 +269,7 @@
                                                                 {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                                              class="rounded mr-75" alt="تصویر مدرک"
                                                              height="64"
-                                                             width="64">
+                                                             width="64" id="blah">
                                                     </a>
                                                     <div class="media-body mt-25">
                                                         <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
@@ -257,12 +277,12 @@
                                                                    class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
                                                                 <span>آپلود تصویر مدرک</span>
                                                                 <input id="select-files" name="document_picture"
-                                                                       type="file" hidden>
+                                                                       type="file" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" hidden>
                                                             </label>
                                                         </div>
                                                         <p class="text-muted ml-1 mt-50"><small>فرمت های مورد
                                                             قبول :
-                                                            PNG , JPG حداکثر حجم : 150KB</small></p>
+                                                            PNG , JPG حداکثر حجم : 2MB</small></p>
                                                     </div>
                                                 </div>
                                             </div>
