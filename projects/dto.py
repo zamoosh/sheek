@@ -61,7 +61,7 @@ class MessageViewDto(serializers.Serializer):
     owner = serializers.IntegerField()
 
 
-class UserJobFieldViewDto(serializers.Serializer):
+class UserJobFielddViewDto(serializers.Serializer):
     created_at = serializers.DateTimeField()
     update_at = serializers.DateTimeField()
     status = serializers.BooleanField()
