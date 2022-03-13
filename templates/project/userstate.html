@@ -6,88 +6,23 @@
 {% block js %}
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script>
-        $.ajax({
-            url: '{% url 'projects:jobsapi' %}',
-            type: "GET",
-            send: function (xhr) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            },
-            success: function (data) {
-                $('#inputGroupSelect01').find('option').remove().end()
-                $("#inputGroupSelect01").append($('<option>', {value: 0, text: ''}))
-                data.forEach(function (element) {
-                    $("#inputGroupSelect01").append($('<option>', {value: element['id'], text: element['title']}))
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-        function getCookie(job) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, job.length + 1) === (job + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(job.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        const csrftoken = getCookie('csrftoken');
-        $('[type="submit"]').on('click', function (e) {
-            e.preventDefault()
-            // Making the AJAX Request
+        $(".open-modal").on("click", function () {
             $.ajax({
-                url: $("form")[0].action,
-                type: "POST",
-                data: {
-                    title: $("#jobs").val(),
-                    parent: $("#inputGroupSelect01").val(),
-                },
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                },
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-            $.ajax({
-                url: '{% url 'projects:jobsapi' %}',
+                url: $(this).attr("data-url"),
                 type: "GET",
                 send: function (xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 },
                 success: function (data) {
-                    $('#inputGroupSelect01').find('option').remove().end()
-                    $("#inputGroupSelect01").append($('<option>', {value: 0, text: ''}))
+                    $("#state_list").empty()
                     data.forEach(function (element) {
-                        $("#inputGroupSelect01").append($('<option>', {value: element['id'], text: element['title']}))
+                        $("#state_list").append("<div class='form-check form-check-primary pt-1'><span>" + element.title + "</span></div>");
                     });
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
-            $.ajax({
-                url: '{% url 'projects:jobs' %}',
-                method: 'GET',
-                data: {},
-                success: function (data) {
-                    $('#jobTabale').replaceWith($('#jobTabale', data));
-                },
-                error: function (error) {
-                    console.log(error);
-                    console.log("error");
-                }
-            });
-        })
+        });
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -103,7 +38,8 @@
                         <h5 class="content-header-title float-left pr-1 mb-0"></h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block">
                             <ol class="breadcrumb p-0 mb-0 pl-1">
-                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">
                                     انتخاب شهر و استان
@@ -114,87 +50,79 @@
                 </div>
             </div>
             <div class="content-body"><!-- Basic Tables start -->
-                <div class="row" id="basic-table">
+                <div class="row">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                            {% if error %}
-                                کارشناس قبلا ثبت شده است
-                            {% endif %}
+                        {% if error %}
+                            کارشناس قبلا ثبت شده است
+                        {% endif %}
 
-                            {% if userJobFields %}
-                                <div class="table-responsive" id="jobTabale">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>کارشناسی</th>
-                                            <th>تاریخ صدور مدرک</th>
-                                            <th>تاریخ انقضا مدرک</th>
-                                            <th>عملیات</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for userJobField in userJobFields %}
-                                            <tr>
-                                                <td class="text-bold-500">{{ userJobField.jobField.parent.title }}/{{ userJobField.jobField.title }}</td>
-                                                <td class="text-bold-500">{{ userJobField.expiration|jformat:"%Y/%m/%d" }}</td>
-                                                <td class="text-bold-500">{{ userJobField.issue|jformat:"%Y/%m/%d" }}</td>
-                                                <td>
-                                                    <a href="{% url 'projects:adduserstate' userJobField.jobField.id %}"><i class="badge-circle badge-circle-light-secondary bx bx-location-plus font-medium-1"></i></a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
+                        {% if userJobFields %}
+                            <div class="row">
+                            {% for userJobField in userJobFields %}
+                                <div class="col-lg-4 col-xl-4 user-details-card">
+                                    <div class="card widget-user-details">
+                                        <div class="card-header">
+                                            <div class="card-title-details d-flex align-items-center">
+                                                <div class="mt-n25">
+                                                    <h5 class="line-height-2 font-size-14">{{ userJobField.jobField.title }}</h5>
+                                                    <div class="card-subtitle font-size-12">{{ userJobField.jobField.parent.title }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <div class="table-responsive ps">
+                                                    <table class="table table-borderless">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="pb-0 pl-0"><small>تاریخ دریافت مدرک</small></td>
+                                                            <td class="pb-0 pl-0"><small>تاریخ انقضای مدرک</small></td>
+                                                            <td class="pb-0 pl-0"><small>محدوده فعالیت</small></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="pl-0">
+                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                    {{ userJobField.issue|jformat:"%Y/%m/%d" }}
+                                                                </div>
+                                                            </td>
+                                                            <td class="pl-0">
+                                                                <div class="badge badge-light-danger text-bold-500 py-50">
+                                                                    {{ userJobField.expiration|jformat:"%Y/%m/%d" }}
+                                                                </div>
+                                                            </td>
+                                                            <td class="pl-0">
+                                                                <div class="badge badge-light-info text-bold-500 py-50">
+                                                                    <a data-toggle="modal" data-target="#picmodal"
+                                                                       aria-modal="true" class="pointer open-modal"
+                                                                       data-url="{% url 'projects:get_userstateapi' userJobField.id %}">مشاهده</a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <a href="{% url 'projects:adduserstate' userJobField.id %}"
+                                                   class="btn btn-success w-100">ویرایش / انتخاب</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            {% else %}
+                            {% endfor %}
+                        {% else %}
                             شما هنوز شهر یا استانی را انتخاب نکرده اید
-                            {% endif %}
-                            </div>
+                        {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel33" aria-hidden="true">
+    </div>
+    <div class="modal fade text-left" id="picmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن مشاغل</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i class="bx bx-x"></i>
-                    </button>
-                </div>
-                <form method="POST" action="{% url 'projects:jobs' %}">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <label>نام شغل/زیر مجموعه: </label>
-                        <div class="form-group">
-                            <input name="job" id="jobs" type="text" placeholder="مشاور املاک" class="form-control">
-
-                            <div class="input-group mt-1">
-                                <select class="form-control" id="inputGroupSelect01">
-                                    <option selected>Choose...</option>
-
-                                    <option value="1"></option>
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">انصراف</span>
-                        </button>
-                        <button type="submit" class="btn btn-primary ml-1" data-dismiss="modal">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">ذخیره</span>
-                        </button>
-                    </div>
-                </form>
+            <div class="modal-content p-2">
+                <div id="state_list"></div>
             </div>
         </div>
     </div>

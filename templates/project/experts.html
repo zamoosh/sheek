@@ -30,12 +30,12 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                {% if result %}
+                                {% if confirm %}
                                     <div class="alert alert-success mb-2" role="alert">
                                         کارشناس <strong>{{ expert.owner.first_name }}</strong> توسط شما تایید شد .
                                     </div>
                                 {% endif %}
-                                {% if result %}
+                                {% if reject %}
                                     <div class="alert alert-danger mb-2" role="alert">
                                         کارشناس <strong>{{ expert.owner.first_name }}</strong> غیر فعال شد .
                                     </div>

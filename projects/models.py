@@ -45,6 +45,9 @@ class UserJobField(models.Model):
     class Meta:
         unique_together = ['jobField', 'owner']
 
+    def return_userState(self):
+        return UserState.objects.filter(userjobfield=self)
+
 
 class UserState(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
