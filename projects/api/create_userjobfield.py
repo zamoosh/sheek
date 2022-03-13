@@ -65,10 +65,11 @@ def get_state(request, jobfield):
     q = q & Q(owner=request.user, jobField_id=jobfield, status=True)
     five_delta = datetime.date.today() - datetime.timedelta(days=5 * 365)
     ten_delta = datetime.date.today() - datetime.timedelta(days=10 * 365)
+    state = []
     if UserJobField.objects.filter(q, issue__lt=five_delta, issue__gte=ten_delta):
         state = State.objects.filter(parent=request.user.state.parent)
-
     elif UserJobField.objects.filter(q, issue__lte=ten_delta):
         state = State.objects.all()
 
-    return Response(ProvinceSerializer(state, many=True).data, status=HTTP_200_OK)
+    serializer = ProvinceSerializer(state, many=True).data
+    return Response(serializer, status=HTTP_200_OK)
