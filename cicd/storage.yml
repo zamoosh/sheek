@@ -1,0 +1,20 @@
+deploy_nojaba_storage:
+  stage: deploy
+  variables:
+    PROJ_DIR: "."
+    IMAGE_ID: "scr-noj.medga.ir/nojaba/storage:"
+  only:
+    refs:
+      - master
+    changes:
+      - cicd/storage/version.txt
+  environment:
+    name: $PROJECT_NAME
+  dependencies:
+    - build_all
+  script:
+    - pwd
+    - VERSION=$(cat cicd/storage/version.txt)
+    - echo $IMAGE_TAG
+    - helm upgrade --install nojaba-storage cicd/storage --set image.tag=$VERSION -f cicd/storage/nojaba-values.yaml
+

@@ -10,7 +10,8 @@ image:
   pullPolicy: IfNotPresent
 
 storage: "sheek"
-imagePullSecrets: []
+imagePullSecrets:
+  - name: regcred
 nameOverride: "sheek"
 fullnameOverride: "sheek-prod"
 

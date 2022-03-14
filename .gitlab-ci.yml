@@ -8,3 +8,5 @@ build_all:
 include:
   - 'cicd/deploy.yml'
   - 'cicd/deploy-stage.yml'
+  - 'cicd/storage.yml'
+  - 'cicd/storage-stage.yml'
