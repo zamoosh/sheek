@@ -1,3 +1,5 @@
+import json
+
 from state.dto import ProvinceViewDto
 from state.serializer import ProvinceSerializer
 from .imports import *
@@ -10,7 +12,8 @@ from ..serializer import UserJobfieldSerializer, UserStateSerializer
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def set_user_jobfied(request):
-    for i in request.data.get('jobField'):
+    for i in json.loads(request.data.get('jobField')):
+        print(request.data.get('jobField'))
         user_jobfield = UserJobField(owner=request.user)
         user_jobfield.jobField = JobField.objects.get(id=i)
         user_jobfield.expiration = request.data.get('expiration', '')
@@ -63,6 +66,7 @@ def set_state_expert(request, jobfield):
 @permission_classes((IsAuthenticated,))
 def get_state(request, jobfield):
     context = {}
+
     q = Q()
     q = q & Q(owner=request.user, jobField_id=jobfield, status=True)
     five_delta = datetime.date.today() - datetime.timedelta(days=5 * 365)
@@ -70,11 +74,12 @@ def get_state(request, jobfield):
     state = []
     if UserJobField.objects.filter(q, issue__gte=five_delta):
         context['msg'] = 'این کاربر فقط در شهر خود میتواند کار کند'
+        context['status'] = '0'
     elif UserJobField.objects.filter(q, issue__lt=five_delta, issue__gte=ten_delta):
         state = State.objects.filter(parent=request.user.state.parent)
+        context['status'] = '1'
     elif UserJobField.objects.filter(q, issue__lte=ten_delta):
-        state = State.objects.all()
         context['msg'] = 'این کاربر دسترسی کامل دارد'
-
-    serializer = ProvinceSerializer(state, many=True).data
-    return Response(serializer, status=HTTP_200_OK)
+        context['status'] = '2'
+    context['state'] = ProvinceSerializer(state, many=True).data
+    return Response(context, status=HTTP_200_OK)

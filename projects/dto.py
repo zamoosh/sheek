@@ -80,7 +80,7 @@ class UserJobFielddViewDto(serializers.Serializer):
 class UserJobFieldCreateDto(serializers.Serializer):
     expiration = serializers.DateField()
     issue = serializers.DateField()
-    jobField = serializers.IntegerField()
+    jobField = serializers.ListField(child=serializers.IntegerField())
     description = serializers.CharField()
     inquiry_link = serializers.CharField()
     document_image = serializers.FileField()

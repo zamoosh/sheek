@@ -4,7 +4,7 @@ from projects.serializer import ProjectSerializer, JobFieldSerializer
 from .imports import *
 from datetime import timedelta
 import datetime
-from ..serializer import ExpertSerializer, UserJobFieldSerializer
+from ..serializer import ExpertSerializer, UserJobFieldSerializer, UserJobFieldFieldSerializer
 
 manual_parameter = [
     openapi.Parameter('state', openapi.IN_QUERY, description="state id", type=openapi.TYPE_INTEGER,
@@ -104,8 +104,6 @@ def confirm_project(request, id):
 @permission_classes((IsAuthenticated,))
 def get_jobfield_for_expert(request):
     context = {}
-    job_field = UserJobField.objects.values_list('jobField', flat=True).filter(status=True, owner=request.user, )
-    job_fields = JobField.objects.filter(id__in=job_field)
-    serializer = JobFieldSerializer(job_fields, many=True).data
+    serializers = UserJobFieldFieldSerializer(UserJobField.objects.filter(owner=request.user), many=True).data
     status_code = HTTP_200_OK
-    return Response(serializer, status=status_code)
+    return Response(serializers, status=status_code)

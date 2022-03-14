@@ -36,3 +36,18 @@ class UserJobFieldSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserJobFieldFieldSerializer(serializers.ModelSerializer):
+    job_Field_id = serializers.SerializerMethodField()
+    job_Field = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserJobField
+        fields = '__all__'
+
+    @staticmethod
+    def get_job_Field(obj):
+        return obj.jobField.title
+
+    @staticmethod
+    def get_job_Field_id(obj):
+        return obj.jobField.id

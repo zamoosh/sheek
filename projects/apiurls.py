@@ -16,6 +16,6 @@ urlpatterns = [
     path('get_jobfield_bytag/<int:id>/', get_jobfield_bytag),
     path('create_projects/', create_projects),
     path('set_user_jobfied/', set_user_jobfied),
-    path('set_state_expert/<int:jobfield>', set_state_expert),
-    path('get_state/<int:jobfield>', get_state),
+    path('set_state_expert/<int:jobfield>/', set_state_expert),
+    path('get_state/<int:jobfield>/', get_state),
 ]
