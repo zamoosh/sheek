@@ -6,7 +6,7 @@ from .imports import *
 @login_required
 def userstate(request):
     context = {}
-    context['userJobFields'] = UserJobField.objects.filter(status=True).order_by('-id')
+    context['userJobFields'] = UserJobField.objects.filter(status=True, owner=request.user.id).order_by('-id')
     for i in context['userJobFields']:
         context['userstate'] = UserState.objects.filter(userjobfield=i.pk)
     return render(request, 'project/userstate.html', context)

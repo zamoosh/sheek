@@ -437,7 +437,22 @@ label {
     right: 39px;
     padding: 5px 15px;
 }
+.show-befores{
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 30px 0;
+    position: relative;
+}
 
+.show-befores:before {
+    content: "انتخاب تگ / زیر گروه";
+    background: #ffffff;
+    position: absolute;
+    top: -15px;
+    right: 39px;
+    padding: 5px 15px;
+}
 #show_tags ul {
     max-height: 245px;
     overflow: scroll;
@@ -564,4 +579,14 @@ background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(0,212,255,0) 10
 }
 .no-card-shadow .card {
     box-shadow: turquoise !important;
+}
+.lin {
+    line-height: 32px;
+    padding-right: 26px;
+}
+.view-profile button {
+    margin: 0;
+}
+.show_tag{
+    line-height: 30px;
 }
