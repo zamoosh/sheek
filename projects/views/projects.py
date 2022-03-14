@@ -18,11 +18,11 @@ def get_expert_projects(request):
             context['project'].save()
             context['result'] = True
     context['projects_start'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True, status_jobField_user=0).order_by(
-        '-created_at')
+        '-id')
     context['projects_progress'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True, status_jobField_user=1).order_by(
-        '-created_at')
+        '-id')
     context['projects_done'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True, status_jobField_user=2).order_by(
-        '-created_at')
+        '-id')
     return render(request, 'project/expert-projects.html', context)
 
 @login_required

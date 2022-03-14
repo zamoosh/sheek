@@ -17,6 +17,7 @@ def profile(request):
         context['req']['whatsapp'] = request.POST.get('whatsapp', '').strip()
         context['req']['telegram'] = request.POST.get('telegram', '').strip()
         context['req']['gender'] = request.POST.get('gender', '').strip()
+        context['req']['existential'] = request.POST.get('existential')
         user = User.objects.get(id=request.user.id)
         user.first_name = context['req']['first_name']
         user.last_name = context['req']['last_name']
@@ -43,6 +44,10 @@ def profile(request):
             user.state_id = int(request.POST.get('city'))
         if 'profile-picture' in request.FILES:
             user.image = request.FILES['profile-picture']
+        if context['req']['existential'] == "realperson":
+            user.existential = False
+        if context['req']['existential'] == "legalperson":
+            user.existential = True
         if 'error' not in context:
             user.save()
         return HttpResponseRedirect(reverse('client:profile'))

@@ -16,7 +16,8 @@
                         <h5 class="content-header-title float-left pr-1 mb-0">کارشناسان</h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block">
                             <ol class="breadcrumb p-0 mb-0 pl-1">
-                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">کارشناسان
                                 </li>
@@ -28,60 +29,202 @@
             <div class="content-body"><!-- Basic Tables start -->
                 <div class="row" id="basic-table">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                {% if confirm %}
-                                    <div class="alert alert-success mb-2" role="alert">
-                                        کارشناس <strong>{{ expert.owner.first_name }}</strong> توسط شما تایید شد .
+                        {% if confirm %}
+                            <div class="alert alert-success mb-2" role="alert">
+                                کارشناس <strong>{{ expert.owner.first_name }}</strong> توسط شما تایید شد .
+                            </div>
+                        {% endif %}
+                        {% if reject %}
+                            <div class="alert alert-danger mb-2" role="alert">
+                                کارشناس <strong>{{ expert.owner.first_name }}</strong> غیر فعال شد .
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-sm-12 bg-withs p-2">
+                                <ul class="nav nav-tabs " id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab-fill" data-toggle="tab"
+                                           href="#home-fill" role="tab"
+                                           aria-controls="home-fill" aria-selected="true">
+                                            <i class="bx bxs-timer align-middle"></i>
+                                            در انتظار تایید
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="settings-tab-fill" data-toggle="tab"
+                                           href="#messages-fill" role="tab"
+                                           aria-controls="settings-fill" aria-selected="false">
+                                            <i class="bx bx-check-circle align-middle"></i>
+                                            تایید شده
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content pt-1">
+                                    <div class="tab-pane active" id="home-fill" role="tabpanel"
+                                         aria-labelledby="home-tab-fill">
+                                        <div class="row">
+                                            {% for expert in experts %}
+                                                <div class="col-lg-6 col-xl-6 user-details-card">
+                                                    <div class="card widget-user-details box-shadow">
+                                                        <div class="card-header">
+                                                            <div class="card-title-details d-flex align-items-center">
+                                                                <a class="pal" data-toggle="tooltip"
+                                                                   data-placement="top" title=""
+                                                                   data-original-title="تایید کارشناس"
+                                                                   {% if expert.status == 0 %}href="{% url 'projects:experts' %}?confirm={{ expert.id }}"{% endif %}><i
+                                                                        class="badge-circle badge-circle-light-secondary bx bx-check font-medium-1"></i></a>
+                                                                <div class="mt-n25">
+                                                                    <h5 class="line-height-2 font-size-15">{{ expert.owner.first_name }} {{ expert.owner.last_name }}</h5>
+                                                                    <div class="card-subtitle">{{ expert.jobField.parent.title }} / {{ expert.jobField.title }}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive ps">
+                                                                    <table class="table table-borderless">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="pb-0 pl-0"><strong>تاریخ
+                                                                                درخواست</strong></td>
+                                                                            <td class="pb-0 pl-0"><strong>تاریخ دریافت
+                                                                                مدرک</strong></td>
+                                                                            <td class="pb-0 pl-0"><strong>تاریخ انقضای
+                                                                                مدرک</strong></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                    {{ expert.created_at|jformat:"%Y/%m/%d" }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                    {{ expert.issue|jformat:"%Y/%m/%d" }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-danger text-bold-500 py-50">
+                                                                                    {{ expert.expiration|jformat:"%Y/%m/%d"  }}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer d-flex justify-content-between border-top">
+                                                            <div class="d-flex">
+                                                                <a href="{{ expert.inquiry_link }}" target="_blank"
+                                                                   class="d-inline-flex align-items-center mr-2">
+                                                                    <i class="bx bx-link mr-25"></i>
+                                                                    <small>لینک استعلام</small>
+                                                                </a>
+                                                                <div data-toggle="modal" data-target="#picmodal"
+                                                                     onclick="document.getElementById('mamad').src='{% if expert.document_image %}{{ expert.document_image.url }}{% endif %}'"
+                                                                     aria-modal="true"
+                                                                     class="d-inline-flex align-items-center pointer">
+                                                                    <i class="bx bx-printer mr-25"></i>
+                                                                    <small>مشاهده مدرک</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
-                                {% endif %}
-                                {% if reject %}
-                                    <div class="alert alert-danger mb-2" role="alert">
-                                        کارشناس <strong>{{ expert.owner.first_name }}</strong> غیر فعال شد .
+                                    <div class="tab-pane" id="messages-fill" role="tabpanel"
+                                         aria-labelledby="profile-tab-fill">
+                                        <div class="row">
+                                            {% for expert in experts_ok %}
+                                                <div class="col-lg-6 col-xl-6 user-details-card">
+                                                    <div class="card widget-user-details box-shadow">
+                                                        <div class="card-header">
+                                                            <div class="card-title-details d-flex align-items-center">
+                                                                <a class="pal" data-toggle="tooltip"
+                                                                   data-placement="top" title=""
+                                                                   data-original-title="غیر فعال کردن کارشناس"
+                                                                   {% if expert.status == 1 %}href="{% url 'projects:experts' %}?reject={{ expert.id }}"{% endif %}><i
+                                                                        class="badge-circle badge-circle-light-secondary bx bx-x font-medium-1"></i></a>
+                                                                <div class="mt-n25">
+                                                                    <h5 class="line-height-2 font-size-15">{{ expert.owner.first_name }} {{ expert.owner.last_name }}</h5>
+                                                                    <div class="card-subtitle">{{ expert.jobField.parent.title }} / {{ expert.jobField.title }}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive ps">
+                                                                    <table class="table table-borderless">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="pb-0 pl-0"><strong>تاریخ
+                                                                                درخواست</strong></td>
+                                                                            <td class="pb-0 pl-0"><strong>تاریخ دریافت
+                                                                                مدرک</strong></td>
+                                                                            <td class="pb-0 pl-0"><strong>تاریخ انقضای
+                                                                                مدرک</strong></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                    {{ expert.created_at|jformat:"%Y/%m/%d" }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                    {{ expert.issue|jformat:"%Y/%m/%d" }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-danger text-bold-500 py-50">
+                                                                                    {{ expert.expiration|jformat:"%Y/%m/%d"  }}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer d-flex justify-content-between border-top">
+                                                            <div class="d-flex">
+                                                                <a href="{{ expert.inquiry_link }}" target="_blank"
+                                                                   class="d-inline-flex align-items-center mr-2">
+                                                                    <i class="bx bx-link mr-25"></i>
+                                                                    <small>لینک استعلام</small>
+                                                                </a>
+                                                                <div data-toggle="modal" data-target="#picmodal"
+                                                                     onclick="document.getElementById('mamad').src='{% if expert.document_image %}{{ expert.document_image.url }}{% endif %}'"
+                                                                     aria-modal="true"
+                                                                     class="d-inline-flex align-items-center pointer">
+                                                                    <i class="bx bx-printer mr-25"></i>
+                                                                    <small>مشاهده مدرک</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
-                                {% endif %}
-
-                                <div class="table-responsive" id="jobTabale">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>عنوان کارشناسی</th>
-                                            <th>کارشناس</th>
-                                            <th>تاریخ درخواست</th>
-                                            <th>تاریخ صدور مدرک</th>
-                                            <th>تاریخ انقضای مدرک</th>
-                                            <th>استعلام</th>
-                                            <th>تصویر مدرک</th>
-                                            <th>عملیات</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for expert in experts %}
-                                            <tr>
-                                                <td class="text-bold-500">{{ expert.owner.first_name }} {{ expert.owner.last_name }}</td>
-                                                <td class="text-bold-500">{{ expert.jobField.parent.title }} / {{ expert.jobField.title }}</td>
-                                                <td class="text-bold-500">{{ expert.created_at|jformat:"%Y/%m/%d" }}</td>
-                                                <td class="text-bold-500">{{ expert.issue|jformat:"%Y/%m/%d" }}</td>
-                                                <td class="text-bold-500">{{ expert.expiration|jformat:"%Y/%m/%d"  }}</td>
-                                                <td class="text-bold-500"><a target="_blank" href="{{ expert.inquiry_link }}">استعلام</a></td>
-                                                <td class="text-bold-500">{% if expert.document_image %}<a target="_blank" href="{{ expert.document_image.url }}">تصویر</a>{%  endif %}</td>
-                                                <td class="text-bold-500">{% if expert.status %}تایید شده{% else %}تایید نشده{% endif %}</td>
-                                                <td>
-                                                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="تایید کارشناس" {% if expert.status == 0 %}href="{% url 'projects:experts' %}?confirm={{ expert.id }}"{% endif %}><i class="badge-circle badge-circle-light-secondary bx bx-check font-medium-1"></i></a>
-                                                    <a data-toggle="tooltip" data-placement="top" title="" data-original-title="رد کارشناس" {% if expert.status == 1 %}href="{% url 'projects:experts' %}?reject={{ expert.id }}"{% endif %}><i class="badge-circle badge-circle-light-secondary bx bx-x font-medium-1"></i></a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="modal fade text-left" id="picmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <img src="" id="mamad">
+            </div>
+        </div>
     </div>
-    {% include "footer.html" %}
+        </div>
+        {% include "footer.html" %}
 {% endblock %}

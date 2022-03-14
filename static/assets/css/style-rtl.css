@@ -548,11 +548,20 @@ label {
 }
 .pal {
   position: absolute;
-  left: 18px;
+  left: 2%;
+  top: 15px;
+  float: left !important;
+}
+.pal2 {
+  position: absolute;
+  left: 8%;
   top: 15px;
   float: left !important;
 }
 .bg-withs {
   background: rgb(255,255,255);
 background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
+}
+.no-card-shadow .card {
+    box-shadow: turquoise !important;
 }

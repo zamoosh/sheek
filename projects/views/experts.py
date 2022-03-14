@@ -3,7 +3,8 @@ from .imports import *
 @login_required
 def experts(request):
     context = {}
-    context['experts'] = UserJobField.objects.all().order_by('-id')
+    context['experts_ok'] = UserJobField.objects.filter(status=1).order_by('-id')
+    context['experts'] = UserJobField.objects.filter(status=0).order_by('-id')
     if 'confirm' in request.GET:
         context['getexperts'] = UserJobField.objects.get(id=int(request.GET.get('confirm')))
         context['getexperts'].status = 1

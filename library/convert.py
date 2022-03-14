@@ -42,7 +42,7 @@ class Convert:
             except:
                 pass
 
-    def converMaintSubGroup(self):
+    def convertMaintSubGroup(self):
         self.cursor.execute("SELECT * FROM `shekk`")
         for item in self.cursor.fetchall():
             jobfield = JobField(id=item[0])
@@ -70,8 +70,13 @@ class Convert:
                     continue
                 tags, _ = Tag.objects.get_or_create(title=i.strip())
                 for j in JobField.objects.filter(title=item[3].strip()):
-                    print(i, j)
-                    try:
-                        tags.jobfield.add(j.id)
-                    except:
-                        pass
+                    if j.parent is None:
+                        continue
+                    elif j.parent.parent is None:
+                        continue
+                    elif j.parent.parent:
+                        print(i, j)
+                        try:
+                            tags.jobfield.add(j.id)
+                        except:
+                            pass
