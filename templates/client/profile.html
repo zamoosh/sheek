@@ -147,9 +147,7 @@
                                                         {% csrf_token %}
                                                         <div class="media">
                                                             <a href="javascript: void(0);">
-                                                                <img src="
-
-                                                                        {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
+                                                                <img src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                                                      class="rounded mr-75" alt="profile image"
                                                                      height="64"
                                                                      width="64" id="blah">
@@ -225,8 +223,7 @@
                                                                         <label>کد ملی</label>
                                                                         <input type="text" class="form-control"
                                                                                placeholder="کد ملی"
-                                                                               value="
-                                                                                       {% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
+                                                                               value="{% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
                                                                                name="national_code" minlength="10"
                                                                                required="required"/>
                                                                     </div>
@@ -267,8 +264,7 @@
                                                                         <input type="text" required class="form-control"
                                                                                readonly id="data-input"
                                                                                placeholder="تاریخ تولد"
-                                                                               value="
-                                                                                       {% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
+                                                                               value="{% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
                                                                                name="birthday">
                                                                     </div>
                                                                 </div>
@@ -350,8 +346,7 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="linkedin"
-                                                                                   value="
-                                                                                           {% if request.user.extra.linkedin %}{{ request.user.extra.linkedin }}{% endif %}">
+                                                                                   value="{% if request.user.extra.linkedin %}{{ request.user.extra.linkedin }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-6">
@@ -360,8 +355,7 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="instagram"
-                                                                                   value="
-                                                                                           {% if request.user.extra.instagram %}{{ request.user.extra.instagram }}{% endif %}">
+                                                                                   value="{% if request.user.extra.instagram %}{{ request.user.extra.instagram }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-6">
@@ -370,8 +364,7 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="whatsapp"
-                                                                                   value="
-                                                                                           {% if request.user.extra.whatsapp %}{{ request.user.extra.whatsapp }}{% endif %}">
+                                                                                   value="{% if request.user.extra.whatsapp %}{{ request.user.extra.whatsapp }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-6">
@@ -380,8 +373,7 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="telegram"
-                                                                                   value="
-                                                                                           {% if request.user.extra.telegram %}{{ request.user.extra.telegram }}{% endif %}">
+                                                                                   value="{% if request.user.extra.telegram %}{{ request.user.extra.telegram }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                 </div>
