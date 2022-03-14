@@ -1,5 +1,6 @@
+from projects.dto import JobFieldViewDto
 from projects.models import *
-from projects.serializer import ProjectSerializer
+from projects.serializer import ProjectSerializer, JobFieldSerializer
 from .imports import *
 from datetime import timedelta
 import datetime
@@ -96,3 +97,15 @@ def confirm_project(request, id):
     project.save()
     context['msg'] = 'پروژه اضافه شد'
     return Response(context, status=HTTP_200_OK)
+
+
+@swagger_auto_schema(method='GET', manual_parameters=[], responses={200: JobFieldViewDto(many=True)})
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_jobfield_for_expert(request):
+    context = {}
+    job_field = UserJobField.objects.values_list('jobField', flat=True).filter(status=True, owner=request.user, )
+    job_fields = JobField.objects.filter(id__in=job_field)
+    serializer = JobFieldSerializer(job_fields, many=True).data
+    status_code = HTTP_200_OK
+    return Response(serializer, status=status_code)
