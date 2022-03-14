@@ -28,7 +28,6 @@ def jobs_api_search2(request, parent=None):
     if request.is_ajax and request.method == "GET":
         context['main'] = []
         context['main_parent'] = []
-
         job_field = JobField.objects.filter(parent=JobField.objects.get(id=parent).parent)
         print(job_field)
         context['select_parent_parent'] = job_field[0].parent.parent.id

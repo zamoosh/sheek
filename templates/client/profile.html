@@ -28,14 +28,14 @@
                 $('#state').find('option').remove().end()
                 $('#city').find('option').remove().end()
                 {%  if request.user.state %}
-                $("#state").append($('<option>', {
-                    value: {{ request.user.state.parent.id }},
-                    text: '{{ request.user.state.parent.title }}'
-                }))
-                $("#city").append($('<option>', {
-                    value: {{ request.user.state.id }},
-                    text: '{{ request.user.state.title }}'
-                }))
+                    $("#state").append($('<option>', {
+                        value: {{ request.user.state.parent.id }},
+                        text: '{{ request.user.state.parent.title }}'
+                    }))
+                    $("#city").append($('<option>', {
+                        value: {{ request.user.state.id }},
+                        text: '{{ request.user.state.title }}'
+                    }))
                 {% endif %}
                 data.forEach(function (element) {
                     $("#state").append($('<option>', {value: element['id'], text: element['title']}))
@@ -148,6 +148,7 @@
                                                         <div class="media">
                                                             <a href="javascript: void(0);">
                                                                 <img src="
+
                                                                         {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                                                      class="rounded mr-75" alt="profile image"
                                                                      height="64"
@@ -159,7 +160,9 @@
                                                                            class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
                                                                         <span>آپلود عکس</span>
                                                                         <input id="select-files" name="profile-picture"
-                                                                               type="file" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" hidden>
+                                                                               type="file"
+                                                                               onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
+                                                                               hidden>
                                                                     </label>
                                                                     <button class="btn btn-sm btn-light-secondary ml-50">
                                                                         ریست
@@ -222,7 +225,8 @@
                                                                         <label>کد ملی</label>
                                                                         <input type="text" class="form-control"
                                                                                placeholder="کد ملی"
-                                                                               value="{% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
+                                                                               value="
+                                                                                       {% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
                                                                                name="national_code" minlength="10"
                                                                                required="required"/>
                                                                     </div>
@@ -247,7 +251,8 @@
                                                                     <div class="controls">
                                                                         <label>شهر</label>
                                                                         <div class="input-group">
-                                                                            <select class="form-control" name="city" id="city">
+                                                                            <select class="form-control" name="city"
+                                                                                    id="city">
                                                                                 <option>انتخاب شهر</option>
                                                                                 <option value="1"></option>
                                                                             </select>
@@ -262,7 +267,8 @@
                                                                         <input type="text" required class="form-control"
                                                                                readonly id="data-input"
                                                                                placeholder="تاریخ تولد"
-                                                                               value="{% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
+                                                                               value="
+                                                                                       {% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
                                                                                name="birthday">
                                                                     </div>
                                                                 </div>
@@ -299,7 +305,41 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
+                                                            <div class="col-6">
+                                                                <fieldset>
+                                                                <label>شخص</label>
+                                                                    <ul class="list-unstyled mt-1">
+                                                                        <li class="d-inline-block mr-2">
+                                                                            <fieldset>
+                                                                                <div class="radio radio-primary radio-glow">
+                                                                                    <input type="radio"
+                                                                                           value="realperson"
+                                                                                           id="realperson"
+                                                                                           name="existential"
+                                                                                            {% if request.user.existential == 0 %}
+                                                                                           checked {% endif %}>
+                                                                                    <label for="realperson">شخص
+                                                                                        حقیقی</label>
+                                                                                </div>
+                                                                            </fieldset>
+                                                                        </li>
+                                                                        <li class="d-inline-block mr-2">
+                                                                            <fieldset>
+                                                                                <div class="radio radio-primary radio-glow">
+                                                                                    <input type="radio"
+                                                                                           value="legalperson"
+                                                                                           id="legalperson"
+                                                                                           name="existential"
+                                                                                            {% if request.user.existential == 1 %}
+                                                                                           checked {% endif %}>
+                                                                                    <label for="legalperson">شخص
+                                                                                        حقوقی</label>
+                                                                                </div>
+                                                                            </fieldset>
+                                                                        </li>
+                                                                    </ul>
+                                                                </fieldset>
+                                                            </div>
                                                             <div class="mt-2 col-12 d-block">
                                                                 <h5>شبکه های اجتماعی</h5>
                                                                 <hr>
@@ -310,7 +350,8 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="linkedin"
-                                                                                   value="{% if request.user.extra.linkedin %}{{ request.user.extra.linkedin }}{% endif %}">
+                                                                                   value="
+                                                                                           {% if request.user.extra.linkedin %}{{ request.user.extra.linkedin }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-6">
@@ -319,7 +360,8 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="instagram"
-                                                                                   value="{% if request.user.extra.instagram %}{{ request.user.extra.instagram }}{% endif %}">
+                                                                                   value="
+                                                                                           {% if request.user.extra.instagram %}{{ request.user.extra.instagram }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-6">
@@ -328,7 +370,8 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="whatsapp"
-                                                                                   value="{% if request.user.extra.whatsapp %}{{ request.user.extra.whatsapp }}{% endif %}">
+                                                                                   value="
+                                                                                           {% if request.user.extra.whatsapp %}{{ request.user.extra.whatsapp }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-6">
@@ -337,7 +380,8 @@
                                                                             <input type="text" class="form-control"
                                                                                    placeholder="Add link"
                                                                                    name="telegram"
-                                                                                   value="{% if request.user.extra.telegram %}{{ request.user.extra.telegram }}{% endif %}">
+                                                                                   value="
+                                                                                           {% if request.user.extra.telegram %}{{ request.user.extra.telegram }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                 </div>

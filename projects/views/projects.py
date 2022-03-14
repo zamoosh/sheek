@@ -3,7 +3,9 @@ from .imports import *
 @login_required
 def get_projects(request):
     context = {}
-    context['projects'] = Project.objects.filter(owner_id=request.user.id, status=True).order_by('-created_at')
+    context['projects_start'] = Project.objects.filter(owner_id=request.user.id, status=True, status_jobField_user=0).order_by('-created_at')
+    context['projects_progress'] = Project.objects.filter(owner_id=request.user.id, status=True, status_jobField_user=1).order_by('-created_at')
+    context['projects_done'] = Project.objects.filter(owner_id=request.user.id, status=True, status_jobField_user=2).order_by('-created_at')
     return render(request, 'project/projects.html', context)
 
 @login_required
@@ -15,8 +17,12 @@ def get_expert_projects(request):
             context['project'].status_jobField_user = 1
             context['project'].save()
             context['result'] = True
-    context['projects'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True).order_by(
-        '-created_at')
+    context['projects_start'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True, status_jobField_user=0).order_by(
+        '-id')
+    context['projects_progress'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True, status_jobField_user=1).order_by(
+        '-id')
+    context['projects_done'] = Project.objects.filter(user_jobField__owner=request.user.id, status=True, status_jobField_user=2).order_by(
+        '-id')
     return render(request, 'project/expert-projects.html', context)
 
 @login_required

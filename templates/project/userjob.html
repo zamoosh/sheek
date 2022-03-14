@@ -146,7 +146,6 @@
                                                             <tr>
                                                                 <td class="pb-0 pl-0"><strong>تاریخ دریافت مدرک</strong></td>
                                                                 <td class="pb-0 pl-0"><strong>تاریخ انقضای مدرک</strong></td>
-                                                                <td class="pb-0"><strong>تعداد پروژه ها</strong></td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="pl-0">
@@ -159,7 +158,6 @@
                                                                         {{ userjob.expiration|jformat:"%Y/%m/%d" }}
                                                                     </div>
                                                                 </td>
-                                                                <td>10 پروژه</td>
                                                             </tr>
                                                             </tbody>
                                                         </table>
@@ -173,7 +171,7 @@
                                                         <i class="bx bx-link mr-25"></i>
                                                         <small>لینک استعلام</small>
                                                     </a>
-                                                    <div data-toggle="modal" data-target="#picmodal" aria-modal="true" class="d-inline-flex align-items-center pointer">
+                                                    <div data-toggle="modal" data-target="#picmodal" onclick="document.getElementById('mamad').src='{% if userjob.document_image %}{{ userjob.document_image.url }}{% endif %}'"  aria-modal="true" class="d-inline-flex align-items-center pointer">
                                                         <i class="bx bx-printer mr-25"></i>
                                                         <small>مشاهده مدرک</small>
                                                     </div>
@@ -188,14 +186,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal fade text-left" id="picmodal" tabindex="-1" role="dialog"
-                                         aria-labelledby="myModalLabel33" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                            <div class="modal-content">
-                                                {% if userjob.document_image %}<img src="{{ userjob.document_image.url }}">{% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
                                 {% endfor %}
                             </div>
                         {% else %}
@@ -206,6 +196,13 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade text-left" id="picmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <img src="" id="mamad">
+            </div>
+        </div>
+    </div>
     {% include "footer.html" %}
 {% endblock %}

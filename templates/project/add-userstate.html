@@ -137,6 +137,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                <h6 class="line-height-1">افزودن استان/شهر برای  : </h6>
+                                <h5 class="line-height-2">{{ getJobField.jobField.title }}</h5>
                                 {% if experience_five %}
                                     شما قابلیت انتخاب شهر یا استان را ندارید، سابقه شما کمتر از یک سال می باشد.
                                 {% else %}
@@ -146,7 +148,7 @@
                                     <form class="form form-vertical" method="POST"
                                           action="{% url 'projects:adduserstate' getJobField.id %}">
                                         {% csrf_token %}
-                                        <div class="form-body">
+                                        <div class="form-body line-height-2">
                                             <div class="row">
                                                 {% if experience_full %}
                                                 <div class="col-6">
