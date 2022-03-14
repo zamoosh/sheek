@@ -1,4 +1,4 @@
-deploy_nojaba_storage:
+deploy_storage:
   stage: deploy
   variables:
     PROJ_DIR: "."
@@ -16,5 +16,5 @@ deploy_nojaba_storage:
     - pwd
     - VERSION=$(cat cicd/storage/version.txt)
     - echo $IMAGE_TAG
-    - helm upgrade --install nojaba-storage cicd/storage --set image.tag=$VERSION -f cicd/storage/nojaba-values.yaml
+    - helm upgrade --install sheek-storage cicd/storage --set image.tag=$VERSION -f cicd/storage/values.yaml
 

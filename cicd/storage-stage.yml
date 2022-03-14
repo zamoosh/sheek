@@ -1,4 +1,4 @@
-deploy_nojaba_storage:
+deploy_stage_storage:
   stage: deploy
   variables:
     PROJ_DIR: "."
@@ -19,5 +19,5 @@ deploy_nojaba_storage:
     - docker build -t $IMAGE_TAG ./cicd/storage/
     - docker push $IMAGE_TAG
     - echo $IMAGE_TAG
-    - helm upgrade --install nojaba-storage cicd/storage --set image.tag=$VERSION -f cicd/storage/values-stage.yaml
+    - helm upgrade --install sheek-stage-storage cicd/storage --set image.tag=$VERSION -f cicd/storage/values-stage.yaml
 

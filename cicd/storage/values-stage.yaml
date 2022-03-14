@@ -11,8 +11,8 @@ image:
 
 imagePullSecrets:
   - name: regcred
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: "sheekstagestorage"
+fullnameOverride: "sheekstagestorage"
 storage: "sheek"
 
 serviceAccount:
