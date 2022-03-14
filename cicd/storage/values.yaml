@@ -13,6 +13,7 @@ imagePullSecrets:
   - name: regcred
 nameOverride: ""
 fullnameOverride: ""
+storage: "sheek"
 
 serviceAccount:
   # Specifies whether a service account should be created
