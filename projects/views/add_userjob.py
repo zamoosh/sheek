@@ -9,7 +9,7 @@ def adduserjobfield(request):
         print(context['req']['jobfield'])
         context['req']['inquiry'] = request.POST.get('inquiry', '').strip()
         for i in context['req']['jobfield']:
-            if UserJobField.objects.filter(jobField=i).exists():
+            if UserJobField.objects.filter(jobField=i, owner=request.user.id).exists():
                 context['error'] = True
             else:
                 userjobfield = UserJobField()

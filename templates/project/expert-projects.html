@@ -95,7 +95,7 @@
                                                                             <td class="pb-0 pl-0"><small>تاریخ
                                                                                 درخواست</small></td>
                                                                             <td class="pb-0 pl-0">
-                                                                                <small>کارشناس</small></td>
+                                                                                <small>درخواست کننده</small></td>
                                                                             <td class="pb-0 pl-0">
                                                                                 <small>وضعیت</small></td>
                                                                             <td class="pb-0 pl-0"><small>پیام
@@ -111,8 +111,8 @@
                                                                                 <div class="badge badge-light-secondary text-bold-500 py-50"
                                                                                      data-toggle="tooltip"
                                                                                      data-placement="top" title=""
-                                                                                     data-original-title="{{ project.user_jobField.owner.cellphone }}">
-                                                                                    {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
+                                                                                     data-original-title="{{ project.owner.cellphone }}">
+                                                                                    {{ project.owner.first_name }} {{ project.owner.last_name }}
                                                                                 </div>
                                                                             </td>
                                                                             <td class="pl-0">
@@ -172,6 +172,11 @@
                                                                    data-original-title="مشاهده پروژه"
                                                                    href="{% url 'projects:view_project' project.id %}"><i
                                                                         class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
+                                                                <a class="pal2" data-toggle="tooltip"
+                                                                   data-placement="top" title=""
+                                                                   data-original-title="دریافت پروژه"
+                                                                   href="{% url 'projects:project-request' %}?confirm={{ project.id }}"><i
+                                                                        class="badge-circle badge-circle-light-secondary bx bx-check font-medium-1"></i></a>
                                                                 <div class="mt-n25">
                                                                     <h5 class="line-height-2 font-size-15">{{ project.title }}</h5>
                                                                 </div>
@@ -186,7 +191,7 @@
                                                                             <td class="pb-0 pl-0"><small>تاریخ
                                                                                 درخواست</small></td>
                                                                             <td class="pb-0 pl-0">
-                                                                                <small>کارشناس</small></td>
+                                                                                <small>درخواست کننده</small></td>
                                                                             <td class="pb-0 pl-0">
                                                                                 <small>وضعیت</small></td>
                                                                             <td class="pb-0 pl-0"><small>پیام
@@ -202,8 +207,8 @@
                                                                                 <div class="badge badge-light-secondary text-bold-500 py-50"
                                                                                      data-toggle="tooltip"
                                                                                      data-placement="top" title=""
-                                                                                     data-original-title="{{ project.user_jobField.owner.cellphone }}">
-                                                                                    {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
+                                                                                     data-original-title="{{ project.owner.cellphone }}">
+                                                                                    {{ project.owner.first_name }} {{ project.owner.last_name }}
                                                                                 </div>
                                                                             </td>
                                                                             <td class="pl-0">
@@ -277,7 +282,7 @@
                                                                             <td class="pb-0 pl-0"><small>تاریخ
                                                                                 درخواست</small></td>
                                                                             <td class="pb-0 pl-0">
-                                                                                <small>کارشناس</small></td>
+                                                                                <small>درخواست کننده</small></td>
                                                                             <td class="pb-0 pl-0">
                                                                                 <small>وضعیت</small></td>
                                                                             <td class="pb-0 pl-0"><small>پیام
@@ -293,8 +298,8 @@
                                                                                 <div class="badge badge-light-secondary text-bold-500 py-50"
                                                                                      data-toggle="tooltip"
                                                                                      data-placement="top" title=""
-                                                                                     data-original-title="{{ project.user_jobField.owner.cellphone }}">
-                                                                                    {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
+                                                                                     data-original-title="{{ project.owner.cellphone }}">
+                                                                                    {{ project.owner.first_name }} {{ project.owner.last_name }}
                                                                                 </div>
                                                                             </td>
                                                                             <td class="pl-0">
