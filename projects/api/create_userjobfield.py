@@ -82,4 +82,7 @@ def get_state(request, jobfield):
         context['msg'] = 'این کاربر دسترسی کامل دارد'
         context['status'] = '2'
     context['state'] = ProvinceSerializer(state, many=True).data
+    user_state = UserState.objects.values_list('state', flat=True).filter(
+        userjobfield=UserJobField.objects.get(owner=request.user, jobField=jobfield, status=True))
+    context['owner_city'] = ProvinceSerializer(State.objects.filter(id__in=user_state), many=True).data
     return Response(context, status=HTTP_200_OK)

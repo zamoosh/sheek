@@ -74,7 +74,7 @@ def get_expert_one(request, id):
 @permission_classes((IsAuthenticated,))
 def get_project_for_expert(request):
     context = {}
-    jobField = UserJobField.objects.values_list('jobField', flat=True).filter(owner=request.user)
+    jobField = UserJobField.objects.values_list('jobField', flat=True).filter(owner=request.user, status=True)
     state = UserState.objects.values_list('state', flat=True).filter(
         userjobfield__in=UserJobField.objects.filter(owner=request.user))
     q = Q()
@@ -92,7 +92,9 @@ def get_project_for_expert(request):
 def confirm_project(request, id):
     context = {}
     project = Project.objects.get(id=id)
+    print(UserJobField.objects.get(owner=request.user, status=True, jobField=project.jobField))
     project.user_jobField = UserJobField.objects.get(owner=request.user, status=True, jobField=project.jobField)
+
     project.status_jobField_user = 1
     project.save()
     context['msg'] = 'پروژه اضافه شد'
