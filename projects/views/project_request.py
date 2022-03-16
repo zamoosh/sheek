@@ -19,4 +19,10 @@ def project_request(request):
         context['getProject'].status_jobField_user = True
         context['getProject'].save()
         context['result'] = True
+        project = Project.objects.get(id=int(request.GET.get('confirm')))
+        message = Message()
+        message.text = "پروژه شما توسط کارشناس تایید شد"
+        message.project_id = project.id
+        message.owner_id = project.owner_id
+        message.save()
     return render(request, 'project/project-request.html', context)

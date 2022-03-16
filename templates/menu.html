@@ -31,6 +31,9 @@
                             class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">ارتقا به کارشناسی</span></a>
                     </li>
                     {% endif %}
+                    <li><a class="d-flex align-items-center" href="{% url 'client:profile' %}"><i
+                            class="bx bx-right-arrow-alt"></i><span class="menu-item text-truncate" data-i18n="List">شکایات</span></a>
+                    </li>
                 </ul>
             </li>
             {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'state:state' %}"><i class="bx bx-location-plus"></i><span
