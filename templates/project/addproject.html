@@ -149,6 +149,7 @@
                     $("#experts").empty();
                     data.forEach(data => {
                         const card = `<div class="card-body">
+                                          <input id="chb1" type="radio" value="${data.id}" name="expert-list" class="d-none"/>
                                           <div class="media-body card-body mt-25 row">
                                               <div class="col-2">
                                                   <img src="${data.profile}" class="rounded mr-75" alt="profile image" height="64" width="64">
@@ -159,7 +160,8 @@
                                               </div>
                                               <div class="col">
                                                   <div class="view-profile">
-                                                  <button type="submit" class="btn btn-light-primary glow">انتخاب کارشناس
+                                                  <button type="button" class="btn select-expert btn-light-primary glow" onclick="expertselect(${data.id})">
+                                                    انتخاب کارشناس
                                                   </button>
                                                   </div>
                                               </div>
@@ -197,16 +199,16 @@
                 type: "GET",
                 send: function (xhr) {
                 },
-                beforeSend: function(){
-                        $('.overlays').show();
-                        $('.loaders').show();
-                    },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders').show();
+                },
                 success: function (data) {
                     $("#show_experts").removeClass('show-befores')
                     $("#show_experts").addClass('show-befores')
                     $("#show_tags").empty();
                     $('.overlays').hide();
-                        $('.loaders').hide();
+                    $('.loaders').hide();
                     $("#show_tags").append(document.createElement('ul'));
                     data.forEach(data => {
                         $("#show_tags>ul").append(`<li onclick="mamad2(${data.id})" class="pointer w-100" id="point">${data.title}</li>`);
@@ -251,15 +253,15 @@
                 },
                 send: function (xhr) {
                 },
-                beforeSend: function(){
-                        $('.overlays').show();
-                        $('.loaders').show();
-                    },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders').show();
+                },
                 success: function (data) {
                     $("#show_tags").addClass('show-befores')
                     $("#show_tags").empty();
                     $('.overlays').hide();
-                        $('.loaders').hide();
+                    $('.loaders').hide();
                     $("#show_tags").append(document.createElement('ul'));
                     data.forEach(data => {
                         $("#show_tags>ul").append(`<li onclick="mamad(${data.id})" class="pointer" id="point">${data.title}</li>`);
@@ -271,6 +273,17 @@
             });
         });
 
+    </script>
+    <script>
+        $(document).ready()
+        {
+            function expertselect(val) {
+                $('.card-body').removeClass("bg-light-green");
+                var input = $('input[value="'+val+'"]');
+                input.prop("checked",true);
+                input[0].parentElement.classList.add("bg-light-green");
+            };
+        }
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -351,7 +364,7 @@
                                             </div>
                                             <div class="col-12">
                                                 <div class="overlays"></div>
-                                                    <div class="loaders"></div>
+                                                <div class="loaders"></div>
                                                 <div class="show_tags w-100 mt-3 mb-5" id="show_tags">
                                                 </div>
                                             </div>

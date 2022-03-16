@@ -179,13 +179,13 @@
                                                     class="bx bx-message-alt"></i><span
                                                     class="d-none d-md-block">پیام ها</span></a>
                                         </li>
-                                        <li class="nav-item mb-0">
+                                        <!--<li class="nav-item mb-0">
                                             <a class="nav-link d-flex px-1" id="docs-tab" data-toggle="tab"
                                                href="#docs"
                                                aria-controls="docs" role="tab" aria-selected="false"><i
                                                     class="bx bx-video"></i><span
                                                     class="d-none d-md-block">اسناد</span></a>
-                                        </li>
+                                        </li>-->
                                         <li class="nav-item mb-0 mr-0">
                                             <a class="nav-link d-flex px-1" id="reports-tab" data-toggle="tab"
                                                href="#reports"
@@ -225,10 +225,12 @@
                                         </div>
                                         <div class="tab-pane " id="expert" aria-labelledby="expert-tab"
                                              role="tabpanel">
-                                            <button class="btn btn-primary mb-2 ml-auto">مشاهده پروفایل کارشناس</button>
+                                            <!--<button class="btn btn-primary mb-2 ml-auto">مشاهده پروفایل کارشناس</button>-->
                                             <!-- user profile nav tabs activity start -->
                                             <div class="card">
-                                                <div class="card-body">
+                                                <div class="card-body profile-image">
+                                                    {% if project_details.user_jobField.owner.image %}
+                                                        <img src="{{ project_details.user_jobField.owner.image.url }}">{% endif %}
                                                     {{ project_details.user_jobField.owner.first_name }} {{ project_details.user_jobField.owner.last_name }}
                                                     {{ project_details.user_jobField.created_at|jformat:"%Y/%M/%d" }}
                                                 </div>
@@ -243,13 +245,14 @@
                                                         data-toggle="modal"
                                                         data-target="#inlineForm1">ارسال پیام جدید
                                                 </button>{% endif %}
-                                            <div class="col-12 col-lg-12">
-                                            <div class="overlay"></div>
+                                        <div class="overlay"></div>
                                             <div class="loader"></div>
-                                                <div class="row" id="message-carts">
+                                            <div class="col-12 col-lg-12">
+                                                <div class="row">
+                                                    <div class="w-100" id="message-carts">
                                                     {% load getmessage %}
                                                     {% for message_project in project_details|message %}
-                                                        <div class="col-8 col-lg-8 pb-1">
+                                                        <div class="col-12 col-lg-12 pb-1">
                                                             <div class="card mb-0 {% if message_project.owner_id == 0 %}badge-circle-light-dark{% elif message_project.owner_id == request.user.id %}badge-circle-light-withe{% else %}alert alert-secondary{% endif %}">
                                                                 <div class="card-body">
                                                                     <div class="col-12">
@@ -267,6 +270,7 @@
                                                             <small>{{ message_project.created_at|jformat:"%Y/%m/%d , %H:%m" }}</small>
                                                         </div>
                                                     {% endfor %}
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -341,8 +345,8 @@
                                    class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type="text" id="reportDescription" name="report-description" placeholder="گزارش"
-                                   class="form-control">
+                            <textarea type="textarea" rows="15" id="reportDescription" name="report-description" placeholder="متن گزارش"
+                                      class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -371,11 +375,11 @@
                 </div>
                 <form method="POST" id="sendMessageForm" action="{% url 'projects:getMessage' project_details.id %}">
                     {% csrf_token %}
-                    <div class="modal-9body">
+                    <div class="modal-9body p-1">
                         <label>متن پیام: </label>
                         <div class="form-group">
-                            <input type="text" id="messageText" name="messageText" placeholder="پیام خود را بنویسید"
-                                   class="form-control">
+                            <textarea type="textarea" rows="10" id="messageText" name="messageText" placeholder="پیام خود را بنویسید"
+                                      class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
