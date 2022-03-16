@@ -88,8 +88,14 @@ class Complaint(models.Model):
         (3, 'answer'),
     ]
     type = models.IntegerField(choices=TYPE, default=1)
-    user_text = models.TextField()
-    admin_text = models.TextField()
+
+
+class Text(models.Model):
+    complaint = models.ForeignKey(Complaint, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    update_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Message(models.Model):

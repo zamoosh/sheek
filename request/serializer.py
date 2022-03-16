@@ -4,7 +4,6 @@ from projects.models import *
 
 
 class ExpertSerializer(serializers.ModelSerializer):
-    state = serializers.SerializerMethodField()
     jobField = serializers.SerializerMethodField()
     owner_first = serializers.SerializerMethodField()
     owner_last = serializers.SerializerMethodField()
@@ -12,10 +11,6 @@ class ExpertSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserJobField
         fields = '__all__'
-
-    @staticmethod
-    def get_state(obj):
-        return obj.state.title
 
     @staticmethod
     def get_owner_first(obj):

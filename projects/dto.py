@@ -86,7 +86,6 @@ class UserJobFieldCreateDto(serializers.Serializer):
     document_image = serializers.FileField()
 
 
-
 class UserStateViewDto(serializers.Serializer):
     created_at = serializers.DateTimeField()
     update_at = serializers.DateTimeField()
@@ -97,3 +96,36 @@ class UserStateViewDto(serializers.Serializer):
 
 class UserStateCreateDto(serializers.Serializer):
     state_list = serializers.ListField(child=serializers.IntegerField())
+
+
+class ComplaintViewDto(serializers.Serializer):
+    title = serializers.CharField()
+    project = serializers.IntegerField()
+    update_at = serializers.DateTimeField()
+    created_at = serializers.DateTimeField()
+    status = serializers.BooleanField()
+    TYPE = [
+        (1, 'send'),
+        (2, 'progress'),
+        (3, 'answer'),
+    ]
+    type = serializers.ChoiceField(TYPE)
+
+
+class ComplaintCreateDto(serializers.Serializer):
+    title = serializers.CharField()
+    project = serializers.IntegerField()
+    text = serializers.CharField()
+
+
+class TextViewDto(serializers.Serializer):
+    complaint = serializers.IntegerField()
+    owner = serializers.IntegerField()
+    text = serializers.CharField()
+    update_at = serializers.DateTimeField()
+    created_at = serializers.DateTimeField()
+
+
+class TextCreateDto(serializers.Serializer):
+    complaint = serializers.IntegerField()
+    text = serializers.CharField()

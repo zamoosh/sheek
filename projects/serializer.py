@@ -85,3 +85,15 @@ class UserStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserState
         fields = '__all__'
+
+
+class ComplaintSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Complaint
+        fields = '__all__'
+
+
+class TextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Text
+        fields = '__all__'
