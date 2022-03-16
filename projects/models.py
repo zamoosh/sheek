@@ -76,6 +76,22 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+class Complaint(models.Model):
+    title = models.CharField(max_length=250)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    update_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=False)
+    TYPE = [
+        (1, 'send'),
+        (2, 'progress'),
+        (3, 'answer'),
+    ]
+    type = models.IntegerField(choices=TYPE, default=1)
+    user_text = models.TextField()
+    admin_text = models.TextField()
+
+
 class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
