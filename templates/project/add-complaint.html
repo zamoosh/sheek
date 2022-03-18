@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}شکایت جدید - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}{% endblock %}
+{% block js %}
+    <script>
+        $.ajax({
+            url: '{% url 'projects:project_api' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#project').find('option').remove().end()
+                $("#project").append($('<option>', {value: 0, text: 'انتخاب پروژه'}))
+                data.forEach(function (element) {
+                    $("#project").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    </script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0">شکایات</h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active"> شکایت جدید
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card icon-tab">
+                            <div class="card-body">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="controls">
+                                            <label>عنوان شکایت</label>
+                                            <input type="text" class="form-control"
+                                                   placeholder="عنوان شکایت"
+                                                   value=""
+                                                   name="title">
+                                        </div>
+                                    </div>
+                                </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="first-name-vertical">پروژه</label>
+                                                <div class="input-group">
+                                                    <select class="form-control" name="project" id="project">
+                                                        <option selected>انتخاب پروژه</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>توضیحات شکایت</label>
+                                                <textarea type="textarea" class="form-control"
+                                                       placeholder="شکایت"
+                                                       value="" rows="15"
+                                                       name="complaint"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="float-right btn btn-primary glow">ارسال شکایت
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

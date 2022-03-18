@@ -9,4 +9,5 @@ urlpatterns = [
     path('dashboard/', dashboard, name="dashboard"),
     path('profile/', profile, name="profile"),
     path('expert_request/', expert_request, name="expert_request"),
+    path('admins/', admins, name="admins"),
 ]
