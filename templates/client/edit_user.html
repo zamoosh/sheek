@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}مدیران - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
+    <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-body">
+                <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs mb-2" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab"
+                        href="#account" aria-controls="account" role="tab" aria-selected="true">
+                        <i class="bx bx-user mr-25"></i><span class="d-none d-sm-block">حساب کاربری</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" id="information-tab" data-toggle="tab"
+                        href="#information" aria-controls="information" role="tab" aria-selected="false">
+                        <i class="bx bx-info-circle mr-25"></i><span class="d-none d-sm-block">اطلاعات</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active fade show" id="account" aria-labelledby="account-tab" role="tabpanel">
+                    <form class="form-validate" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <div class="controls">
+                                        <label>نام کاربری</label>
+                                        <input type="text" disabled class="form-control" placeholder="Username"
+                                            value="{{ user.username }}"
+                                            name="username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="controls">
+                                        <label>نام</label>
+                                        <input type="text" class="form-control" placeholder="Name"
+                                            value="{{ user.first_name }}"
+                                            name="name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="controls">
+                                        <label>ایمیل</label>
+                                        <input type="email" class="form-control" placeholder="Email"
+                                            value="{{ user.email }}"
+                                            name="email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>وضعیت</label>
+                                    <select name="status" class="form-control">
+                                        <option value="1" {% if user.is_active %}selected{% endif %}>فعال</option>
+                                        <option value="2" {% if user.is_active == 0 %}selected{% endif %}>مسدود</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <div class="controls">
+                                        <label>شماره تماس</label>
+                                        <input type="text" class="form-control" placeholder="09120000000"
+                                            value="{{ user.cellphone }}"
+                                            name="cellphone">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="controls">
+                                        <label>نام خانوادگی</label>
+                                        <input type="text" class="form-control" placeholder="Name"
+                                            value="{{ user.last_name }}"
+                                            name="last_name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>نقش کاربری</label>
+                                    <select name="role" class="form-control">
+                                        <option value="1" {% if user.is_superuser == 0 %}selected{% endif %}>کاربر</option>
+                                        <option value="2" {% if user.is_superuser %}selected{% endif %}>ادمین</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">ذخیره تغییرات</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- users edit account form ends -->
+                </div>
+                <div class="tab-pane fade show" id="information" aria-labelledby="information-tab" role="tabpanel">
+                    <!-- users edit Info form start -->
+                    <form class="form-validate">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <h5 class="mb-1"><i class="bx bx-link mr-25"></i>شبکه های اجتماعی</h5>
+                                <div class="form-group">
+                                    <label>LINKEDIN</label>
+                                    <input disabled class="form-control" type="text" value="{% if user.extra.linkedin %}{{ user.extra.linkedin }}{% endif %}">
+                                </div>
+                                <div class="form-group">
+                                    <label>INSTAGRAM</label>
+                                    <input disabled class="form-control" type="text" value="{% if user.extra.instagram %}{{ extra.instagram }}{% endif %}">
+                                </div>
+                                <div class="form-group">
+                                    <label>WHATSAPP</label>
+                                    <input disabled class="form-control" type="text" value="{% if user.extra.whatsapp %}{{ user.extra.whatsapp }}{% endif %}">
+                                </div>
+                                <div class="form-group">
+                                    <label>TELEGRAM</label>
+                                    <input disabled class="form-control" type="text" value="{% if user.extra.telegram %}{{ user.extra.telegram }}{% endif %}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mt-1 mt-sm-0">
+                                <h5 class="mb-1"><i class="bx bx-user mr-25"></i>اطلاعات کاربری</h5>
+                                <div class="form-group">
+                                    <label>کد ملی</label>
+                                    <input disabled type="text" class="form-control nat_code"
+                                            value="{{ user.national_code }}"
+                                            name="nat_code">
+                                </div>
+                                <div class="form-group">
+                                    <div class="controls position-relative">
+                                        <label>تاریخ تولد</label>
+                                        <input disabled type="text" class="form-control birthdate-picker"
+                                            value="{{ user.birthday|jformat:"%Y/%m/%d" }}"
+                                            name="dob">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- users edit Info form ends -->
+                </div>
+            </div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

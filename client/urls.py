@@ -10,4 +10,5 @@ urlpatterns = [
     path('profile/', profile, name="profile"),
     path('expert_request/', expert_request, name="expert_request"),
     path('admins/', admins, name="admins"),
+    path('edit_admins/<int:id>/', edit_admins, name="edit_admins"),
 ]

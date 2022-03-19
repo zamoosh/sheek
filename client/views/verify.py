@@ -20,6 +20,8 @@ def verify(request):
                             if len(request.GET.get("next", "/")) == 0:
                                 return HttpResponseRedirect("/")
                             return HttpResponseRedirect(request.GET.get("next", "/"))
+                        else:
+                            context['active'] = False
                     else:
                         print("The username and password were incorrect.")
                 else:

@@ -22,6 +22,8 @@
                     class="menu-title text-truncate" data-i18n="Dashboard">داشبورد</span></a></li>
             {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'client:admins' %}"><i class="bx bx-user-plus"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">مدیران</span></a></li>{% endif %}
+            {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'client:admins' %}"><i class="bx bx-user-voice"></i><span
+                    class="menu-title text-truncate" data-i18n="Dashboard">کارشناسان</span></a></li>{% endif %}
             {% if request.user.is_superuser %}<li class="disabled nav-item"><a href="#"><i class="bx bx-user-pin"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">کاربران</span></a></li>{% endif %}
             {% if request.user.is_superuser %}<li class=" nav-item"><a href="{% url 'projects:admin_complaints' %}"><i class="bx bx-support"></i><span

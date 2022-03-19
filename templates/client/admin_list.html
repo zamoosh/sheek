@@ -75,7 +75,7 @@
                                                                             <td>{% if user.is_active %}<span class="badge badge-light-success">فعال</span>{% else %}<span class="badge badge-light-danger">مسدود شده</span>{% endif %}
                                                                             </td>
                                                                             <td>
-                                                                                <a href="html/ltr/vertical-menu-template/app-users-edit.html"><i
+                                                                                <a href="{% url 'client:edit_admins' user.id %}"><i
                                                                                         class="bx bx-edit-alt"></i></a>
                                                                             </td>
                                                                         </tr>

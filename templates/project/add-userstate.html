@@ -57,7 +57,6 @@
                     success: function (data) {
                         $("#show_experts").empty();
                         data.forEach(function (element) {
-
                             $("#show_experts").append("<div class='form-check show-state form-check-primary pt-1'><input name='userstate' id='" + element.id + "' type='checkbox' value='" + element.id + "' /> <label for='" + element.id + "'>" + element.title + "</label> </div>");
                         });
                     },
@@ -107,6 +106,29 @@
             }
         });
     </script>
+    <script>
+     function selects(){
+                var ele=document.getElementsByName('userstate');
+                for(var i=0; i<ele.length; i++){
+                    if(ele[i].type=='checkbox')
+                        ele[i].checked=true;
+                }
+            }
+            function deSelect(){
+                var ele=document.getElementsByName('userstate');
+                for(var i=0; i<ele.length; i++){
+                    if(ele[i].type=='checkbox')
+                        ele[i].checked=false;
+
+                }
+            }
+    </script>
+    <script>
+    $("#state").change(function () {
+        $("#undis").removeAttr("disabled");
+        $("#undis2").removeAttr("disabled");
+    });
+    </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -137,6 +159,16 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                {% if save %}
+                                    <div class="alert p-2 bg-rgba-success alert-dismissible mb-2" role="alert">
+                                      <div class="d-flex align-items-center">
+                                        <i class="bx bx-check-circle"></i>
+                                        <span>
+                                          شهر ها با موفقیت ثبت شدند.
+                                        </span>
+                                      </div>
+                                    </div>
+                                {% endif %}
                                 <h6 class="line-height-1">افزودن استان/شهر برای  : </h6>
                                 <h5 class="line-height-2">{{ getJobField.jobField.title }}</h5>
                                 {% if experience_five %}
@@ -163,6 +195,10 @@
                                                     </div>
                                                 </div>
                                                 {% endif %}
+                                                <div class="col-12">
+                                                    <input type="button" id="undis" class="btn-all" disabled onclick='selects()' value="انتخاب همه"/>
+                                                    <input type="button" id="undis2" class="btn-all" disabled onclick='deSelect()' value="حذف انتخاب شده ها"/>
+                                                </div>
                                                 <div class="col-12 mb-5">
                                                     <div class="show_parent" id="show_experts">
 

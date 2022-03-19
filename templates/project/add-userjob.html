@@ -87,6 +87,26 @@
                 }
             });
         });
+        $("#subexpert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:adduserjob' %}' + $("#subexpert").val() + '/',
+                type: "GET",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#salahiat').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#salahiat").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
         $("#state").change(function () {
             $.ajax({
                 url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
@@ -165,7 +185,32 @@
             }, 500);
         });
     </script>
-
+    <script>
+    $("#subexpert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                beforeSend: function(){
+                    $('.overlays').show();
+                    $('.loaders-expert').show();
+                },
+                success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
+                    $("#show_experts").empty();
+                    $('.overlays').hide();
+                    $('.loaders-expert').hide();
+                    data.forEach(data => {
+                        $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                    })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -224,6 +269,39 @@
                                                     <div class="loaders-expert"></div>
                                                 <div class="show_experts w-100" id="show_experts">
 
+                                                </div>
+                                            </div>
+                                        <div class="row col-12">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="first-name-vertical">سرگروه</label>
+                                                        <div class="input-group mt-1">
+                                                            <select class="form-control" name="expert" id="expert">
+                                                                <option selected>انتخاب سرگروه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="first-name-vertical">زیر گروه</label>
+                                                        <div class="input-group mt-1">
+                                                            <select class="form-control" name="subexpert"
+                                                                    id="subexpert">
+                                                                <option selected>انتخاب زیر گروه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="first-name-vertical">صلاحیت</label>
+                                                        <div class="input-group mt-1">
+                                                            <select class="form-control" name="salahiat" id="salahiat">
+                                                                <option selected>انتخاب صلاحیت</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-6">
