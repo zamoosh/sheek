@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'state',
     'django_jalali',
     'request',
+    'log',
 ]
 
 MIDDLEWARE = [

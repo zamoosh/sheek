@@ -56,7 +56,7 @@
                                         <label>نام</label>
                                         <input type="text" class="form-control" placeholder="Name"
                                             value="{{ user.first_name }}"
-                                            name="name">
+                                            name="first_name">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -92,6 +92,7 @@
                                             name="last_name">
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label>نقش کاربری</label>
                                     <select name="role" class="form-control">
@@ -99,6 +100,7 @@
                                         <option value="2" {% if user.is_superuser %}selected{% endif %}>ادمین</option>
                                     </select>
                                 </div>
+
                             </div>
                             <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
                                 <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">ذخیره تغییرات</button>

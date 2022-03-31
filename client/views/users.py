@@ -1,18 +1,19 @@
+from django.db.models import Q
 from django.urls import reverse
 
 from .imports import *
 
 
-def admins(request):
+def users(request):
     context = {}
     if request.user.is_superuser:
-        context['admins'] = User.objects.filter(is_superuser=True)
+        context['admins'] = User.objects.filter(~Q(is_superuser=True), ~Q(has_jobField=True))
     else:
         HttpResponseRedirect(reverse('client:dashboard'))
-    return render(request, 'client/admin_list.html', context)
+    return render(request, 'client/user_list.html', context)
 
 
-def edit_admins(request, id):
+def users_admins(request, id):
     context = {}
 
     if request.method == "POST":
@@ -21,8 +22,7 @@ def edit_admins(request, id):
         context['req']['last_name'] = request.POST.get('last_name', '').strip()
         context['req']['email'] = request.POST.get('email', '').strip()
         context['req']['status'] = int(request.POST.get('status'))
-        if request.POST.get('role'):
-            context['req']['role'] = int(request.POST.get('role'))
+        context['req']['role'] = int(request.POST.get('role'))
         user = User.objects.get(id=id)
         user.first_name = context['req']['first_name']
         user.last_name = context['req']['last_name']
@@ -32,11 +32,11 @@ def edit_admins(request, id):
             user.is_active = False
         elif context['req']['status'] == 1:
             user.is_active = True
-        if request.POST.get('role'):
-            if context['req']['role'] == 1:
-                user.is_superuser = False
-            elif context['req']['role'] == 2:
-                user.is_superuser = True
+
+        if context['req']['role'] == 1:
+            user.is_superuser = False
+        elif context['req']['role'] == 2:
+            user.is_superuser = True
 
         user.save()
     context['user'] = User.objects.get(id=id)
