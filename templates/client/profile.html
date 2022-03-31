@@ -227,7 +227,7 @@
                                                                         <input type="text" class="form-control"
                                                                                placeholder="کد ملی"
                                                                                value="{% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
-                                                                               name="national_code" minlength="10"
+                                                                               name="national_code" minlength="10" maxlength="10"
                                                                                required="required"/>
                                                                     </div>
                                                                 </div>
