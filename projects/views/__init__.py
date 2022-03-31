@@ -12,3 +12,7 @@ from .project_request import *
 from .experts import *
 from .job_search import *
 from .userstate import *
+from .complaints import *
+from .add_complaint import *
+from .view_complaint import *
+from .admin_complaints import *

@@ -1,7 +1,10 @@
+from django.db.models import Q
 from .imports import *
 
 @login_required
 def dashboard(request):
+    context = {}
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/accounts/auth/")
-    return render(request, 'client/dashboard.html')
+    context['user_jobs'] = UserJobField.objects.filter(owner=request.user, status=True)
+    return render(request, 'client/dashboard.html',context)

@@ -37,6 +37,13 @@ urlpatterns = [
     path('message/readmsg/<int:id>/', setreadmessage, name="ReadMessage"),
     path('experts/', experts, name="experts"),
     path('jobsearch/api/', job_search, name="job_search"),
+
+    path('admin_complaints/', admin_complaints, name="admin_complaints"),
+    path('complaints/', complaints, name="complaints"),
+    path('new-complaint/', add_complaint, name="add_complaint"),
+    path('complaint/<int:id>/<str:title>/', view_complaint, name="view_complaint"),
+    path('end_complaint/<int:id>/', end_complaint, name="end_complaint"),
+    path('projects/api/', projects_api, name="project_api"),
 ]
 
 app_name = ProjectsConfig.name

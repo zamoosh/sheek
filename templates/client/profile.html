@@ -5,8 +5,7 @@
 {% block css %}
     <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
     <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
-    <link rel="stylesheet" type="text/css"
-          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
@@ -134,8 +133,12 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            {% if error %}
-                                                کد ملی وارد شده قبلا ثبت شده است.
+                                            {% if messages %}
+                                                {% for message in messages %}
+                                                <div class="alert alert-danger mb-2" role="alert">
+                                                    {{ message }}
+                                                </div>
+                                                {% endfor %}
                                             {% endif %}
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active"
@@ -224,7 +227,7 @@
                                                                         <input type="text" class="form-control"
                                                                                placeholder="کد ملی"
                                                                                value="{% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
-                                                                               name="national_code" minlength="10"
+                                                                               name="national_code" minlength="10" maxlength="10"
                                                                                required="required"/>
                                                                     </div>
                                                                 </div>

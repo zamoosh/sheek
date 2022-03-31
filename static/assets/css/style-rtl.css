@@ -575,7 +575,7 @@ label {
 }
 .bg-withs {
   background: rgb(255,255,255);
-background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(0,212,255,0) 100%);
 }
 .no-card-shadow .card {
     box-shadow: turquoise !important;
@@ -589,4 +589,61 @@ background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(0,212,255,0) 10
 }
 .show_tag{
     line-height: 30px;
+}
+.bg-light-green {
+  background: #cecece26;
+  border-radius: 15px;
+}
+.profile-image img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+}
+.thead {
+  font-size: 17px;
+  margin: 16px 0;
+  border-bottom: 2px solid #DFE3E7;
+  padding-bottom: 15px;
+}
+.tr-table {
+  padding: 25px 0;
+  background: #fff;
+  margin: 15px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 17px 7px #eee;
+}
+.head-card {
+  position: relative;
+  border-bottom: 2px solid aliceblue;
+  padding-bottom: 13px;
+}
+.head-card img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+.d-in {
+  display: inline-block;
+  position: absolute;
+  top: 3px;
+  padding-right: 9px;
+  line-height: 26px;
+}
+a.btn-end-comp {
+    text-align: center;
+    background: #5ab73d;
+    display: block;
+    padding: 16px;
+    border-radius: 5px;
+    color: #fff;
+}
+.btn-all {
+    background: none;
+    border: none;
+    padding: 6px 11px;
+    border-radius: 5px;
+}
+.state-alert {
+  position: absolute;
+  left: 20px;
 }

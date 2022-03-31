@@ -40,6 +40,7 @@ def adduserstate(request, id):
             user_state.owner_id = request.user.id
             user_state.state_id = i
             user_state.save()
+        context['save'] = True
     return render(request, 'project/add-userstate.html', context)
 
 

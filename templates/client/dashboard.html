@@ -13,6 +13,21 @@
                     <section id="dashboard-analytics">
                         <div class="row">
                             <!-- Website Analytics Starts-->
+                            {% for i in user_jobs %}
+                                {% if not i.return_userState|length %}
+                                    <div class="col-12">
+                                        <div class="alert w-100 bg-rgba-success p-2 alert-dismissible mb-2" role="alert">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bx-check-circle"></i>
+                                                <span>
+                                              کارشناسی {{ i.jobField.title }} برای شما فعال شده. شما میتوانید برای این کارشناسی شهر و استان انتخاب نمایید .
+                                            </span>
+                                                <span class="state-alert"><a href="{% url 'projects:adduserstate' i.id %}">انتخاب شهر و استان</a></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                             <div class="col-md-12 col-sm-12">
                                 <div class="card bannerdashboard">
                                     <img src="{% static "app-assets/images/banner/banner.jpg" %}" alt="بنر">

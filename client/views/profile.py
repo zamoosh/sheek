@@ -1,7 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.contrib import messages
 from .imports import *
 import jdatetime
+from django.db.models import Q
+
 
 @login_required
 def profile(request):
@@ -18,37 +21,34 @@ def profile(request):
         context['req']['telegram'] = request.POST.get('telegram', '').strip()
         context['req']['gender'] = request.POST.get('gender', '').strip()
         context['req']['existential'] = request.POST.get('existential')
-        user = User.objects.get(id=request.user.id)
-        user.first_name = context['req']['first_name']
-        user.last_name = context['req']['last_name']
-        user.email = context['req']['email']
-        # try:
-        #     user_national = User.objects.get(national_code=context['req']['national_code'])
-        #     context['error'] = True
-        #     print('no1')
-        # except ObjectDoesNotExist:
-        user.national_code = context['req']['national_code']
-        print('ok1')
-        user.extra['linkedin'] = context['req']['linkedin']
-        user.extra['instagram'] = context['req']['instagram']
-        user.extra['whatsapp'] = context['req']['whatsapp']
-        user.extra['telegram'] = context['req']['telegram']
+        request.user.first_name = context['req']['first_name']
+        request.user.last_name = context['req']['last_name']
+        request.user.email = context['req']['email']
+        try:
+            q = Q(national_code=context['req']['national_code']) & ~Q(id=request.user.id)
+            user_national = User.objects.get(q)
+            context['error'] = True
+            messages.error(request, 'کد ملی تکراری می باشد.')
+        except ObjectDoesNotExist:
+            request.user.national_code = context['req']['national_code']
+        request.user.extra['linkedin'] = context['req']['linkedin']
+        request.user.extra['instagram'] = context['req']['instagram']
+        request.user.extra['whatsapp'] = context['req']['whatsapp']
+        request.user.extra['telegram'] = context['req']['telegram']
         if context['req']['gender'] == "male":
-            user.gender = 1
+            request.user.gender = 1
         elif context['req']['gender'] == "female":
-            user.gender = 0
+            request.user.gender = 0
         if request.POST.get('birthday'):
-            user.birthday = jdatetime.datetime.strptime(request.POST.get('birthday'), "%Y/%m/%d").togregorian()
-        # request.user.state = context['req']['state']
+            request.user.birthday = jdatetime.datetime.strptime(request.POST.get('birthday'), "%Y/%m/%d").togregorian()
         if request.POST.get('city'):
-            user.state_id = int(request.POST.get('city'))
+            request.user.state_id = int(request.POST.get('city'))
         if 'profile-picture' in request.FILES:
-            user.image = request.FILES['profile-picture']
+            request.user.image = request.FILES['profile-picture']
         if context['req']['existential'] == "realperson":
-            user.existential = False
+            request.user.existential = False
         if context['req']['existential'] == "legalperson":
-            user.existential = True
+            request.user.existential = True
         if 'error' not in context:
-            user.save()
-        return HttpResponseRedirect(reverse('client:profile'))
+            request.user.save()
     return render(request, 'client/profile.html', context)
