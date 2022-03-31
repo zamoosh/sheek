@@ -10,3 +10,4 @@ from state.models import State
 import re
 from library.smsir import Smsir
 from projects.models import *
+from law.models import *

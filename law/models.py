@@ -8,11 +8,11 @@ class Group(models.Model):
 
 
 class Rule(models.Model):
-    title = models.CharField(max_length=250, null=True, blank=True)
-    date = models.DateField()
-    article = models.CharField(max_length=250)
+    title = models.TextField(null=True, blank=True)
+    date = models.CharField(max_length=25)
+    article = models.TextField(null=True, blank=True)
     footnote = models.TextField(null=True, blank=True)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
 
