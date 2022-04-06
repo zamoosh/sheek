@@ -216,7 +216,7 @@
                                                                         <input type="email" class="form-control"
                                                                                placeholder="Email"
                                                                                value="{{ request.user.email }}"
-                                                                               name="email" required/>
+                                                                               name="email"/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -264,7 +264,7 @@
                                                                 <div class="form-group">
                                                                     <div class="controls">
                                                                         <label>تاریخ تولد</label>
-                                                                        <input type="text" required class="form-control"
+                                                                        <input type="text" class="form-control"
                                                                                readonly id="data-input"
                                                                                placeholder="تاریخ تولد"
                                                                                value="{% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"

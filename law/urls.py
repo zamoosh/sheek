@@ -3,5 +3,6 @@ from .views import *
 
 app_name = 'law'
 urlpatterns = [
-    path('law/<int:id>/', laws, name="laws"),
+    path('laws/', laws, name="laws"),
+    path('law/<int:id>/', law, name="law"),
 ]

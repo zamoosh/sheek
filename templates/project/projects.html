@@ -35,315 +35,315 @@
                                 مدیریت کنید .
                             </div>
                         {% endif %}
-                            <div class="row">
-                                <div class="col-sm-12 bg-withs p-2">
-                                    <!-- Nav tabs -->
-                                    <ul class="nav nav-tabs " id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab-fill" data-toggle="tab"
-                                               href="#home-fill" role="tab"
-                                               aria-controls="home-fill" aria-selected="true">
-                                                <i class="bx bx-time align-middle"></i>
-                                                در حال انجام
+                        <div class="row">
+                            <div class="col-sm-12 bg-withs p-2">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs " id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab-fill" data-toggle="tab"
+                                           href="#home-fill" role="tab"
+                                           aria-controls="home-fill" aria-selected="true">
+                                            <i class="bx bx-time align-middle"></i>
+                                            در حال انجام
 
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab-fill" data-toggle="tab"
-                                               href="#profile-fill" role="tab"
-                                               aria-controls="profile-fill" aria-selected="false">
-                                                <i class="bx bxs-timer align-middle"></i>
-                                                انتظار تایید
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="settings-tab-fill" data-toggle="tab"
-                                               href="#messages-fill" role="tab"
-                                               aria-controls="settings-fill" aria-selected="false">
-                                                <i class="bx bx-check-circle align-middle"></i>
-                                                اتمام رسیده
-                                            </a>
-                                        </li>
-                                    </ul>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab-fill" data-toggle="tab"
+                                           href="#profile-fill" role="tab"
+                                           aria-controls="profile-fill" aria-selected="false">
+                                            <i class="bx bxs-timer align-middle"></i>
+                                            انتظار تایید
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="settings-tab-fill" data-toggle="tab"
+                                           href="#messages-fill" role="tab"
+                                           aria-controls="settings-fill" aria-selected="false">
+                                            <i class="bx bx-check-circle align-middle"></i>
+                                            اتمام رسیده
+                                        </a>
+                                    </li>
+                                </ul>
 
-                                    <!-- Tab panes -->
-                                    <div class="tab-content pt-1">
-                                        <div class="tab-pane active" id="home-fill" role="tabpanel"
-                                             aria-labelledby="home-tab-fill">
-                                            <div class="row">
-                                                {% for project in projects_progress %}
-                                                    <div class="col-lg-6 col-xl-6 user-details-card">
-                                                        <div class="card widget-user-details {% if project.status_jobField_user == 2 %}badge-circle-light-success{% endif %}">
-                                                            <div class="card-header">
-                                                                <div class="card-title-details d-flex align-items-center">
-                                                                    <a class="pal" data-toggle="tooltip"
-                                                                       data-placement="top" title=""
-                                                                       data-original-title="مشاهده پروژه"
-                                                                       href="{% url 'projects:view_project' project.id %}"><i
-                                                                            class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
-                                                                    <div class="mt-n25">
-                                                                        <h5 class="line-height-2 font-size-15">{{ project.title }}</h5>
-                                                                    </div>
+                                <!-- Tab panes -->
+                                <div class="tab-content pt-1">
+                                    <div class="tab-pane active" id="home-fill" role="tabpanel"
+                                         aria-labelledby="home-tab-fill">
+                                        <div class="row">
+                                            {% for project in projects_progress %}
+                                                <div class="col-lg-6 col-xl-6 user-details-card">
+                                                    <div class="card widget-user-details {% if project.status_jobField_user == 2 %}badge-circle-light-success{% endif %}">
+                                                        <div class="card-header">
+                                                            <div class="card-title-details d-flex align-items-center">
+                                                                <a class="pal" data-toggle="tooltip"
+                                                                   data-placement="top" title=""
+                                                                   data-original-title="مشاهده پروژه"
+                                                                   href="{% url 'projects:view_project' project.id %}"><i
+                                                                        class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
+                                                                <div class="mt-n25">
+                                                                    <h5 class="line-height-2 font-size-15">{{ project.title }}</h5>
                                                                 </div>
                                                             </div>
-                                                            <div class="card-content">
-                                                                <div class="card-body">
-                                                                    <div class="table-responsive ps">
-                                                                        <table class="table table-borderless">
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td class="pb-0 pl-0"><small>تاریخ
-                                                                                    درخواست</small></td>
-                                                                                <td class="pb-0 pl-0">
-                                                                                    <small>کارشناس</small></td>
-                                                                                <td class="pb-0 pl-0">
-                                                                                    <small>وضعیت</small></td>
-                                                                                <td class="pb-0 pl-0"><small>پیام
-                                                                                    ها</small></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="pl-0">
-                                                                                    <div class="badge badge-light-primary text-bold-500 py-50">
-                                                                                        {{ project.created_at|jformat:"%Y/%m/%d" }}
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="pl-0">
-                                                                                    <div class="badge badge-light-secondary text-bold-500 py-50"
-                                                                                         data-toggle="tooltip"
-                                                                                         data-placement="top" title=""
-                                                                                         data-original-title="{{ project.user_jobField.owner.cellphone }}">
-                                                                                        {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="pl-0">
-                                                                                    {% if project.user_jobField %}
-                                                                                        {% if project.status_jobField_user == 0 %}
-                                                                                            <i class="bx bx-info-circle"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="درحال بررسی توسط کارشناس/کارشناسان"></i>
-                                                                                        {% elif project.status_jobField_user == 1 %}
-                                                                                            <i class="bx bx-check-circle"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="تایید شده توسط کارشناس"></i>
-                                                                                        {% elif project.status_jobField_user == 2 %}
-                                                                                            <i class="bx bx-user-check"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="پروژه به اتمام رسیده"></i>
-                                                                                        {% endif %}
-                                                                                    {% else %}
-                                                                                        <i class="bx bx-user-x"
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive ps">
+                                                                    <table class="table table-borderless">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="pb-0 pl-0"><small>تاریخ
+                                                                                درخواست</small></td>
+                                                                            <td class="pb-0 pl-0">
+                                                                                <small>کارشناس</small></td>
+                                                                            <td class="pb-0 pl-0">
+                                                                                <small>وضعیت</small></td>
+                                                                            <td class="pb-0 pl-0"><small>پیام
+                                                                                ها</small></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                    {{ project.created_at|jformat:"%Y/%m/%d" }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-secondary text-bold-500 py-50"
+                                                                                     data-toggle="tooltip"
+                                                                                     data-placement="top" title=""
+                                                                                     data-original-title="{{ project.user_jobField.owner.cellphone }}">
+                                                                                    {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                {% if project.user_jobField %}
+                                                                                    {% if project.status_jobField_user == 0 %}
+                                                                                        <i class="bx bx-info-circle"
                                                                                            data-toggle="tooltip"
-                                                                                           data-placement="top" title=""
-                                                                                           data-original-title="منتظر تایید یک کارشناس"></i>
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="درحال بررسی توسط کارشناس/کارشناسان"></i>
+                                                                                    {% elif project.status_jobField_user == 1 %}
+                                                                                        <i class="bx bx-check-circle"
+                                                                                           data-toggle="tooltip"
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="تایید شده توسط کارشناس"></i>
+                                                                                    {% elif project.status_jobField_user == 2 %}
+                                                                                        <i class="bx bx-user-check"
+                                                                                           data-toggle="tooltip"
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="پروژه به اتمام رسیده"></i>
                                                                                     {% endif %}
-                                                                                </td>
-                                                                                <td class="pl-0">{% load getmessage %}
-                                                                                    <div class="badge badge-light-secondary text-bold-500 py-50">
-                                                                                        {{ project|message|length }}
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                                                {% else %}
+                                                                                    <i class="bx bx-user-x"
+                                                                                       data-toggle="tooltip"
+                                                                                       data-placement="top" title=""
+                                                                                       data-original-title="منتظر تایید یک کارشناس"></i>
+                                                                                {% endif %}
+                                                                            </td>
+                                                                            <td class="pl-0">{% load getmessage %}
+                                                                                <div class="badge badge-light-secondary text-bold-500 py-50">
+                                                                                    {{ project|message|length }}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                {% endfor %}
-                                            </div>
+                                                </div>
+                                            {% endfor %}
                                         </div>
-                                        <div class="tab-pane" id="profile-fill" role="tabpanel"
-                                             aria-labelledby="profile-tab-fill">
-                                            <div class="row">
-                                                {% for project in projects_start %}
-                                                    <div class="col-lg-6 col-xl-6 user-details-card">
-                                                        <div class="card widget-user-details {% if project.status_jobField_user == 2 %}badge-circle-light-success{% endif %}">
-                                                            <div class="card-header">
-                                                                <div class="card-title-details d-flex align-items-center">
-                                                                    <a class="pal" data-toggle="tooltip"
-                                                                       data-placement="top" title=""
-                                                                       data-original-title="مشاهده پروژه"
-                                                                       href="{% url 'projects:view_project' project.id %}"><i
-                                                                            class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
-                                                                    <div class="mt-n25">
-                                                                        <h5 class="line-height-2 font-size-15">{{ project.title }}</h5>
-                                                                    </div>
+                                    </div>
+                                    <div class="tab-pane" id="profile-fill" role="tabpanel"
+                                         aria-labelledby="profile-tab-fill">
+                                        <div class="row">
+                                            {% for project in projects_start %}
+                                                <div class="col-lg-6 col-xl-6 user-details-card">
+                                                    <div class="card widget-user-details {% if project.status_jobField_user == 2 %}badge-circle-light-success{% endif %}">
+                                                        <div class="card-header">
+                                                            <div class="card-title-details d-flex align-items-center">
+                                                                <a class="pal" data-toggle="tooltip"
+                                                                   data-placement="top" title=""
+                                                                   data-original-title="مشاهده پروژه"
+                                                                   href="{% url 'projects:view_project' project.id %}"><i
+                                                                        class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
+                                                                <div class="mt-n25">
+                                                                    <h5 class="line-height-2 font-size-15">{{ project.title }}</h5>
                                                                 </div>
                                                             </div>
-                                                            <div class="card-content">
-                                                                <div class="card-body">
-                                                                    <div class="table-responsive ps">
-                                                                        <table class="table table-borderless">
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td class="pb-0 pl-0"><small>تاریخ
-                                                                                    درخواست</small></td>
-                                                                                <td class="pb-0 pl-0">
-                                                                                    <small>کارشناس</small></td>
-                                                                                <td class="pb-0 pl-0">
-                                                                                    <small>وضعیت</small></td>
-                                                                                <td class="pb-0 pl-0"><small>پیام
-                                                                                    ها</small></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="pl-0">
-                                                                                    <div class="badge badge-light-primary text-bold-500 py-50">
-                                                                                        {{ project.created_at|jformat:"%Y/%m/%d" }}
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="pl-0">
-                                                                                    <div class="badge badge-light-secondary text-bold-500 py-50"
-                                                                                         data-toggle="tooltip"
-                                                                                         data-placement="top" title=""
-                                                                                         data-original-title="{{ project.user_jobField.owner.cellphone }}">
-                                                                                        {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="pl-0">
-                                                                                    {% if project.user_jobField %}
-                                                                                        {% if project.status_jobField_user == 0 %}
-                                                                                            <i class="bx bx-info-circle"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="درحال بررسی توسط کارشناس/کارشناسان"></i>
-                                                                                        {% elif project.status_jobField_user == 1 %}
-                                                                                            <i class="bx bx-check-circle"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="تایید شده توسط کارشناس"></i>
-                                                                                        {% elif project.status_jobField_user == 2 %}
-                                                                                            <i class="bx bx-user-check"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="پروژه به اتمام رسیده"></i>
-                                                                                        {% endif %}
-                                                                                    {% else %}
-                                                                                        <i class="bx bx-user-x"
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive ps">
+                                                                    <table class="table table-borderless">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="pb-0 pl-0"><small>تاریخ
+                                                                                درخواست</small></td>
+                                                                            <td class="pb-0 pl-0">
+                                                                                <small>کارشناس</small></td>
+                                                                            <td class="pb-0 pl-0">
+                                                                                <small>وضعیت</small></td>
+                                                                            <td class="pb-0 pl-0"><small>پیام
+                                                                                ها</small></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                    {{ project.created_at|jformat:"%Y/%m/%d" }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-secondary text-bold-500 py-50"
+                                                                                     data-toggle="tooltip"
+                                                                                     data-placement="top" title=""
+                                                                                     data-original-title="{{ project.user_jobField.owner.cellphone }}">
+                                                                                    {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                {% if project.user_jobField %}
+                                                                                    {% if project.status_jobField_user == 0 %}
+                                                                                        <i class="bx bx-info-circle"
                                                                                            data-toggle="tooltip"
-                                                                                           data-placement="top" title=""
-                                                                                           data-original-title="منتظر تایید یک کارشناس"></i>
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="درحال بررسی توسط کارشناس/کارشناسان"></i>
+                                                                                    {% elif project.status_jobField_user == 1 %}
+                                                                                        <i class="bx bx-check-circle"
+                                                                                           data-toggle="tooltip"
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="تایید شده توسط کارشناس"></i>
+                                                                                    {% elif project.status_jobField_user == 2 %}
+                                                                                        <i class="bx bx-user-check"
+                                                                                           data-toggle="tooltip"
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="پروژه به اتمام رسیده"></i>
                                                                                     {% endif %}
-                                                                                </td>
-                                                                                <td class="pl-0">{% load getmessage %}
-                                                                                    <div class="badge badge-light-secondary text-bold-500 py-50">
-                                                                                        {{ project|message|length }}
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                                                {% else %}
+                                                                                    <i class="bx bx-user-x"
+                                                                                       data-toggle="tooltip"
+                                                                                       data-placement="top" title=""
+                                                                                       data-original-title="منتظر تایید یک کارشناس"></i>
+                                                                                {% endif %}
+                                                                            </td>
+                                                                            <td class="pl-0">{% load getmessage %}
+                                                                                <div class="badge badge-light-secondary text-bold-500 py-50">
+                                                                                    {{ project|message|length }}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                {% endfor %}
-                                            </div>
+                                                </div>
+                                            {% endfor %}
                                         </div>
-                                        <div class="tab-pane" id="messages-fill" role="tabpanel"
-                                             aria-labelledby="messages-tab-fill">
-                                            <div class="row">
-                                                {% for project in projects_done %}
-                                                    <div class="col-lg-6 col-xl-6 user-details-card">
-                                                        <div class="card widget-user-details">
-                                                            <div class="card-header">
-                                                                <div class="card-title-details d-flex align-items-center">
-                                                                    <a class="pal" data-toggle="tooltip"
-                                                                       data-placement="top" title=""
-                                                                       data-original-title="مشاهده پروژه"
-                                                                       href="{% url 'projects:view_project' project.id %}"><i
-                                                                            class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
-                                                                    <div class="mt-n25">
-                                                                        <h5 class="line-height-2 font-size-15">{{ project.title }}</h5>
-                                                                    </div>
+                                    </div>
+                                    <div class="tab-pane" id="messages-fill" role="tabpanel"
+                                         aria-labelledby="messages-tab-fill">
+                                        <div class="row">
+                                            {% for project in projects_done %}
+                                                <div class="col-lg-6 col-xl-6 user-details-card">
+                                                    <div class="card widget-user-details">
+                                                        <div class="card-header">
+                                                            <div class="card-title-details d-flex align-items-center">
+                                                                <a class="pal" data-toggle="tooltip"
+                                                                   data-placement="top" title=""
+                                                                   data-original-title="مشاهده پروژه"
+                                                                   href="{% url 'projects:view_project' project.id %}"><i
+                                                                        class="badge-circle badge-circle-light-secondary bx bx-show font-medium-1"></i></a>
+                                                                <div class="mt-n25">
+                                                                    <h5 class="line-height-2 font-size-15">{{ project.title }}</h5>
                                                                 </div>
                                                             </div>
-                                                            <div class="card-content">
-                                                                <div class="card-body">
-                                                                    <div class="table-responsive ps">
-                                                                        <table class="table table-borderless">
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td class="pb-0 pl-0"><small>تاریخ
-                                                                                    درخواست</small></td>
-                                                                                <td class="pb-0 pl-0">
-                                                                                    <small>کارشناس</small></td>
-                                                                                <td class="pb-0 pl-0">
-                                                                                    <small>وضعیت</small></td>
-                                                                                <td class="pb-0 pl-0"><small>پیام
-                                                                                    ها</small></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="pl-0">
-                                                                                    <div class="badge badge-light-primary text-bold-500 py-50">
-                                                                                        {{ project.created_at|jformat:"%Y/%m/%d" }}
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="pl-0">
-                                                                                    <div class="badge badge-light-secondary text-bold-500 py-50"
-                                                                                         data-toggle="tooltip"
-                                                                                         data-placement="top" title=""
-                                                                                         data-original-title="{{ project.user_jobField.owner.cellphone }}">
-                                                                                        {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="pl-0">
-                                                                                    {% if project.user_jobField %}
-                                                                                        {% if project.status_jobField_user == 0 %}
-                                                                                            <i class="bx bx-info-circle"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="درحال بررسی توسط کارشناس/کارشناسان"></i>
-                                                                                        {% elif project.status_jobField_user == 1 %}
-                                                                                            <i class="bx bx-check-circle"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="تایید شده توسط کارشناس"></i>
-                                                                                        {% elif project.status_jobField_user == 2 %}
-                                                                                            <i class="bx bx-user-check"
-                                                                                               data-toggle="tooltip"
-                                                                                               data-placement="top"
-                                                                                               title=""
-                                                                                               data-original-title="پروژه به اتمام رسیده"></i>
-                                                                                        {% endif %}
-                                                                                    {% else %}
-                                                                                        <i class="bx bx-user-x"
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive ps">
+                                                                    <table class="table table-borderless">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="pb-0 pl-0"><small>تاریخ
+                                                                                درخواست</small></td>
+                                                                            <td class="pb-0 pl-0">
+                                                                                <small>کارشناس</small></td>
+                                                                            <td class="pb-0 pl-0">
+                                                                                <small>وضعیت</small></td>
+                                                                            <td class="pb-0 pl-0"><small>پیام
+                                                                                ها</small></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                    {{ project.created_at|jformat:"%Y/%m/%d" }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <div class="badge badge-light-secondary text-bold-500 py-50"
+                                                                                     data-toggle="tooltip"
+                                                                                     data-placement="top" title=""
+                                                                                     data-original-title="{{ project.user_jobField.owner.cellphone }}">
+                                                                                    {{ project.user_jobField.owner.first_name }} {{ project.user_jobField.owner.last_name }}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                {% if project.user_jobField %}
+                                                                                    {% if project.status_jobField_user == 0 %}
+                                                                                        <i class="bx bx-info-circle"
                                                                                            data-toggle="tooltip"
-                                                                                           data-placement="top" title=""
-                                                                                           data-original-title="منتظر تایید یک کارشناس"></i>
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="درحال بررسی توسط کارشناس/کارشناسان"></i>
+                                                                                    {% elif project.status_jobField_user == 1 %}
+                                                                                        <i class="bx bx-check-circle"
+                                                                                           data-toggle="tooltip"
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="تایید شده توسط کارشناس"></i>
+                                                                                    {% elif project.status_jobField_user == 2 %}
+                                                                                        <i class="bx bx-user-check"
+                                                                                           data-toggle="tooltip"
+                                                                                           data-placement="top"
+                                                                                           title=""
+                                                                                           data-original-title="پروژه به اتمام رسیده"></i>
                                                                                     {% endif %}
-                                                                                </td>
-                                                                                <td class="pl-0">{% load getmessage %}
-                                                                                    <div class="badge badge-light-secondary text-bold-500 py-50">
-                                                                                        {{ project|message|length }}
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                                                {% else %}
+                                                                                    <i class="bx bx-user-x"
+                                                                                       data-toggle="tooltip"
+                                                                                       data-placement="top" title=""
+                                                                                       data-original-title="منتظر تایید یک کارشناس"></i>
+                                                                                {% endif %}
+                                                                            </td>
+                                                                            <td class="pl-0">{% load getmessage %}
+                                                                                <div class="badge badge-light-secondary text-bold-500 py-50">
+                                                                                    {{ project|message|length }}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                {% endfor %}
-                                            </div>
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>

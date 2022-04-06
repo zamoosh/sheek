@@ -49,6 +49,7 @@ def userstateapi(request, id):
     context = {}
     state_list = []
     if request.method == "GET":
+        print("aaaa")
         expert_list = []
         q = Q()
         q = q & Q(status=True, jobField=UserJobField.objects.get(id=id).jobField)

@@ -10,6 +10,9 @@ def users(request):
         context['admins'] = User.objects.filter(~Q(is_superuser=True), ~Q(has_jobField=True))
     else:
         HttpResponseRedirect(reverse('client:dashboard'))
+    if request.method == "POST":
+        context['searchbar'] = request.POST.get('searchbar', '')
+        context['admins'] = User.objects.filter(has_jobField=True, cellphone__icontains=context['searchbar'])
     return render(request, 'client/user_list.html', context)
 
 

@@ -3,17 +3,30 @@
 {% block title %}انتخاب کارشناشی - آرمان سنجش{% endblock %}
 {% load jformat %}
 {% block css %}
-    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
-    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/bootstrap-datepicker.min.css" %}"/>
+
 {% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.fa.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.min.js" %}"></script>
     <script type="text/javascript">
-        $(function () {
-            $("#issue-input").persianDatepicker();
-            $("#expiration-input").persianDatepicker();
-        });
+
+      $(document).ready(function() {
+                $("#issue-input").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    isRTL: true,
+                    dateFormat: "yy/mm/dd"
+                });
+                $("#expiration-input").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    isRTL: true,
+                    dateFormat: "yy/mm/dd"
+                });
+            });
+
     </script>
     <script>
         $.ajax({
@@ -81,6 +94,7 @@
                     data.forEach(function (element) {
                         $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
                     });
+                    $("#subexpert").change();
                 },
                 error: function (error) {
                     console.log(error);
@@ -94,17 +108,18 @@
                 async: false,
                 cache: false,
                 timeout: 30000,
-                send: function (xhr) {
-                },
-                success: function (data) {
-                    $('#salahiat').find('option').remove().end()
-                    data.forEach(function (element) {
-                        $("#salahiat").append($('<option>', {value: element['id'], text: element['title']}))
-                    });
-                },
-                error: function (error) {
-                    console.log(error);
-                }
+            send: function (xhr) {
+            },
+            success: function (data) {
+                $("#show_experts").addClass('show-before-expert')
+                $("#show_experts").empty();
+                data.forEach(data => {
+                    $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
             });
         });
         $("#state").change(function () {
@@ -126,14 +141,14 @@
         });
     </script>
     <script>
-        mamad = function (mamadvar) {
+        /*mamad = function (mamadvar) {
 
             $.ajax({
                 url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
                 type: "GET",
                 send: function (xhr) {
                 },
-                beforeSend: function(){
+                beforeSend: function () {
                     $('.overlays').show();
                     $('.loaders-expert').show();
                 },
@@ -150,9 +165,9 @@
                     console.log(error);
                 }
             });
-        }
+        }*/
         var timeoutid;
-        $('#searchin').keyup(function () {
+        /*$('#searchin').keyup(function () {
             clearTimeout(timeoutid);
             timeoutid = setTimeout(function () {
 
@@ -164,7 +179,7 @@
                     },
                     send: function (xhr) {
                     },
-                    beforeSend: function(){
+                    beforeSend: function () {
                         $('.overlays').show();
                         $('.loaders').show();
                     },
@@ -183,16 +198,16 @@
                     }
                 });
             }, 500);
-        });
+        });*/
     </script>
     <script>
-    $("#subexpert").change(function () {
+        /*$("#subexpert").change(function () {
             $.ajax({
                 url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
                 type: "GET",
                 send: function (xhr) {
                 },
-                beforeSend: function(){
+                beforeSend: function () {
                     $('.overlays').show();
                     $('.loaders-expert').show();
                 },
@@ -209,7 +224,7 @@
                     console.log(error);
                 }
             });
-        });
+        });*/
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -241,69 +256,36 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form form-vertical" method="POST" novalidate="novalidate" enctype="multipart/form-data" action="{% url 'projects:adduserjob' %}">
+                                <form class="form form-vertical" method="POST" novalidate="novalidate"
+                                      enctype="multipart/form-data" action="{% url 'projects:adduserjob' %}">
                                     {% csrf_token %}
                                     <div class="form-body">
                                         <div class="row">
-                                            <div class="col-12">
+                                            <div class="col-6">
                                                 <div class="form-group">
-                                                    <div class="controls">
-                                                        <label>جستجو در تگ ها</label>
-                                                        <input type="text" required class="form-control"
-                                                               placeholder="تگ مورد نظر"
-                                                               value=""
-                                                               id="searchin"
-                                                               name="searchin" autocomplete="off">
+                                                    <label for="first-name-vertical">سرگروه</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="expert" id="expert">
+                                                            <option selected>انتخاب سرگروه</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12">
-                                                <div class="overlays"></div>
-                                                    <div class="loaders"></div>
-                                                <div class="show_tags w-100 mt-3 mb-5" id="show_tags">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">زیر گروه</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="subexpert"
+                                                                id="subexpert">
+                                                            <option selected>انتخاب زیر گروه</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <div class="show_experts" id="show_experts"></div>
+                                            </div>
 
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-5">
-                                                <div class="overlays"></div>
-                                                    <div class="loaders-expert"></div>
-                                                <div class="show_experts w-100" id="show_experts">
-
-                                                </div>
-                                            </div>
-                                        <div class="row col-12">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="first-name-vertical">سرگروه</label>
-                                                        <div class="input-group mt-1">
-                                                            <select class="form-control" name="expert" id="expert">
-                                                                <option selected>انتخاب سرگروه</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="first-name-vertical">زیر گروه</label>
-                                                        <div class="input-group mt-1">
-                                                            <select class="form-control" name="subexpert"
-                                                                    id="subexpert">
-                                                                <option selected>انتخاب زیر گروه</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label for="first-name-vertical">صلاحیت</label>
-                                                        <div class="input-group mt-1">
-                                                            <select class="form-control" name="salahiat" id="salahiat">
-                                                                <option selected>انتخاب صلاحیت</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <div class="controls">
@@ -344,6 +326,8 @@
                                                     <a href="javascript: void(0);">
                                                         <img src="
 
+
+
                                                                 {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                                              class="rounded mr-75" alt="تصویر مدرک"
                                                              height="64"
@@ -355,7 +339,9 @@
                                                                    class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
                                                                 <span>آپلود تصویر مدرک</span>
                                                                 <input id="select-files" name="document_picture"
-                                                                       type="file" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" hidden>
+                                                                       type="file"
+                                                                       onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
+                                                                       hidden>
                                                             </label>
                                                         </div>
                                                         <p class="text-muted ml-1 mt-50"><small>فرمت های مورد
