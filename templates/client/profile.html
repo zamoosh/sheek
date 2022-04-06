@@ -3,18 +3,26 @@
 {% block title %}پروفایل کاربری آرمان سنجش{% endblock %}
 {% load jformat %}
 {% block css %}
-    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
-    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/bootstrap-datepicker.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
 {% endblock %}
 {% block js %}
-    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+        <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.fa.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
     <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
     <script type="text/javascript">
         $(function () {
             $("#data-input").persianDatepicker();
         });
+        $(document).ready(function() {
+                $("#data-input").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    isRTL: true,
+                    dateFormat: "yy/mm/dd"
+                });
+            });
     </script>
     <script>
         $.ajax({
