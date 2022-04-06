@@ -8,9 +8,10 @@ urlpatterns = [
     path('logout/', Logout, name="logout"),
     path('dashboard/', dashboard, name="dashboard"),
     path('profile/', profile, name="profile"),
-    path('expert_request/', expert_request, name="expert_request"),
+    path('expert-request/', expert_request, name="expert_request"),
     path('admins/', admins, name="admins"),
     path('experts/', experts, name="experts"),
     path('users/', users, name="users"),
-    path('edit_admins/<int:id>/', edit_admins, name="edit_admins"),
+    path('edit-admins/<int:id>/', edit_admins, name="edit_admins"),
+    path('register-user/', register_user, name="register_user"),
 ]

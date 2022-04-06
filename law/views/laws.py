@@ -1,7 +1,7 @@
 from .imports import *
 
 
-def laws(request, id):
+def laws(request):
     context = {}
-    context['laws'] = Rule.objects.filter(group=id)
+    context['laws'] = Group.objects.all()
     return render(request, 'law/laws.html', context)

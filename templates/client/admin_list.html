@@ -29,7 +29,6 @@
                                 <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
                                         class="bx bx-home-alt"></i></a>
                                 </li>
-
                                 <li class="breadcrumb-item active"> مدیران
                                 </li>
                             </ol>
@@ -46,50 +45,76 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="content-body"><!-- users list start -->
+                                                <div class="col-12">
+                                                    <div class="row">
+                                                        <div class="search-bar d-block col-6">
+                                                            <form method="post">
+                                                                {% csrf_token %}
+                                                                <fieldset
+                                                                        class="search-input form-group position-relative">
+
+                                                                    <input type="search"
+                                                                           class="form-control rounded-right form-control-lg shadow pl-2"
+                                                                           id="searchbar"
+                                                                           value="{% if searchbar %}{{ searchbar }}{% endif %}"
+                                                                           name="searchbar"
+                                                                           placeholder="جستجو شماره تلفن + اینتر...">
+
+                                                                </fieldset>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                {% if not admins %}
+                                                    <div class="alert alert-danger mb-2" role="alert">
+                                                        هیچ موردی برای {{ searchbar }} یافت نشد
+                                                    </div>
+                                                {% endif %}
                                                 <section class="users-list-wrapper">
                                                     <div class="users-list-table">
                                                         <div class="card">
                                                             <div class="card-body">
-                                                                <!-- datatable start -->
-                                                                <div class="table-responsive">
-                                                                    <table id="users-list-datatable" class="table">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th>id</th>
-                                                                            <th>نام کاربری</th>
-                                                                            <th>نام و نام خانوادگی</th>
-                                                                            <th>آخرین ورود</th>
-                                                                            <th>وضعیت</th>
-                                                                            <th>ویرایش</th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        {% for user in admins %}
-                                                                        <tr>
-                                                                            <td>{{ user.id }}</td>
-                                                                            <td><a
-                                                                                    href="#">{{ user.username }}</a>
-                                                                            </td>
-                                                                            <td>{{ user.get_full_name }}</td>
-                                                                            <td>{{ user.last_login|jformat:"%H:%m %Y/%m/%d" }}</td>
-                                                                            <td>{% if user.is_active %}<span class="badge badge-light-success">فعال</span>{% else %}<span class="badge badge-light-danger">مسدود شده</span>{% endif %}
-                                                                            </td>
-                                                                            <td>
-                                                                                <a href="{% url 'client:edit_admins' user.id %}"><i
-                                                                                        class="bx bx-edit-alt"></i></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                        {% endfor %}
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                                <!-- datatable ends -->
+                                                                {% if admins %}
+                                                                    <div class="table-responsive">
+                                                                        <table id="users-list-datatable" class="table">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>id</th>
+                                                                                <th>نام کاربری</th>
+                                                                                <th>نام و نام خانوادگی</th>
+                                                                                <th>آخرین ورود</th>
+                                                                                <th>وضعیت</th>
+                                                                                <th>ویرایش</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            {% for user in admins %}
+                                                                                <tr>
+                                                                                    <td>{{ user.id }}</td>
+                                                                                    <td><a
+                                                                                            href="#">{{ user.username }}</a>
+                                                                                    </td>
+                                                                                    <td>{{ user.get_full_name }}</td>
+                                                                                    <td>{{ user.last_login|jformat:"%H:%m %Y/%m/%d" }}</td>
+                                                                                    <td>{% if user.is_active %}
+                                                                                        <span class="badge badge-light-success">فعال</span>{% else %}
+                                                                                        <span class="badge badge-light-danger">مسدود شده</span>{% endif %}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a href="{% url 'client:edit_admins' user.id %}"><i
+                                                                                                class="bx bx-edit-alt"></i></a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            {% endfor %}
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </section>
-                                                <!-- users list ends -->
-
                                             </div>
                                         </div>
                                     </div>

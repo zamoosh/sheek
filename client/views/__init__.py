@@ -7,3 +7,4 @@ from .expert_request import *
 from .admins import *
 from .experts import *
 from .users import *
+from .register_user import *

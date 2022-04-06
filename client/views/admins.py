@@ -9,12 +9,14 @@ def admins(request):
         context['admins'] = User.objects.filter(is_superuser=True)
     else:
         HttpResponseRedirect(reverse('client:dashboard'))
+    if request.method == "POST":
+        context['searchbar'] = request.POST.get('searchbar', '')
+        context['admins'] = User.objects.filter(is_superuser=True, cellphone__icontains=context['searchbar'])
     return render(request, 'client/admin_list.html', context)
 
 
 def edit_admins(request, id):
     context = {}
-
     if request.method == "POST":
         context['req'] = {}
         context['req']['first_name'] = request.POST.get('first_name', '').strip()

@@ -127,66 +127,180 @@
 
                         {% if userjobs %}
                             <div class="row">
-                                {% for userjob in userjobs %}
-                                    <div class="col-lg-6 col-xl-6 user-details-card">
-                                        <div class="card widget-user-details">
-                                            <div class="card-header">
-                                                <div class="card-title-details d-flex align-items-center">
-                                                    <div class="mt-n25">
-                                                        <h5 class="line-height-2 font-size-15">{{ userjob.jobField.title }}</h5>
-                                                        <div class="card-subtitle">{{ userjob.jobField.parent.title }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-content">
-                                                <div class="card-body">
-                                                    <div class="table-responsive ps">
-                                                        <table class="table table-borderless">
-                                                            <tbody>
-                                                            <tr>
-                                                                <td class="pb-0 pl-0"><strong>تاریخ دریافت مدرک</strong></td>
-                                                                <td class="pb-0 pl-0"><strong>تاریخ انقضای مدرک</strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="pl-0">
-                                                                    <div class="badge badge-light-primary text-bold-500 py-50">
-                                                                        {{ userjob.issue|jformat:"%Y/%m/%d" }}
+                                <div class="col-sm-12 bg-withs p-2">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs " id="myTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="home-tab-fill" data-toggle="tab"
+                                               href="#home-fill" role="tab"
+                                               aria-controls="home-fill" aria-selected="true">
+                                                <i class="bx bx-time align-middle"></i>
+                                                تایید شده
+
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="profile-tab-fill" data-toggle="tab"
+                                               href="#profile-fill" role="tab"
+                                               aria-controls="profile-fill" aria-selected="false">
+                                                <i class="bx bxs-timer align-middle"></i>
+                                                انتظار تایید
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content pt-1">
+                                        <div class="tab-pane active" id="home-fill" role="tabpanel"
+                                             aria-labelledby="home-tab-fill">
+                                            <div class="row">
+                                                {% for userjob in userjobs %}
+                                                    <div class="col-lg-6 col-xl-6 user-details-card">
+                                                        <div class="card widget-user-details">
+                                                            <div class="card-header">
+                                                                <div class="card-title-details d-flex align-items-center">
+                                                                    <div class="mt-n25">
+                                                                        <h5 class="line-height-2 font-size-15">{{ userjob.jobField.title }}</h5>
+                                                                        <div class="card-subtitle">{{ userjob.jobField.parent.title }}</div>
                                                                     </div>
-                                                                </td>
-                                                                <td class="pl-0">
-                                                                    <div class="badge badge-light-danger text-bold-500 py-50">
-                                                                        {{ userjob.expiration|jformat:"%Y/%m/%d" }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+                                                                    <div class="table-responsive ps">
+                                                                        <table class="table table-borderless">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td class="pb-0 pl-0"><strong>تاریخ
+                                                                                    دریافت مدرک</strong>
+                                                                                </td>
+                                                                                <td class="pb-0 pl-0"><strong>تاریخ
+                                                                                    انقضای مدرک</strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="pl-0">
+                                                                                    <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                        {{ userjob.issue|jformat:"%Y/%m/%d" }}
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td class="pl-0">
+                                                                                    <div class="badge badge-light-danger text-bold-500 py-50">
+                                                                                        {{ userjob.expiration|jformat:"%Y/%m/%d" }}
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer d-flex justify-content-between border-top">
+                                                                <div class="d-flex">
+                                                                    <a href="{{ userjob.inquiry_link }}" target="_blank"
+                                                                       class="d-inline-flex align-items-center mr-2">
+                                                                        <i class="bx bx-link mr-25"></i>
+                                                                        <small>لینک استعلام</small>
+                                                                    </a>
+                                                                    <div data-toggle="modal" data-target="#picmodal"
+                                                                         onclick="document.getElementById('mamad').src='
+                                                                                 {% if userjob.document_image %}{{ userjob.document_image.url }}{% endif %}'"
+                                                                         aria-modal="true"
+                                                                         class="d-inline-flex align-items-center pointer">
+                                                                        <i class="bx bx-printer mr-25"></i>
+                                                                        <small>مشاهده مدرک</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <i class="bx bx-check mr-25"></i>
+                                                                    <small>
+                                                                        وضعیت :
+                                                                        <span class="{% if userjob.status %}text-success{% else %}text-danger{% endif %}">{% if userjob.status %}
+                                                                            تایید شده{% else %}تایید
+                                                                            نشده{% endif %}</span>
+                                                                    </small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                {% endfor %}
                                             </div>
-                                            <div class="card-footer d-flex justify-content-between border-top">
-                                                <div class="d-flex">
-                                                    <a href="{{ userjob.inquiry_link }}" target="_blank"
-                                                       class="d-inline-flex align-items-center mr-2">
-                                                        <i class="bx bx-link mr-25"></i>
-                                                        <small>لینک استعلام</small>
-                                                    </a>
-                                                    <div data-toggle="modal" data-target="#picmodal" onclick="document.getElementById('mamad').src='{% if userjob.document_image %}{{ userjob.document_image.url }}{% endif %}'"  aria-modal="true" class="d-inline-flex align-items-center pointer">
-                                                        <i class="bx bx-printer mr-25"></i>
-                                                        <small>مشاهده مدرک</small>
+                                        </div>
+                                        <div class="tab-pane" id="profile-fill" role="tabpanel"
+                                             aria-labelledby="profile-tab-fill">
+                                            <div class="row">
+                                                {% for userjob in userjobsNotActive %}
+                                                    <div class="col-lg-6 col-xl-6 user-details-card">
+                                                        <div class="card widget-user-details">
+                                                            <div class="card-header">
+                                                                <div class="card-title-details d-flex align-items-center">
+                                                                    <div class="mt-n25">
+                                                                        <h5 class="line-height-2 font-size-15">{{ userjob.jobField.title }}</h5>
+                                                                        <div class="card-subtitle">{{ userjob.jobField.parent.title }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+                                                                    <div class="table-responsive ps">
+                                                                        <table class="table table-borderless">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td class="pb-0 pl-0"><strong>تاریخ
+                                                                                    دریافت مدرک</strong>
+                                                                                </td>
+                                                                                <td class="pb-0 pl-0"><strong>تاریخ
+                                                                                    انقضای مدرک</strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="pl-0">
+                                                                                    <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                                        {{ userjob.issue|jformat:"%Y/%m/%d" }}
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td class="pl-0">
+                                                                                    <div class="badge badge-light-danger text-bold-500 py-50">
+                                                                                        {{ userjob.expiration|jformat:"%Y/%m/%d" }}
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer d-flex justify-content-between border-top">
+                                                                <div class="d-flex">
+                                                                    <a href="{{ userjob.inquiry_link }}" target="_blank"
+                                                                       class="d-inline-flex align-items-center mr-2">
+                                                                        <i class="bx bx-link mr-25"></i>
+                                                                        <small>لینک استعلام</small>
+                                                                    </a>
+                                                                    <div data-toggle="modal" data-target="#picmodal"
+                                                                         onclick="document.getElementById('mamad').src='
+                                                                                 {% if userjob.document_image %}{{ userjob.document_image.url }}{% endif %}'"
+                                                                         aria-modal="true"
+                                                                         class="d-inline-flex align-items-center pointer">
+                                                                        <i class="bx bx-printer mr-25"></i>
+                                                                        <small>مشاهده مدرک</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <i class="bx bx-check mr-25"></i>
+                                                                    <small>
+                                                                        وضعیت :
+                                                                        <span class="{% if userjob.status %}text-success{% else %}text-danger{% endif %}">{% if userjob.status %}
+                                                                            تایید شده{% else %}تایید
+                                                                            نشده{% endif %}</span>
+                                                                    </small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div>
-                                                    <i class="bx bx-check mr-25"></i>
-                                                    <small>
-                                                        وضعیت :
-                                                        <span class="{% if userjob.status %}text-success{% else %}text-danger{% endif %}">{% if userjob.status %}تایید شده{% else %}تایید نشده{% endif %}</span>
-                                                    </small>
-                                                </div>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
+                                </div>
                             </div>
                         {% else %}
                             شما هنوز رشته ای را انتخاب نکرده اید

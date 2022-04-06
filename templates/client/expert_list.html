@@ -46,6 +46,21 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="content-body"><!-- users list start -->
+                                                <div class="search-bar">
+                                                    <form method="post">
+                                                        {% csrf_token %}
+                                                        <fieldset class="search-input form-group position-relative">
+
+                                                            <input type="search"
+                                                                   class="form-control rounded-right form-control-lg shadow pl-2"
+                                                                   id="searchbar"
+                                                                   value="{% if searchbar %}{{ searchbar }}{% endif %}"
+                                                                   name="searchbar"
+                                                                   placeholder="جستجو شماره تلفن + اینتر...">
+
+                                                        </fieldset>
+                                                    </form>
+                                                </div>
                                                 <section class="users-list-wrapper">
                                                     <div class="users-list-table">
                                                         <div class="card">
@@ -65,20 +80,22 @@
                                                                         </thead>
                                                                         <tbody>
                                                                         {% for user in admins %}
-                                                                        <tr>
-                                                                            <td>{{ user.id }}</td>
-                                                                            <td><a
-                                                                                    href="#">{{ user.username }}</a>
-                                                                            </td>
-                                                                            <td>{{ user.get_full_name }}</td>
-                                                                            <td>{{ user.last_login|jformat:"%H:%m %Y/%m/%d" }}</td>
-                                                                            <td>{% if user.is_active %}<span class="badge badge-light-success">فعال</span>{% else %}<span class="badge badge-light-danger">مسدود شده</span>{% endif %}
-                                                                            </td>
-                                                                            <td>
-                                                                                <a href="{% url 'client:edit_admins' user.id %}"><i
-                                                                                        class="bx bx-edit-alt"></i></a>
-                                                                            </td>
-                                                                        </tr>
+                                                                            <tr>
+                                                                                <td>{{ user.id }}</td>
+                                                                                <td><a
+                                                                                        href="#">{{ user.username }}</a>
+                                                                                </td>
+                                                                                <td>{{ user.get_full_name }}</td>
+                                                                                <td>{{ user.last_login|jformat:"%H:%m %Y/%m/%d" }}</td>
+                                                                                <td>{% if user.is_active %}
+                                                                                    <span class="badge badge-light-success">فعال</span>{% else %}
+                                                                                    <span class="badge badge-light-danger">مسدود شده</span>{% endif %}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="{% url 'client:edit_admins' user.id %}"><i
+                                                                                            class="bx bx-edit-alt"></i></a>
+                                                                                </td>
+                                                                            </tr>
                                                                         {% endfor %}
                                                                         </tbody>
                                                                     </table>
