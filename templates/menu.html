@@ -18,6 +18,7 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
+        {% if request.user.is_superuser %}
             <li class=" nav-item"><a href="#"><i class="bx bxs-user-detail"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">کاربران</span></a>
                 <ul class="menu-content">
@@ -38,6 +39,7 @@
                         </li>{% endif %}
                 </ul>
             </li>
+        {% endif %}
             <li class=" nav-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">داشبورد</span></a></li>
             {% if request.user.is_superuser %}
@@ -52,7 +54,7 @@
                 </li>{% endif %}
             {% if request.user.is_superuser %}
                 <li class=" nav-item"><a href="{% url 'projects:jobs' %}"><i class="bx bx-briefcase-alt"></i><span
-                        class="menu-title text-truncate" data-i18n="Dashboard">مشاغل</span></a></li>{% endif %}
+                        class="menu-title text-truncate" data-i18n="Dashboard">حوزه های فعالیت</span></a></li>{% endif %}
             {% if request.user.is_superuser %}
                 <li class=" nav-item"><a href="{% url 'projects:experts' %}"><i class="bx bx-location-plus"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">تایید کارشناسان</span></a>

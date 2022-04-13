@@ -14,16 +14,42 @@
             },
             success: function (data) {
                 $('#inputGroupSelect01').find('option').remove().end()
-                $("#inputGroupSelect01").append($('<option>', {value: 0, text: ''}))
-                data.forEach(function (element) {
-                    $("#inputGroupSelect01").append($('<option>', {value: element['id'], text: element['title']}))
+                $("#inputGroupSelect01").append($('<option>', {value: 0, text: 'انتخاب گروه یا زیر گروه'}));
+                $("#inputGroupSelect01").append($('<optgroup>', {id: 'inputGroupOpt01', label: 'حوزه های فعالیت'}));
+                $("#inputGroupSelect01").append($('<optgroup>', {id: 'inputGroupOpt02', label: 'گروه ها'}));
+                data.forEach(element => {
+                    console.log(element['parent'])
+                    if(element['parent']) {
+                        $("#inputGroupOpt02").append($('<option>', {value: element['id'], text: element['title']}));
+                    }else {
+                        $("#inputGroupOpt01").append($('<option>', {value: element['id'], text: element['title']}));
+                    }
                 });
             },
             error: function (error) {
                 console.log(error);
             }
         });
-        function getCookie(job) {
+        $.ajax({
+            url: '{% url 'projects:jobs_competence_api' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#inputGroupSelect02').find('option').remove().end()
+                $("#inputGroupSelect02").append($('<option>', {value: 0, text: 'انتخاب زیر گروه'}));
+                data.forEach(function (element) {
+                    console.log(element)
+                    $("#inputGroupSelect02").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+       /* function getCookie(job) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 const cookies = document.cookie.split(';');
@@ -36,9 +62,9 @@
                 }
             }
             return cookieValue;
-        }
+        }*/
         const csrftoken = getCookie('csrftoken');
-        $('[type="submit"]').on('click', function (e) {
+        /*$('[type="submit"]').on('click', function (e) {
             e.preventDefault()
             // Making the AJAX Request
             $.ajax({
@@ -93,7 +119,7 @@
                     console.log("error");
                 }
             });
-        })
+        })*/
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -124,8 +150,15 @@
                         <div class="card">
                             <div class="card-body">
                                 <button type="button" class="btn btn-primary float-right shadow mr-1 mb-1" data-toggle="modal"
-                                        data-target="#inlineForm">اضافه کردن شغل
+                                        data-target="#addCompetence">اضافه کردن صلاحیت
                                 </button>
+                                <button type="button" class="btn btn-primary float-right shadow mr-1 mb-1" data-toggle="modal"
+                                        data-target="#addGroups">اضافه کردن گروه
+                                </button>
+                                <button type="button" class="btn btn-primary float-right shadow mr-1 mb-1" data-toggle="modal"
+                                        data-target="#inlineForm">اضافه کردن حوزه فعالیت
+                                </button>
+
                                 <div class="table-responsive" id="jobTabale">
                                     <table class="table">
                                     <div class="overlay"></div>
@@ -156,6 +189,37 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {% if jobs.has_other_pages %}
+                                    <nav aria-label="Page navigation">
+                                    <ul class="pagination pagination-borderless justify-content-center mt-2">
+                                    {% if jobs.has_previous %}
+                                    <li class="page-item previous"><a class="page-link" href="?page={{ jobs.previous_page_number }}">
+                                        <i class="bx bx-chevron-left"></i>
+                                    </a></li>
+                                    {% else %}
+                                      <li class="page-item previous"><a class="page-link" disabled="">
+                                        <i class="bx bx-chevron-left"></i>
+                                      </a></li>
+                                    {% endif %}
+                                    {% for i in jobs.paginator.page_range %}
+                                      {% if jobs.number == i %}
+                                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ i }}</a></li>
+                                      {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                      {% endif %}
+                                    {% endfor %}
+                                    {% if jobs.has_next %}
+                                    <li class="page-item next"><a class="page-link" href="?page={{ jobs.next_page_number }}">
+                                        <i class="bx bx-chevron-right"></i>
+                                    </a></li>
+                                    {% else %}
+                                      <li class="page-item next"><a class="page-link" disabled="">
+                                        <i class="bx bx-chevron-right"></i>
+                                    </a></li>
+                                    {% endif %}
+                                  </ul>
+                                    </nav>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -168,7 +232,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن مشاغل</h4>
+                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن حوزه کاری</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="bx bx-x"></i>
                     </button>
@@ -176,13 +240,45 @@
                 <form method="POST" action="{% url 'projects:jobs' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                        <label>نام شغل/زیر مجموعه: </label>
+                        <label>عنوان حوزه فعالیت: </label>
+                        <div class="form-group">
+                            <input name="subgroup" value="subgroup" type="text" hidden class="form-control">
+                            <input name="job" id="jobs" type="text" placeholder="مشاور املاک" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ذخیره</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="addGroups" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن گروه</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'projects:jobs' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <label>عنوان گروه: </label>
+                        <input name="group" value="group" type="text" hidden class="form-control">
                         <div class="form-group">
                             <input name="job" id="jobs" type="text" placeholder="مشاور املاک" class="form-control">
                             <div class="input-group mt-1">
-                                <select class="form-control" id="inputGroupSelect01">
-                                    <option selected>Choose...</option>
-                                    <option value="1"></option>
+                                <select class="form-control" name="parent" id="inputGroupSelect01">
                                 </select>
                             </div>
                         </div>
@@ -192,7 +288,44 @@
                             <i class="bx bx-x d-block d-sm-none"></i>
                             <span class="d-none d-sm-block">انصراف</span>
                         </button>
-                        <button type="submit" class="btn btn-primary ml-1" data-dismiss="modal">
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ذخیره</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="addCompetence" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن صلاحیت</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'projects:jobs' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <label>عنوان صلاحیت: </label>
+                        <input name="competence" value="competence" type="text" hidden class="form-control">
+                        <div class="form-group">
+                            <input name="job" id="jobs" type="text" placeholder="مشاور املاک" class="form-control">
+                            <div class="input-group mt-1">
+                                <select class="form-control" name="parent" id="inputGroupSelect02">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
                             <i class="bx bx-check d-block d-sm-none"></i>
                             <span class="d-none d-sm-block">ذخیره</span>
                         </button>

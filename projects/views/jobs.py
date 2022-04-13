@@ -1,22 +1,43 @@
 from .imports import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required
 def jobs(request):
     context = {}
+    context['jobs'] = JobField.objects.filter(status=True).order_by('-created_at')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(context['jobs'], 50)
     try:
-        context['jobs'] = JobField.objects.filter(status=True).order_by('-created_at')
-    except:
-        pass
+        context['jobs'] = paginator.page(page)
+    except PageNotAnInteger:
+        context['jobs'] = paginator.page(1)
+    except EmptyPage:
+        context['jobs'] = paginator.page(paginator.num_pages)
     if request.method == "POST":
         context['req'] = {}
-        context['req']['title'] = request.POST.get('title', '').strip()
+        context['req']['subgroup'] = request.POST.get('subgroup')
+        context['req']['group'] = request.POST.get('group')
+        context['req']['competence'] = request.POST.get('competence')
+        context['req']['title'] = request.POST.get('job', '').strip()
         context['req']['description'] = request.POST.get('description', '').strip()
-        context['req']['parent'] = int(request.POST.get('parent'))
-        job = JobField()
-        job.title = context['req']['title']
-        if context['req']['parent']:
-            job.parent_id = context['req']['parent']
-        job.save()
+        context['req']['parent'] = request.POST.get('parent')
+        if context['req']['subgroup']:
+            job = JobField()
+            job.title = context['req']['title']
+            job.save()
+        if context['req']['group']:
+            job = JobField()
+            job.title = context['req']['title']
+            if context['req']['parent']:
+                job.parent_id = int(context['req']['parent'])
+            job.save()
+        if context['req']['competence']:
+            job = JobField()
+            job.title = context['req']['title']
+            if context['req']['parent']:
+                job.parent_id = int(context['req']['parent'])
+            job.competence = True
+            job.save()
     return render(request, 'project/jobs.html', context)
 
 
