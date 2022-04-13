@@ -4,8 +4,11 @@ from .apps import ProjectsConfig
 
 urlpatterns = [
     path('jobs/', jobs, name="jobs"),
-    path('jobs/delete/<int:id>', delete_job, name="delete-job"),
+    path('jobs/delete/<int:id>/', delete_job, name="delete-job"),
     path('jobs/api/', jobs_api, name="jobsapi"),
+    path('jobs-competence/api/', jobs_competence_api, name="jobs_competence_api"),
+    path('job-group-api/api/', jobs_group_api, name="jobs_group_api"),
+    path('job-group-api/api/<int:parent>/', jobs_group_api, name="jobs_group_api"),
     path('user-job/', userjobfield, name="userjob"),
 
     path('user-state/', userstate, name="userstate"),
@@ -14,8 +17,15 @@ urlpatterns = [
     path('dell-userstateapi/<int:id>/', dellstate, name="dellstate"),
     path('get_userstateapi/<int:id>/', get_userstateapi, name="get_userstateapi"),
 
-    path('adduserjob/', adduserjobfield, name="adduserjob"),
-    path('adduserjob/<int:parent>/', jobs_api, name="adduserjob"),
+    path('new-adduserjob/', adduserjobfield, name="adduserjob"),
+    path('new-adduserjob/<int:id>/', adduserjobfields, name="adduser-jobs"),
+    # path('adduserjob/<int:parent>/', jobs_api, name="adduserjobhh"),
+
+    # path('adduser-parent-api/', adduser_parent_api, name="adduser_parent_api"),
+    # path('adduser-parent-api/<int:parent>/', adduser_parent_api, name="adduser_parent_api"),
+
+    path('adduser-job-api/', adduser_jobs_api, name="adduser-job-api"),
+    path('adduser-job-api/<int:id>/', adduser_jobs_api, name="adduser-job-api"),
 
     path('adduserjob/api/', jobs_api_search, name="jobs_api_search"),
     path('adduserjob/api/<int:parent>/', jobs_api_search, name="jobs_api_search"),

@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}انتخاب کارشناشی - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/bootstrap-datepicker.min.css" %}"/>
+
+{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.fa.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.min.js" %}"></script>
+    <script type="text/javascript">
+
+      $(document).ready(function() {
+                $("#issue-input").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    isRTL: true,
+                    dateFormat: "yy/mm/dd"
+                });
+                $("#expiration-input").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    isRTL: true,
+                    dateFormat: "yy/mm/dd"
+                });
+            });
+
+    </script>
+    <script>
+        var brd = $("#brd");
+        brd.append(`<a class='breadcrumb-item pointer' onClick='brdClick({{ id.id }})' id="{{ id.id }}">{{id.title}}</a> `);
+        expertapi();
+        function expertapi(id){
+
+
+            $('#expert').find('option').remove().end();
+            $("#expert").append($(`<option>`, {value: '', text: 'در حال دریافت اطلاعات ...'}));
+
+            $.ajax({
+                url: (id) ? '{% url 'projects:adduser-job-api' %}' + id + '/' : '{% url 'projects:adduser-job-api' id.id %}',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    if (data[0].competence) {
+                        $("#show_experts").addClass('show-before-expert').empty();
+                        $('#expert').find('option').remove().end().hide();
+                        data.forEach(data => {
+                            $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                        });
+                    } else {
+                        $("#show_experts").removeClass('show-before-expert').empty();
+                        $('#expert').find('option').remove().end().show();
+                        data.splice(0, 0, {id: '', title: 'انتخاب کنید...'});
+                        data.forEach(function (element) {
+                            $("#expert").append($(`<option>`, {value: element['id'], text: element['title']}));
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+        }
+
+        function brdClick(id) {
+            expertapi(id);
+            var list = Object.entries(brd[0].children);
+            list.forEach(function callback(el, index) {
+               if (Number(el[1].id) === id){
+                list = list.splice(0, index + 1);
+                return null;
+               }
+            });
+            brd.empty();
+            list.forEach((el) => {
+                brd.append(`<a class='breadcrumb-item pointer' onClick='brdClick(${el[1].id})' id="${el[1].id}"> ${el[1].innerText}</a> `);
+            });
+        }
+
+
+/*
+        $("#expert").on(function () {
+        previousId = this.value;
+        });*/
+        $("#expert").change(function () {
+            if (($("#expert").val())) {
+                $("#brd").append(`<a class='breadcrumb-item pointer' onClick='brdClick(${$("#expert").val()})' id="${$("#expert").val()}"> ${$("#expert option:selected").text()}</a> `);
+                expertapi($("#expert").val());
+            }else {
+                $("#show_experts").removeClass('show-before-expert');
+                $("#show_experts").empty();
+            }
+            /*$.ajax({
+                url: '{% url 'projects:adduser-job-api' %}' + $("#expert").val() + '/',
+                type: "GET",
+                async: false,
+                cache: false,
+                timeout: 30000,
+            send: function (xhr) {
+            },
+            success: function (data) {
+                $("#show_experts").addClass('show-before-expert')
+                $("#show_experts").empty();
+                data.forEach(data => {
+                    $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+            });*/
+
+        });
+        /*$("#state").change(function () {
+            $.ajax({
+                url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $('#city').find('option').remove().end()
+                    data.forEach(function (element) {
+                        $("#city").append($('<option>', {value: element['id'], text: element['title']}))
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });*/
+    </script>
+    <script>
+        /*mamad = function (mamadvar) {
+
+            $.ajax({
+                url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders-expert').show();
+                },
+                success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
+                    $("#show_experts").empty();
+                    $('.overlays').hide();
+                    $('.loaders-expert').hide();
+                    data.forEach(data => {
+                        $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                    })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }*/
+        var timeoutid;
+        /*$('#searchin').keyup(function () {
+            clearTimeout(timeoutid);
+            timeoutid = setTimeout(function () {
+
+                $.ajax({
+                    url: '{% url 'projects:job_search' %}',
+                    type: "GET",
+                    data: {
+                        title: $("#searchin").val(),
+                    },
+                    send: function (xhr) {
+                    },
+                    beforeSend: function () {
+                        $('.overlays').show();
+                        $('.loaders').show();
+                    },
+                    success: function (data) {
+                        $("#show_tags").addClass('show-before')
+                        $("#show_tags").empty();
+                        $('.overlays').hide();
+                        $('.loaders').hide();
+                        $("#show_tags").append(document.createElement('ul'));
+                        data.forEach(data => {
+                            $("#show_tags>ul").append(`<li onclick="mamad(${data.id})" class="pointer" id="point">${data.title}</li>`);
+                        })
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }, 500);
+        });*/
+    </script>
+    <script>
+        /*$("#subexpert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders-expert').show();
+                },
+                success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
+                    $("#show_experts").empty();
+                    $('.overlays').hide();
+                    $('.loaders-expert').hide();
+                    data.forEach(data => {
+                        $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                    })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });*/
+    </script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0"></h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="{% url 'projects:adduserjob' %}">انتخاب حوزه کارشناسی</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    افزودن کارشناسی
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body"><!-- Basic Tables start -->
+                <div class="row" id="basic-table">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="form form-vertical" method="POST" novalidate="novalidate"
+                                      enctype="multipart/form-data" action="{% url 'projects:adduserjob' %}">
+                                    {% csrf_token %}
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">سرگروه</label>
+                                                    <div class="input-group mt-1">
+                                                        <select class="form-control" name="expert" id="expert">
+                                                            <option selected>انتخاب سرگروه</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="breadcrumb" style="background: none;" id="brd"></div>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <div class="show_experts" id="show_experts"></div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>تاریخ صدور مدرک</label>
+                                                        <input type="text" required class="form-control"
+                                                               readonly id="issue-input"
+                                                               placeholder="تاریخ صدور مدرک"
+                                                               value=""
+                                                               name="issue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>تاریخ انقضای مدرک</label>
+                                                        <input type="text" required class="form-control"
+                                                               readonly id="expiration-input"
+                                                               placeholder="تاریخ انقضای مدرک"
+                                                               value=""
+                                                               name="expiration">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>لینک مرجع استعلام</label>
+                                                        <input type="text" required class="form-control"
+                                                               placeholder="لینک مرجع استعلام"
+                                                               value=""
+                                                               name="inquiry">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="media">
+                                                    <a href="javascript: void(0);">
+                                                        <img src="
+
+
+
+                                                                {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
+                                                             class="rounded mr-75" alt="تصویر مدرک"
+                                                             height="64"
+                                                             width="64" id="blah">
+                                                    </a>
+                                                    <div class="media-body mt-25">
+                                                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                            <label for="select-files"
+                                                                   class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
+                                                                <span>آپلود تصویر مدرک</span>
+                                                                <input id="select-files" name="document_picture"
+                                                                       type="file"
+                                                                       onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
+                                                                       hidden>
+                                                            </label>
+                                                        </div>
+                                                        <p class="text-muted ml-1 mt-50"><small>فرمت های مورد
+                                                            قبول :
+                                                            PNG , JPG حداکثر حجم : 2MB</small></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary mr-1">ثبت</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

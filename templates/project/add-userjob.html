@@ -12,20 +12,20 @@
     <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.min.js" %}"></script>
     <script type="text/javascript">
 
-      $(document).ready(function() {
-                $("#issue-input").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    isRTL: true,
-                    dateFormat: "yy/mm/dd"
-                });
-                $("#expiration-input").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    isRTL: true,
-                    dateFormat: "yy/mm/dd"
-                });
+        $(document).ready(function () {
+            $("#issue-input").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                isRTL: true,
+                dateFormat: "yy/mm/dd"
             });
+            $("#expiration-input").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                isRTL: true,
+                dateFormat: "yy/mm/dd"
+            });
+        });
 
     </script>
     <script>
@@ -108,18 +108,18 @@
                 async: false,
                 cache: false,
                 timeout: 30000,
-            send: function (xhr) {
-            },
-            success: function (data) {
-                $("#show_experts").addClass('show-before-expert')
-                $("#show_experts").empty();
-                data.forEach(data => {
-                    $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            }
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
+                    $("#show_experts").empty();
+                    data.forEach(data => {
+                        $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
             });
         });
         $("#state").change(function () {
@@ -226,6 +226,17 @@
             });
         });*/
     </script>
+    <script>
+        $(document).ready()
+        {
+            function expertselect(val) {
+                $('.card-body').removeClass("bg-orang");
+                var input = $('input[value="'+val+'"]');
+                input.prop("checked",true);
+                input[0].parentElement.classList.add("bg-orang");
+            };
+        }
+    </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -260,98 +271,23 @@
                                       enctype="multipart/form-data" action="{% url 'projects:adduserjob' %}">
                                     {% csrf_token %}
                                     <div class="form-body">
+                                    <span class="titles"><i class="bx bx-select-multiple"></i>  انتخاب حوزه کارشناسی</span>
                                         <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="first-name-vertical">سرگروه</label>
-                                                    <div class="input-group mt-1">
-                                                        <select class="form-control" name="expert" id="expert">
-                                                            <option selected>انتخاب سرگروه</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="first-name-vertical">زیر گروه</label>
-                                                    <div class="input-group mt-1">
-                                                        <select class="form-control" name="subexpert"
-                                                                id="subexpert">
-                                                            <option selected>انتخاب زیر گروه</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-3">
-                                                <div class="show_experts" id="show_experts"></div>
-                                            </div>
-
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <label>تاریخ صدور مدرک</label>
-                                                        <input type="text" required class="form-control"
-                                                               readonly id="issue-input"
-                                                               placeholder="تاریخ صدور مدرک"
-                                                               value=""
-                                                               name="issue">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <label>تاریخ انقضای مدرک</label>
-                                                        <input type="text" required class="form-control"
-                                                               readonly id="expiration-input"
-                                                               placeholder="تاریخ انقضای مدرک"
-                                                               value=""
-                                                               name="expiration">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <label>لینک مرجع استعلام</label>
-                                                        <input type="text" required class="form-control"
-                                                               placeholder="لینک مرجع استعلام"
-                                                               value=""
-                                                               name="inquiry">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="media">
-                                                    <a href="javascript: void(0);">
-                                                        <img src="
-
-
-
-                                                                {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
-                                                             class="rounded mr-75" alt="تصویر مدرک"
-                                                             height="64"
-                                                             width="64" id="blah">
-                                                    </a>
-                                                    <div class="media-body mt-25">
-                                                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                                                            <label for="select-files"
-                                                                   class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
-                                                                <span>آپلود تصویر مدرک</span>
-                                                                <input id="select-files" name="document_picture"
-                                                                       type="file"
-                                                                       onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
-                                                                       hidden>
-                                                            </label>
+                                            {% for jobfield in jobfields %}
+                                            <div class="col-4 text-center pointer" onclick="expertselect({{ jobfield.id }})">
+                                                <div class="card-body p-1 mb-2 bg-light-blue">
+                                                    <input id="chb1" type="radio" value="{{ jobfield.id }}" name="expert-list"
+                                                           class="d-none"/>
+                                                    <div class="media-body card-body mt-25 row">
+                                                        <div class="col lin">
+                                                            <span>{{ jobfield.title }}</span><br>
                                                         </div>
-                                                        <p class="text-muted ml-1 mt-50"><small>فرمت های مورد
-                                                            قبول :
-                                                            PNG , JPG حداکثر حجم : 2MB</small></p>
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% endfor %}
                                             <div class="col-12 d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary mr-1">ثبت</button>
+                                                <button type="submit" class="btn btn-primary mr-1">مرحله بعد</button>
                                             </div>
                                         </div>
                                     </div>

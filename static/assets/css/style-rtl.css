@@ -430,7 +430,7 @@ label {
 }
 
 .show-before:before {
-    content: "1 - انتخاب تگ";
+    content: "انتخاب تگ";
     background: #ffffff;
     position: absolute;
     top: -15px;
@@ -467,7 +467,7 @@ label {
 }
 
 .show-before-expert:before {
-    content: "2 - انتخاب صلاحیت";
+    content: "انتخاب صلاحیت";
     background: #ffffff;
     position: absolute;
     top: -15px;
@@ -655,4 +655,25 @@ a.btn-end-comp {
   width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.bg-orang {
+  background: #FFCC4A !important;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 1px #FFCC4A;
+}
+.titles {
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: 18px;
+  display: block;
+}
+.titles i{
+    font-size: 20px;
+    position: relative;
+    top: 2px;
+    color: #5A8DEE;
+}
+.bg-light-blue {
+  background: #5A8DEE17;
+  border-radius: 15px;
 }

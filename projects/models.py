@@ -16,10 +16,28 @@ class JobField(models.Model):
     status = models.BooleanField(default=True)
     description = models.TextField()
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    competence = models.BooleanField(default=False)
 
     def delete(self, *args, **kwargs):
         self.status = False
         self.save()
+
+    def get_child(self):
+        item = JobField.objects.filter(parent=self, competence=False)
+        if not len(item):
+            return self
+
+
+    def get_child_competence(self):
+        item = JobField.objects.filter(parent=self)
+        print(item)
+        for i in item:
+            if i.competence:
+                return self
+            else:
+                return JobField.get_child_competence(i)
+
+
 
 
 class Tag(models.Model):
