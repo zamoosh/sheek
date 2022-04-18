@@ -54,6 +54,8 @@ urlpatterns = [
     path('complaint/<int:id>/<str:title>/', view_complaint, name="view_complaint"),
     path('end_complaint/<int:id>/', end_complaint, name="end_complaint"),
     path('projects/api/', projects_api, name="project_api"),
+
+    path('expert/<int:id>/', expert_profile, name="expert_profile")
 ]
 
 app_name = ProjectsConfig.name

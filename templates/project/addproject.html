@@ -161,8 +161,11 @@
                                               </div>
                                               <div class="col">
                                                   <div class="view-profile">
-                                                      <button type="button" class="btn select-expert btn-light-primary glow" onclick="expertselect(${data.id})">
-                                                        انتخاب کارشناس
+                                                      <a target="_blank" class="btn w-40 select-expert btn-light-primary glow" href="/jobs/expert/${data.id}">
+                                                        <i class="bx bx-user"></i>
+                                                      </a>
+                                                      <button type="button" class="btn w-40 select-expert btn-light-primary glow" onclick="expertselect(${data.id})">
+                                                        <i class="bx bx-check"></i>
                                                       </button>
                                                   </div>
                                               </div>
@@ -280,8 +283,8 @@
         {
             function expertselect(val) {
                 $('.card-body').removeClass("bg-light-green");
-                var input = $('input[value="'+val+'"]');
-                input.prop("checked",true);
+                var input = $('input[value="' + val + '"]');
+                input.prop("checked", true);
                 input[0].parentElement.classList.add("bg-light-green");
             };
         }
