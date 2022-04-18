@@ -27,7 +27,6 @@ class JobField(models.Model):
         if not len(item):
             return self
 
-
     def get_child_competence(self):
         item = JobField.objects.filter(parent=self)
         print(item)

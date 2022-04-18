@@ -286,6 +286,19 @@
                                                 </div>
                                             </div>
                                             {% endfor %}
+                                            {% for jobfield in beold %}
+                                                <div class="col-4 text-center">
+                                                <div class="card-body p-1 mb-2 bg-light-light-blue">
+                                                    <input id="chb1" type="radio" value="{{ jobfield.id }}" name="expert-list"
+                                                           class="d-none"/>
+                                                    <div class="media-body card-body mt-25 row">
+                                                        <div class="col lin">
+                                                            <span>{{ jobfield.title }}</span><br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
                                             <div class="col-12 d-flex justify-content-end">
                                                 <button type="submit" class="btn btn-primary mr-1">مرحله بعد</button>
                                             </div>
