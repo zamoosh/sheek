@@ -21,7 +21,11 @@ def adduserjobfields(request, id):
     if request.method == "POST":
         context['jobfield'] = request.POST.getlist('jobfield')
         context['inquiry'] = request.POST.get('inquiry', '').strip()
+        q = Q()
+
+        five_delta = datetime.date.today() - datetime.timedelta(days=5 * 365)
         for i in context['jobfield']:
+            q = q & Q(owner=request.user, jobField=i)
             if UserJobField.objects.filter(jobField=i, owner=request.user.id).exists():
                 context['error'] = True
             else:
@@ -38,5 +42,9 @@ def adduserjobfields(request, id):
                 if 'document_picture' in request.FILES:
                     userjobfield.document_image = request.FILES['document_picture']
                 userjobfield.save()
+            if UserJobField.objects.filter(q, issue__gte=five_delta):
+                user_state = UserState(state=request.user.state)
+                user_state.userjobfield = UserJobField.objects.get(q)
+                user_state.save()
         return HttpResponseRedirect(reverse('projects:userjob'))
     return render(request, 'project/add-userjob-field.html', context)
