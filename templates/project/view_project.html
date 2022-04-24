@@ -195,11 +195,13 @@
                                         </li>
                                     </ul>
                                     {% if project_details.status_jobField_user == 1 %}
-                                        <a class="btn btn-success ml-auto mr-2"  data-toggle="modal"
-                                        data-target="#inlineForms">اعلام اتمام پروژه</a>{% endif %}
+                                        {% if project_details.owner == request.user %}
+                                            <a class="btn btn-success ml-auto mr-2"  data-toggle="modal"
+                                        data-target="#inlineForms">اعلام اتمام پروژه</a>
+                                        {% endif %}
+                                    {% endif %}
                                     {% if project_details.status_jobField_user == 0 %}
-                                        <div class="btn btn-warning ml-auto mr-2">پروژه شما هنوز توسط کارشناس تایید نشده
-                                            است .
+                                        <div class="btn btn-success ml-auto mr-2"><a href="{% url 'projects:project-request' %}?confirm={{ project_details.id }}">تایید پروژه</a>
                                         </div>{% endif %}
                                 </div>
                             </div>
