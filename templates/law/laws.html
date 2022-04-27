@@ -28,13 +28,15 @@
                             <div class="card faq-bg bg-transparent box-shadow-0 p-1 p-md-5">
                                 <div class="card-body p-0">
                                     <h1 class="faq-title text-center mb-3">قوانین و آیین نامه ها</h1>
+                                    {% if group %}
                                     <form method="post">
                                         {% csrf_token %}
                                         <fieldset class="faq-search-width form-group position-relative w-50 mx-auto">
                                             <input type="text" name="searchbar" class="form-control round form-control-lg shadow pl-2"
-                                                   id="searchbar" placeholder="جستجو در قوانین ..." value="{% if searchbar %}جستجو برای : {{ searchbar }}{% endif %}">
+                                                   id="searchbar" placeholder="جستجو در {{ group.title }} ..." value="{% if searchbar %}جستجو برای : {{ searchbar }} در {{ group.title }}{% endif %}">
                                         </fieldset>
                                     </form>
+                                {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -68,7 +70,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center p-md-4 p-sm-1 py-1 p-0">
-                                        <h1 class="faq-title">{% if request.method == "POST" %}جستجو برای :{{ searchbar }}{% else %}{{ group.title }}{% endif %}</h1>
+                                        <h5 class="faq-title">{% if request.method == "POST" %}جستجو برای :{{ searchbar }}در {{ group.title }}{% else %}{{ group.title }}{% endif %}</h5>
                                     </div>
                                     {% if request.method == "POST" %}{% if not lawsAcardeon %}
                                         <div class="alert alert-danger mb-2" role="alert">
