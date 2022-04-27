@@ -49,6 +49,7 @@ urlpatterns = [
     path('jobs/', include('projects.urls')),
     path('log/', include('log.urls')),
     path('law/', include('law.urls')),
+    path('api/law/', include('law.apiurls')),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

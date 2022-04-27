@@ -8,7 +8,7 @@ from ..serializer import JobFieldSerializer
 @permission_classes((IsAuthenticated,))
 def get_job_field_parent(request):
     context = {}
-    job_field = JobField.objects.filter(parent=None)
+    job_field = JobField.objects.filter(parent=None, competence=False)
     serializer = JobFieldSerializer(job_field, many=True)
     context = serializer.data
     status_code = HTTP_200_OK

@@ -43,6 +43,9 @@ class Tag(models.Model):
     title = models.CharField(max_length=250, unique=True)
     jobfield = models.ManyToManyField(JobField)
 
+    def get_tag(self):
+        return Tag.objects.filter(jobfield=self)
+
 
 class UserJobField(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

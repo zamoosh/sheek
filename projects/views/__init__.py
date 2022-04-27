@@ -17,3 +17,6 @@ from .add_complaint import *
 from .view_complaint import *
 from .admin_complaints import *
 from .expert_profile import *
+from .set_tags import *
+from .set_tag import *
+from .tags import *

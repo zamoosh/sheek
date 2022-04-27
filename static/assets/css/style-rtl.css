@@ -681,3 +681,12 @@ a.btn-end-comp {
     background: #C0D7FF17;
     border-radius: 15px;
 }
+.tag-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  width: 100%;
+}

@@ -55,7 +55,11 @@ urlpatterns = [
     path('end_complaint/<int:id>/', end_complaint, name="end_complaint"),
     path('projects/api/', projects_api, name="project_api"),
 
-    path('expert/<int:id>/', expert_profile, name="expert_profile")
+    path('expert/<int:id>/', expert_profile, name="expert_profile"),
+
+    path('tags/', tags, name="tags"),
+    path('set-tags/', set_tags, name="set_tags"),
+    path('set-tag/<int:pk>/', set_tag, name="set_tag"),
 ]
 
 app_name = ProjectsConfig.name
