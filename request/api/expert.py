@@ -4,7 +4,8 @@ from projects.serializer import ProjectSerializer, JobFieldSerializer
 from .imports import *
 from datetime import timedelta
 import datetime
-from ..serializer import ExpertSerializer, UserJobFieldSerializer, UserJobFieldFieldSerializer
+from ..serializer import ExpertSerializer, UserJobFieldSerializer, UserJobFieldFieldSerializer, \
+    UserJobFieldOwnerSerializer
 
 manual_parameter = [
     openapi.Parameter('state', openapi.IN_QUERY, description="state id", type=openapi.TYPE_INTEGER,
@@ -25,8 +26,8 @@ def get_user(request):
     user_state = UserState.objects.values_list('userjobfield', flat=True).filter(state_id=request.GET.get('state'),
                                                                                  userjobfield__in=UserJobField.objects.filter(
                                                                                      q))
-    users = UserJobField.objects.values_list('owner', flat=True).filter(id__in=user_state)
-    user = UserSerializer(User.objects.filter(id__in=users), many=True).data
+    users = UserJobField.objects.filter(id__in=user_state)
+    user = UserJobFieldOwnerSerializer(users, many=True).data
     return Response(user, status=HTTP_200_OK)
 
 

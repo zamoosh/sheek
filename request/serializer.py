@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from client.serializer import UserSerializer
 from projects.models import *
 
 
@@ -26,6 +27,13 @@ class ExpertSerializer(serializers.ModelSerializer):
 
 
 class UserJobFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserJobField
+        fields = '__all__'
+
+
+class UserJobFieldOwnerSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(many=False, read_only=True)
     class Meta:
         model = UserJobField
         fields = '__all__'
