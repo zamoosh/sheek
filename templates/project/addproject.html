@@ -15,14 +15,30 @@
     </style>
 {% endblock %}
 {% block js %}
-    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
     <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
 
     <script src="{% static "app-assets/vendors/js/extensions/jquery.steps.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/forms/wizard-steps.min.js" %}"></script>
-
+    <script>
+        document.querySelectorAll("a[href='#next']")[0].onclick = function () {
+            cu = document.getElementById('jquery-val-form-t-2').parentElement;
+            if (cu.className === "current") {
+                var first = document.getElementById('searchin');
+                var second = document.getElementById('salahiat');
+                if ((first.value || second.value)) {
+                    document.getElementById("chk_option_error").style.visibility = "hidden";
+                    return true;
+                } else {
+                    document.getElementById("chk_option_error").style.visibility = "visible";
+                    document.querySelectorAll("a[href='#previous']")[0].click();
+                    return false;
+                }
+            }
+        }
+    </script>
     <script type="text/javascript">
         $('.media').click(function () {
             $('.hli').removeClass('hli');
@@ -45,7 +61,7 @@
             },
             success: function (data) {
                 $('#expert').find('option').remove().end()
-                $("#expert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
+                $("#expert").append($('<option>', {value: '', text: 'انتخاب کارشناسی'}))
                 data.forEach(function (element) {
                     $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
                 });
@@ -65,7 +81,7 @@
                 },
                 success: function (data) {
                     $('#subexpert').find('option').remove().end()
-                    $("#subexpert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
+                    $("#subexpert").append($('<option>', {value: '', text: 'انتخاب کارشناسی'}))
                     data.forEach(function (element) {
                         $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
                     });
@@ -103,7 +119,7 @@
             },
             success: function (data) {
                 $('#state').find('option').remove().end()
-                $("#state").append($('<option>', {value: 0, text: 'انتخاب استان'}))
+                $("#state").append($('<option>', {value: '', text: 'انتخاب استان'}))
                 data.forEach(function (element) {
                     $("#state").append($('<option>', {value: element['id'], text: element['title']}))
                 });
@@ -318,7 +334,7 @@
                     <div class="col-12">
                         <div class="card icon-tab">
                             <div class="card-body mt-2">
-                                <form class="wizard-validation" method="POST"
+                                <form class="wizard-validation wizard" id="jquery-val-form" method="POST"
                                       action="{% url 'projects:addproject' %}">
                                     {% csrf_token %}
 
@@ -356,6 +372,9 @@
                                         <span>جستجو در رشته های کارشناسی</span>
                                     </h6>
                                     <fieldset>
+                                        <div class="w-100" id="chk_option_error" style="visibility:hidden; color:red; ">
+                                            لطفا حداقل یک صلاحیت را انتخاب کنید
+                                        </div>
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="form-group">
@@ -399,7 +418,7 @@
                                                         <label for="first-name-vertical">صلاحیت</label>
                                                         <div class="input-group mt-1">
                                                             <select class="form-control" name="salahiat" id="salahiat">
-                                                                <option selected>انتخاب صلاحیت</option>
+                                                                <option value="" selected>انتخاب صلاحیت</option>
                                                             </select>
                                                         </div>
                                                     </div>
