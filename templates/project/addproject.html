@@ -19,10 +19,15 @@
     <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+
     <script src="{% static "app-assets/vendors/js/extensions/jquery.steps.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/forms/wizard-steps.min.js" %}"></script>
 
     <script type="text/javascript">
+        $('.media').click(function () {
+            $('.hli').removeClass('hli');
+            $(this).addClass('hli').find('input').prop('checked', true)
+        });
         $(function () {
             $("#data-input").persianDatepicker();
         });
@@ -51,7 +56,7 @@
         });
         $("#expert").change(function () {
             $.ajax({
-                url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
+                url: '{% url 'projects:jobs_group_api' %}' + $("#expert").val() + '/',
                 type: "GET",
                 async: false,
                 cache: false,
@@ -60,6 +65,7 @@
                 },
                 success: function (data) {
                     $('#subexpert').find('option').remove().end()
+                    $("#subexpert").append($('<option>', {value: 0, text: 'انتخاب کارشناسی'}))
                     data.forEach(function (element) {
                         $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
                     });
@@ -71,7 +77,7 @@
         });
         $("#subexpert").change(function () {
             $.ajax({
-                url: '{% url 'projects:adduserjob' %}' + $("#subexpert").val() + '/',
+                url: '{% url 'projects:adduser-job-api' %}' + $("#subexpert").val() + '/',
                 type: "GET",
                 async: false,
                 cache: false,
@@ -131,8 +137,8 @@
                 url: '{% url 'projects:addproject_api' %}',
                 type: "GET",
                 data: {
-                    state: $("#city").val(), // < note use of 'this' here
-                    user_jobfield: $("#subexpert").val()
+                    salahiat: $("#salahiat").val(),
+                    city: $("#city").val()
                 },
                 send: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -143,26 +149,30 @@
 
                     $("#experts").empty();
                     data.forEach(data => {
-                        const card = `<div class="media get-expert">
-                       <input id="chb1" type="radio" value="${data.id}" name="expert-list"/>
-                        <img src="${data.profile}" class="rounded mr-75" alt="profile image" height="64" width="64">
-                        <div class="media-body mt-25">
-                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                        <span>${data.name}</span>
-                        </div>
-                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                        <span>${data.last_name}</span>
-                        </div>
-                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                        <span>${data.birthday}</span>
-                        <div class="view-profile">
-                        <a href="#">مشاهده پروفایل</a>
-                        </div>
-                        </span>
-                        </div>
-                        </div>
-                        </div>`
+                        const card = `<div class="card-body">
+                                          <input id="chb1" type="radio" value="${data.id}" name="expert-list" class="d-none"/>
+                                          <div class="media-body card-body mt-25 row">
+                                              <div class="col-2">
+                                                  <img src="${data.profile}" class="rounded mr-75" alt="profile image" height="64" width="64">
+                                              </div>
+                                              <div class="col lin">
+                                                  <span>${data.name} ${data.last_name} </span><br>
+                                                  <span>تعداد پروژه ها : ${data.projects}</span>
+                                              </div>
+                                              <div class="col">
+                                                  <div class="view-profile">
+                                                      <a target="_blank" class="btn w-40 select-expert btn-light-primary glow" href="/jobs/expert/${data.id}">
+                                                        <i class="bx bx-user"></i>
+                                                      </a>
+                                                      <button type="button" class="btn w-40 select-expert btn-light-primary glow" onclick="expertselect(${data.id})">
+                                                        <i class="bx bx-check"></i>
+                                                      </button>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                       </div>`
                         const ele = document.createElement('div');
+                        ele.classList.add('col-6')
                         ele.innerHTML = card;
                         $("#experts").append(ele);
 
@@ -193,13 +203,19 @@
                 type: "GET",
                 send: function (xhr) {
                 },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders').show();
+                },
                 success: function (data) {
-                    $("#search-list").empty();
+                    $("#show_experts").removeClass('show-befores')
+                    $("#show_experts").addClass('show-befores')
+                    $("#show_tags").empty();
+                    $('.overlays').hide();
+                    $('.loaders').hide();
+                    $("#show_tags").append(document.createElement('ul'));
                     data.forEach(data => {
-                        const card = `<li onclick="mamad2(${data.id})" class="pointer">${data.title}</li>`
-                        const ele = document.createElement('div');
-                        ele.innerHTML = card;
-                        $("#search-list").append(ele);
+                        $("#show_tags>ul").append(`<li onclick="mamad2(${data.id})" class="pointer w-100" id="point">${data.title}</li>`);
                     })
                 },
                 error: function (error) {
@@ -241,13 +257,18 @@
                 },
                 send: function (xhr) {
                 },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders').show();
+                },
                 success: function (data) {
-                    $("#search-list").empty();
+                    $("#show_tags").addClass('show-befores')
+                    $("#show_tags").empty();
+                    $('.overlays').hide();
+                    $('.loaders').hide();
+                    $("#show_tags").append(document.createElement('ul'));
                     data.forEach(data => {
-                        const card = `<li onclick="mamad(${data.id})" class="pointer">${data.title}</li>`
-                        const ele = document.createElement('div');
-                        ele.innerHTML = card;
-                        $("#search-list").append(ele);
+                        $("#show_tags>ul").append(`<li onclick="mamad(${data.id})" class="pointer" id="point">${data.title}</li>`);
                     })
                 },
                 error: function (error) {
@@ -256,6 +277,17 @@
             });
         });
 
+    </script>
+    <script>
+        $(document).ready()
+        {
+            function expertselect(val) {
+                $('.card-body').removeClass("bg-light-green");
+                var input = $('input[value="' + val + '"]');
+                input.prop("checked", true);
+                input[0].parentElement.classList.add("bg-light-green");
+            };
+        }
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -321,7 +353,6 @@
                                         </div>
                                     </fieldset>
                                     <h6>
-
                                         <span>جستجو در رشته های کارشناسی</span>
                                     </h6>
                                     <fieldset>
@@ -333,9 +364,12 @@
                                                         <input class="form-control" type="text" name="searchin"
                                                                id="searchin">
                                                     </div>
-                                                    <div class="jobsearch" id="search-list">
-
-                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="overlays"></div>
+                                                <div class="loaders"></div>
+                                                <div class="show_tags w-100 mt-3 mb-5" id="show_tags">
                                                 </div>
                                             </div>
                                             <div class="row col-12">
@@ -450,9 +484,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12" id="experts">
-                                                <div class="overlay"></div>
-                                                <div class="loader"></div>
+                                            <div class="overlay"></div>
+                                            <div class="loader"></div>
+                                            <div class="col-12 row" id="experts">
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary glow btnformsub">ثبت درخواست

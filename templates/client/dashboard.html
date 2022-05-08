@@ -13,6 +13,21 @@
                     <section id="dashboard-analytics">
                         <div class="row">
                             <!-- Website Analytics Starts-->
+                            {% for i in user_jobs %}
+                                {% if not i.return_userState|length %}
+                                    <div class="col-12">
+                                        <div class="alert w-100 bg-rgba-success p-2 alert-dismissible mb-2" role="alert">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bx bx-check-circle"></i>
+                                                <span>
+                                              کارشناسی {{ i.jobField.title }} برای شما فعال شده. شما میتوانید برای این کارشناسی شهر و استان انتخاب نمایید .
+                                            </span>
+                                                <span class="state-alert"><a href="{% url 'projects:adduserstate' i.id %}">انتخاب شهر و استان</a></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                             <div class="col-md-12 col-sm-12">
                                 <div class="card bannerdashboard">
                                     <img src="{% static "app-assets/images/banner/banner.jpg" %}" alt="بنر">
@@ -21,116 +36,18 @@
                             </div>
                         </div>
                         <div class="row">
+                            {% for law in laws %}
                             <div class="col-xl-2 col-md-4 col-sm-6">
                                 <div class="card text-center">
                                     <div class="card-body">
                                         <div class="badge-circle badge-circle-lg badge-circle-light-info mx-auto my-1">
                                             <i class="bx bx-edit-alt font-medium-5"></i>
                                         </div>
-                                        <p class="text-muted mb-0 line-ellipsis">حسابرسی</p>
+                                        <a href="{% url 'law:law' law.id %}"><p class="text-muted mb-0 line-ellipsis">{{ law.title }}</p></a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-warning mx-auto my-1">
-                                            <i class="bx bx-file font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">ارزیابی املاک</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-danger mx-auto my-1">
-                                            <i class="bx bx-message font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">داوری</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-primary mx-auto my-1">
-                                            <i class="bx bx-money font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">کارخانجات</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-success mx-auto my-1">
-                                            <i class="bx bx-purchase-tag font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">مهاجرت</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-danger mx-auto my-1">
-                                            <i class="bx bx-shopping-bag font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">امور تعاونی ها</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-danger mx-auto my-1">
-                                            <i class="bx bx-shopping-bag font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">تهیه انواع نقشه</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-danger mx-auto my-1">
-                                            <i class="bx bx-shopping-bag font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">امور حقوقی</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-danger mx-auto my-1">
-                                            <i class="bx bx-shopping-bag font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">امور سهام</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-danger mx-auto my-1">
-                                            <i class="bx bx-shopping-bag font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">نرم افزار</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-danger mx-auto my-1">
-                                            <i class="bx bx-shopping-bag font-medium-5"></i>
-                                        </div>
-                                        <p class="text-muted mb-0 line-ellipsis">مشاوره تخصصی</p>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </section>
                 </section>

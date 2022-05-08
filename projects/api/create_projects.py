@@ -15,7 +15,7 @@ def create_projects(request):
     if request.data.get('user_jobField') == 0:
         pass
     else:
-        project.user_jobField = UserJobField.objects.get(id=request.data.get('user_jobField', 0))
+        project.user_jobField = UserJobField.objects.get(id=request.data.get('user_jobField', 0), jobField=project.jobField)
     project.save()
     serializer = LowProjectSerializer(project, many=False)
     context.update(serializer.data)

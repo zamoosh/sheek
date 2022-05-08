@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}قوانین - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link rel="stylesheet" type="text/css"
+          href="{% static "app-assets/css-rtl/core/menu/menu-types/vertical-menu.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/extensions/swiper.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/pages/faq.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/vendors/css/vendors-rtl.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/vendors/css/extensions/swiper.min.css" %}">
+{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/vendors/js/extensions/swiper.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/pages/faq.min.js" %}"></script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-body">
+                <section class="faq-search">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card faq-bg bg-transparent box-shadow-0 p-1 p-md-5">
+                                <div class="card-body p-0">
+                                    <h1 class="faq-title text-center mb-3">قوانین و آیین نامه ها</h1>
+                                    {% if group %}
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <fieldset class="faq-search-width form-group position-relative w-50 mx-auto">
+                                            <input type="text" name="searchbar" class="form-control round form-control-lg shadow pl-2"
+                                                   id="searchbar" placeholder="جستجو در {{ group.title }} ..." value="{% if searchbar %}جستجو برای : {{ searchbar }} در {{ group.title }}{% endif %}">
+                                        </fieldset>
+                                    </form>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="faq">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card bg-transparent shadow-none">
+                                <div class="card-body">
+                                    <!--div class="swiper-centered-slides swiper-container p-1">
+                                        <div class="swiper-wrapper">
+                                        </div>
+                                    </div-->
+                                    <div class="col-12">
+                                        <div class="row">
+                                            {% for law in laws %}
+                                                <div class="col">
+                                                    <div class="card text-center cent-text1">
+                                                        <div class="card-body">
+                                                            <div class="badge-circle badge-circle-lg badge-circle-light-info mx-auto my-1">
+                                                                <i class="bx bx-edit-alt font-medium-5"></i>
+                                                            </div>
+                                                            <a href="{% url 'law:law' law.id %}"><p
+                                                                    class="text-muted mb-0 line-ellipsis">{{ law.title }}</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="text-center p-md-4 p-sm-1 py-1 p-0">
+                                        <h5 class="faq-title">{% if request.method == "POST" %}جستجو برای :{{ searchbar }}در {{ group.title }}{% else %}{{ group.title }}{% endif %}</h5>
+                                    </div>
+                                    {% if request.method == "POST" %}{% if not lawsAcardeon %}
+                                        <div class="alert alert-danger mb-2" role="alert">
+                                                        هیچ موردی برای {{ searchbar }} یافت نشد
+                                                    </div>
+                                    {% endif %}{% endif %}
+                                    <div id="accordion-icon-wrapper1"
+                                         class="collapse-icon accordion-icon-rotate">
+                                        <div class="accordion" id="accordionWrapar2">
+                                            {% for la in lawsAcardeon %}
+                                                <div class="card collapse-header">
+                                                    <div id="heading5" class="card-header"
+                                                         data-toggle="collapse"
+                                                         role="button"
+                                                         data-target="#accordion{{ la.id }}"
+                                                         aria-expanded="false"
+                                                         aria-controls="accordion{{ la.id }}">
+                      <span class="collapse-title d-flex align-items-center"><i class="bx bxs-circle font-small-1"></i>
+                        {{ la.date }} / {{ la.title }} / {{ la.article }}
+                      </span>
+                                                    </div>
+                                                    <div id="accordion{{ la.id }}" role="tabpanel"
+                                                         data-parent="#accordionWrapar2"
+                                                         aria-labelledby="heading5"
+                                                         class="collapse">
+                                                        <div class="card-body">
+                                                            {{ la.description }}
+                                                            <p class="pt-3 text-danger">
+                                                                {{ la.footnote }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="faq-bottom">
+                    <div class="row mb-2">
+                        <div class="col-12 text-center">
+                            <h2 class="faq-subtitle">سوالی دارید؟</h2>
+                            <p class="p-2 text-muted font-medium-1"></p>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-center mb-5">
+                        <div class="col-sm-12 col-md-4 text-center border rounded p-2 mr-md-2 m-1">
+                            <i class="bx bx-phone-call primary font-large-1 text-muted p-50"></i>
+                            <h5>021-2000200</h5>
+                            <p class="text-muted font-medium-1">شنبه تا چهارشنبه 10 الی 21</p>
+                        </div>
+                        <div class="col-sm-12 col-md-4 text-center border color-gray-faq rounded p-2 m-1">
+                            <i class="bx bx-mail-send primary font-large-1 p-50"></i>
+                            <h5><a href="mailto:hello@help.com">info@karshenas.org</a></h5>
+                            <p class="text-muted font-medium-1">پاسخگویی 24 ساعته</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

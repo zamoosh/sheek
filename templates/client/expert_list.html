@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}کارشناسان - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
+    <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0">کارشناسان</h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
+                                </li>
+
+                                <li class="breadcrumb-item active"> کارشناسان
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section id="page-account-settings">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="content-body"><!-- users list start -->
+                                                <div class="search-bar">
+                                                    <form method="post">
+                                                        {% csrf_token %}
+                                                        <fieldset class="search-input form-group position-relative">
+
+                                                            <input type="search"
+                                                                   class="form-control rounded-right form-control-lg shadow pl-2"
+                                                                   id="searchbar"
+                                                                   value="{% if searchbar %}{{ searchbar }}{% endif %}"
+                                                                   name="searchbar"
+                                                                   placeholder="جستجو شماره تلفن + اینتر...">
+
+                                                        </fieldset>
+                                                    </form>
+                                                </div>
+                                                <section class="users-list-wrapper">
+                                                    <div class="users-list-table">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <!-- datatable start -->
+                                                                <div class="table-responsive">
+                                                                    <table id="users-list-datatable" class="table">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>id</th>
+                                                                            <th>نام کاربری</th>
+                                                                            <th>نام و نام خانوادگی</th>
+                                                                            <th>آخرین ورود</th>
+                                                                            <th>وضعیت</th>
+                                                                            <th>ویرایش</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        {% for user in admins %}
+                                                                            <tr>
+                                                                                <td>{{ user.id }}</td>
+                                                                                <td><a
+                                                                                        href="#">{{ user.username }}</a>
+                                                                                </td>
+                                                                                <td>{{ user.get_full_name }}</td>
+                                                                                <td>{{ user.last_login|jformat:"%H:%m %Y/%m/%d" }}</td>
+                                                                                <td>{% if user.is_active %}
+                                                                                    <span class="badge badge-light-success">فعال</span>{% else %}
+                                                                                    <span class="badge badge-light-danger">مسدود شده</span>{% endif %}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <a href="{% url 'client:edit_admins' user.id %}"><i
+                                                                                            class="bx bx-edit-alt"></i></a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <!-- datatable ends -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                                <!-- users list ends -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

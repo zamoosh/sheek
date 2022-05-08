@@ -1,19 +1,50 @@
+from django.shortcuts import redirect
 from .imports import *
+
 
 @login_required
 def adduserjobfield(request):
     context = {}
-    if request.method == "POST":
-        context['req'] = {}
-        context['req']['state'] = int(request.POST.get('city'))
-        context['req']['expert'] = int(request.POST.get('subexpert'))
-        context['req']['experience'] = request.POST.get('experience')
-        userjobfield = UserJobField()
-        userjobfield.state_id = context['req']['state']
-        userjobfield.jobField_id = context['req']['expert']
-        userjobfield.owner_id = request.user.id
-        if request.POST.get('experience'):
-            userjobfield.experience = jdatetime.datetime.strptime(request.POST.get('experience'), "%Y/%m/%d").togregorian()
-        userjobfield.save()
-        return HttpResponseRedirect(reverse('projects:userjob'))
+    context['old'] = UserJobField.objects.values('jobField').filter(owner=request.user)
+    context['beold'] = JobField.objects.filter(jobfield__jobfield__in=context['old'], parent=None).distinct()
+    context['jobfields'] = JobField.objects.filter(parent=None).exclude(jobfield__jobfield__in=context['old'])
+    if request.method == 'POST':
+        context['request'] = {}
+        context['request']['expert-list'] = request.POST.get('expert-list')
+        print('Conxt', context['request']['expert-list'])
+        return HttpResponseRedirect(reverse('projects:adduser-jobs', args=[int(context['request']['expert-list'])]))
     return render(request, 'project/add-userjob.html', context)
+
+
+def adduserjobfields(request, id):
+    context = {'id': JobField.objects.get(id=id)}
+    if request.method == "POST":
+        context['jobfield'] = request.POST.getlist('jobfield')
+        context['inquiry'] = request.POST.get('inquiry', '').strip()
+        q = Q()
+
+        five_delta = datetime.date.today() - datetime.timedelta(days=5 * 365)
+        for i in context['jobfield']:
+            q = q & Q(owner=request.user, jobField=i)
+            if UserJobField.objects.filter(jobField=i, owner=request.user.id).exists():
+                context['error'] = True
+            else:
+                userjobfield = UserJobField()
+                userjobfield.owner_id = request.user.id
+                userjobfield.jobField_id = i
+                userjobfield.inquiry_link = context['inquiry']
+                if request.POST.get('expiration'):
+                    userjobfield.expiration = jdatetime.datetime.strptime(request.POST.get('expiration'),
+                                                                          "%Y/%m/%d").togregorian()
+                if request.POST.get('issue'):
+                    userjobfield.issue = jdatetime.datetime.strptime(request.POST.get('issue'),
+                                                                     "%Y/%m/%d").togregorian()
+                if 'document_picture' in request.FILES:
+                    userjobfield.document_image = request.FILES['document_picture']
+                userjobfield.save()
+            if UserJobField.objects.filter(q, issue__gte=five_delta):
+                user_state = UserState(state=request.user.state)
+                user_state.userjobfield = UserJobField.objects.get(q)
+                user_state.save()
+        return HttpResponseRedirect(reverse('projects:userjob'))
+    return render(request, 'project/add-userjob-field.html', context)

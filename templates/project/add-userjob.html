@@ -3,16 +3,30 @@
 {% block title %}انتخاب کارشناشی - آرمان سنجش{% endblock %}
 {% load jformat %}
 {% block css %}
-    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
-    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/bootstrap-datepicker.min.css" %}"/>
+
 {% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.fa.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.min.js" %}"></script>
     <script type="text/javascript">
-        $(function () {
-            $("#data-input").persianDatepicker();
+
+        $(document).ready(function () {
+            $("#issue-input").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                isRTL: true,
+                dateFormat: "yy/mm/dd"
+            });
+            $("#expiration-input").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                isRTL: true,
+                dateFormat: "yy/mm/dd"
+            });
         });
+
     </script>
     <script>
         $.ajax({
@@ -51,27 +65,27 @@
         });
 
 
-            $.ajax({
-                url: '{% url 'projects:jobsapi' %}',
-                type: "GET",
-                send: function (xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                },
-                success: function (data) {
-                    $('#expert').find('option').remove().end()
-                    $("#expert").append($('<option>', {value: 0, text: ''}))
-                    data.forEach(function (element) {
-                        $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
-                    });
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+        $.ajax({
+            url: '{% url 'projects:jobsapi' %}',
+            type: "GET",
+            send: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $('#expert').find('option').remove().end()
+                $("#expert").append($('<option>', {value: 0, text: ''}))
+                data.forEach(function (element) {
+                    $("#expert").append($('<option>', {value: element['id'], text: element['title']}))
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
 
-        $("#expert").change(function(){
+        $("#expert").change(function () {
             $.ajax({
-                url: '{% url 'projects:adduserjob' %}'+$("#expert").val()+'/',
+                url: '{% url 'projects:adduserjob' %}' + $("#expert").val() + '/',
                 type: "GET",
                 send: function (xhr) {
                 },
@@ -80,15 +94,37 @@
                     data.forEach(function (element) {
                         $("#subexpert").append($('<option>', {value: element['id'], text: element['title']}))
                     });
+                    $("#subexpert").change();
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
         });
-        $("#state").change(function(){
+        $("#subexpert").change(function () {
             $.ajax({
-                url: '{% url 'state:stateapi' %}'+$("#state").val()+'/',
+                url: '{% url 'projects:adduserjob' %}' + $("#subexpert").val() + '/',
+                type: "GET",
+                async: false,
+                cache: false,
+                timeout: 30000,
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
+                    $("#show_experts").empty();
+                    data.forEach(data => {
+                        $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+        $("#state").change(function () {
+            $.ajax({
+                url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
                 type: "GET",
                 send: function (xhr) {
                 },
@@ -103,6 +139,103 @@
                 }
             });
         });
+    </script>
+    <script>
+        /*mamad = function (mamadvar) {
+
+            $.ajax({
+                url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders-expert').show();
+                },
+                success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
+                    $("#show_experts").empty();
+                    $('.overlays').hide();
+                    $('.loaders-expert').hide();
+                    data.forEach(data => {
+                        $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                    })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }*/
+        var timeoutid;
+        /*$('#searchin').keyup(function () {
+            clearTimeout(timeoutid);
+            timeoutid = setTimeout(function () {
+
+                $.ajax({
+                    url: '{% url 'projects:job_search' %}',
+                    type: "GET",
+                    data: {
+                        title: $("#searchin").val(),
+                    },
+                    send: function (xhr) {
+                    },
+                    beforeSend: function () {
+                        $('.overlays').show();
+                        $('.loaders').show();
+                    },
+                    success: function (data) {
+                        $("#show_tags").addClass('show-before')
+                        $("#show_tags").empty();
+                        $('.overlays').hide();
+                        $('.loaders').hide();
+                        $("#show_tags").append(document.createElement('ul'));
+                        data.forEach(data => {
+                            $("#show_tags>ul").append(`<li onclick="mamad(${data.id})" class="pointer" id="point">${data.title}</li>`);
+                        })
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }, 500);
+        });*/
+    </script>
+    <script>
+        /*$("#subexpert").change(function () {
+            $.ajax({
+                url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
+                type: "GET",
+                send: function (xhr) {
+                },
+                beforeSend: function () {
+                    $('.overlays').show();
+                    $('.loaders-expert').show();
+                },
+                success: function (data) {
+                    $("#show_experts").addClass('show-before-expert')
+                    $("#show_experts").empty();
+                    $('.overlays').hide();
+                    $('.loaders-expert').hide();
+                    data.forEach(data => {
+                        $("#show_experts").append("<div class='form-check form-check-primary pt-1'><input name='jobfield' id='" + data.id + "' type='checkbox' value='" + data.id + "' /> <label for='" + data.id + "'>" + data.title + "</label> </div>");
+                    })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });*/
+    </script>
+    <script>
+        $(document).ready()
+        {
+            function expertselect(val) {
+                $('.card-body').removeClass("bg-orang");
+                var input = $('input[value="'+val+'"]');
+                input.prop("checked",true);
+                input[0].parentElement.classList.add("bg-orang");
+            };
+        }
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -122,6 +255,7 @@
                                         class="bx bx-home-alt"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">
+                                    افزودن کارشناسی
                                 </li>
                             </ol>
                         </div>
@@ -133,68 +267,40 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form form-vertical" method="POST" action="{% url 'projects:adduserjob' %}">
+                                <form class="form form-vertical" method="POST" novalidate="novalidate"
+                                      enctype="multipart/form-data" action="{% url 'projects:adduserjob' %}">
                                     {% csrf_token %}
                                     <div class="form-body">
+                                    <span class="titles"><i class="bx bx-select-multiple"></i>  انتخاب حوزه کارشناسی</span>
                                         <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="first-name-vertical">کارشناسی</label>
-                                                    <div class="input-group mt-1">
-                                                        <select class="form-control" name="expert" id="expert">
-                                                            <option selected>Choose...</option>
-                                                            <option value="1"></option>
-                                                        </select>
+                                            {% for jobfield in jobfields %}
+                                            <div class="col-4 text-center pointer" onclick="expertselect({{ jobfield.id }})">
+                                                <div class="card-body p-1 mb-2 bg-light-blue">
+                                                    <input id="chb1" type="radio" value="{{ jobfield.id }}" name="expert-list"
+                                                           class="d-none"/>
+                                                    <div class="media-body card-body mt-25 row">
+                                                        <div class="col lin">
+                                                            <span>{{ jobfield.title }}</span><br>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="first-name-vertical">زیر کارشناسی</label>
-                                                    <div class="input-group mt-1">
-                                                        <select class="form-control" name="subexpert" id="subexpert">
-                                                            <option selected>Choose...</option>
-                                                            <option value="1"></option>
-                                                        </select>
+                                            {% endfor %}
+                                            {% for jobfield in beold %}
+                                                <div class="col-4 text-center">
+                                                <div class="card-body p-1 mb-2 bg-light-light-blue">
+                                                    <input id="chb1" type="radio" value="{{ jobfield.id }}" name="expert-list"
+                                                           class="d-none"/>
+                                                    <div class="media-body card-body mt-25 row">
+                                                        <div class="col lin">
+                                                            <span>{{ jobfield.title }}</span><br>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="first-name-vertical">استان</label>
-                                                    <div class="input-group mt-1">
-                                                        <select class="form-control" name="state" id="state">
-                                                            <option selected>Choose...</option>
-                                                            <option value="1"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="first-name-vertical">شهر</label>
-                                                    <div class="input-group mt-1">
-                                                        <select class="form-control" name="city" id="city">
-                                                            <option selected>Choose...</option>
-                                                            <option value="1"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                                <div class="form-group">
-                                                                    <div class="controls">
-                                                                        <label>سابقه از</label>
-                                                                        <input type="text" required class="form-control"
-                                                                               readonly id="data-input"
-                                                                               placeholder="شروع سابقه کاری"
-                                                                               value=""
-                                                                               name="experience">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                            {% endfor %}
                                             <div class="col-12 d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary mr-1">ثبت</button>
+                                                <button type="submit" class="btn btn-primary mr-1">مرحله بعد</button>
                                             </div>
                                         </div>
                                     </div>

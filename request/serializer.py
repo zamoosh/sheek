@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from projects.models import UserJobField
+from client.serializer import UserSerializer
+from projects.models import *
 
 
 class ExpertSerializer(serializers.ModelSerializer):
-    state = serializers.SerializerMethodField()
     jobField = serializers.SerializerMethodField()
     owner_first = serializers.SerializerMethodField()
     owner_last = serializers.SerializerMethodField()
@@ -12,10 +12,6 @@ class ExpertSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserJobField
         fields = '__all__'
-
-    @staticmethod
-    def get_state(obj):
-        return obj.state.title
 
     @staticmethod
     def get_owner_first(obj):
@@ -34,3 +30,27 @@ class UserJobFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserJobField
         fields = '__all__'
+
+
+class UserJobFieldOwnerSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(many=False, read_only=True)
+    class Meta:
+        model = UserJobField
+        fields = '__all__'
+
+
+class UserJobFieldFieldSerializer(serializers.ModelSerializer):
+    job_Field_id = serializers.SerializerMethodField()
+    job_Field = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserJobField
+        fields = '__all__'
+
+    @staticmethod
+    def get_job_Field(obj):
+        return obj.jobField.title
+
+    @staticmethod
+    def get_job_Field_id(obj):
+        return obj.jobField.id

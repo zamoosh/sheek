@@ -12,6 +12,6 @@ data:
   DATABASE_PORT: ""
   DEBUG: "False"
   STATIC_URL: "https://static.karshenas.org/"
-  MEDIA_ROOT: "/media/"
+  MEDIA_ROOT: "/storage/"
   MEDIA_URL: "https://media.karshenas.org/"
 {{- end -}}

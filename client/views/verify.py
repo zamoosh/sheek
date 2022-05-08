@@ -20,6 +20,8 @@ def verify(request):
                             if len(request.GET.get("next", "/")) == 0:
                                 return HttpResponseRedirect("/")
                             return HttpResponseRedirect(request.GET.get("next", "/"))
+                        else:
+                            context['active'] = False
                     else:
                         print("The username and password were incorrect.")
                 else:
@@ -27,12 +29,6 @@ def verify(request):
                         cellphone=context['cellphone'],
                         username=context['cellphone']
                     )
-                    if context['expertRegister']:
-                        user.has_jobField = True
-                    if context['existential'] == "realperson":
-                        user.existential = False
-                    if context['existential'] == "legalperson":
-                        user.existential = True
                     user.save()
                     del request.session['user']
                     context['register'] = 1

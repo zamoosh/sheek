@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}قوانین - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
+    <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0">قوانین</h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
+                                </li>
+
+                                <li class="breadcrumb-item active">قوانین
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="accordion collapse-icon accordion-icon-rotate" id="accordionWrapa2"
+                     data-toggle-hover="true">
+                    {% for law in laws %}
+                        <div class="card collapse-header open">
+                            <div id="heading5" class="card-header" data-toggle="collapse" data-target="#accordion{{ law.id }}"
+                                 aria-expanded="true" aria-controls="accordion{{ law.id }}" role="tablist">
+        <span class="collapse-title">
+          <span class="align-middle">{{ law.date }} / {{ law.title }} / {{ law.article }}</span>
+        </span>
+                            </div>
+                            <div id="accordion{{ law.id }}" role="tabpanel" data-parent="#accordionWrapa2"
+                                 aria-labelledby="heading5" class="collapse" style="">
+                                <div class="card-content">
+                                    <div class="card-body line-height-2">
+                                        {{ law.description }}
+                                        <p class="pt-3 text-danger">
+                                            {{ law.footnote }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

@@ -3,19 +3,26 @@
 {% block title %}پروفایل کاربری آرمان سنجش{% endblock %}
 {% load jformat %}
 {% block css %}
-    <link type="text/css" rel="stylesheet" href="{% static "assets/css/datepicker.css" %}"/>
-    <link rel="stylesheet" href="{% static "assets/css/persianDatepicker-default.css" %}"/>
-    <link rel="stylesheet" type="text/css"
-          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "assets/css/bootstrap-datepicker.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
 {% endblock %}
 {% block js %}
-    <script type="text/javascript" src="{% static "assets/js/datepicker.js" %}"></script>
+        <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.fa.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.min.js" %}"></script>
     <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
     <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
     <script type="text/javascript">
         $(function () {
             $("#data-input").persianDatepicker();
         });
+        $(document).ready(function() {
+                $("#data-input").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    isRTL: true,
+                    dateFormat: "yy/mm/dd"
+                });
+            });
     </script>
     <script>
         $.ajax({
@@ -26,10 +33,17 @@
             },
             success: function (data) {
                 $('#state').find('option').remove().end()
-                $("#state").append($('<option>', {
-                    value: {{ request.user.state.id }},
-                    text: '{{ request.user.state.title }}'
-                }))
+                $('#city').find('option').remove().end()
+                {%  if request.user.state %}
+                    $("#state").append($('<option>', {
+                        value: {{ request.user.state.parent.id }},
+                        text: '{{ request.user.state.parent.title }}'
+                    }))
+                    $("#city").append($('<option>', {
+                        value: {{ request.user.state.id }},
+                        text: '{{ request.user.state.title }}'
+                    }))
+                {% endif %}
                 data.forEach(function (element) {
                     $("#state").append($('<option>', {value: element['id'], text: element['title']}))
                 });
@@ -73,6 +87,7 @@
                                 <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
                                         class="bx bx-home-alt"></i></a>
                                 </li>
+
                                 <li class="breadcrumb-item active"> حساب کاربری
                                 </li>
                             </ol>
@@ -126,8 +141,12 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            {% if error %}
-                                                کد ملی وارد شده قبلا ثبت شده است.
+                                            {% if messages %}
+                                                {% for message in messages %}
+                                                <div class="alert alert-danger mb-2" role="alert">
+                                                    {{ message }}
+                                                </div>
+                                                {% endfor %}
                                             {% endif %}
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active"
@@ -139,19 +158,20 @@
                                                         {% csrf_token %}
                                                         <div class="media">
                                                             <a href="javascript: void(0);">
-                                                                <img src="
-                                                                        {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
+                                                                <img src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                                                      class="rounded mr-75" alt="profile image"
                                                                      height="64"
-                                                                     width="64">
+                                                                     width="64" id="blah">
                                                             </a>
                                                             <div class="media-body mt-25">
-                                                                <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                                <div class="col-12 px-0">
                                                                     <label for="select-files"
                                                                            class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
                                                                         <span>آپلود عکس</span>
                                                                         <input id="select-files" name="profile-picture"
-                                                                               type="file" hidden>
+                                                                               type="file"
+                                                                               onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
+                                                                               hidden>
                                                                     </label>
                                                                     <button class="btn btn-sm btn-light-secondary ml-50">
                                                                         ریست
@@ -204,7 +224,7 @@
                                                                         <input type="email" class="form-control"
                                                                                placeholder="Email"
                                                                                value="{{ request.user.email }}"
-                                                                               name="email" required/>
+                                                                               name="email"/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -215,7 +235,7 @@
                                                                         <input type="text" class="form-control"
                                                                                placeholder="کد ملی"
                                                                                value="{% if request.user.national_code %}{{ request.user.national_code }}{% endif %}"
-                                                                               name="national_code" minlength="10"
+                                                                               name="national_code" minlength="10" maxlength="10"
                                                                                required="required"/>
                                                                     </div>
                                                                 </div>
@@ -239,7 +259,8 @@
                                                                     <div class="controls">
                                                                         <label>شهر</label>
                                                                         <div class="input-group">
-                                                                            <select class="form-control" id="city">
+                                                                            <select class="form-control" name="city"
+                                                                                    id="city">
                                                                                 <option>انتخاب شهر</option>
                                                                                 <option value="1"></option>
                                                                             </select>
@@ -251,7 +272,7 @@
                                                                 <div class="form-group">
                                                                     <div class="controls">
                                                                         <label>تاریخ تولد</label>
-                                                                        <input type="text" required class="form-control"
+                                                                        <input type="text" class="form-control"
                                                                                readonly id="data-input"
                                                                                placeholder="تاریخ تولد"
                                                                                value="{% if request.user.birthday %}{{ request.user.birthday|jformat:"%Y/%m/%d" }}{% endif %}"
@@ -292,39 +313,39 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
-                                                                <div class="form-group">
-                                                                    {% if request.user.has_jobField %}
-                                                                        <label class="d-block">آپلود تصویر کارت
-                                                                            ملی</label>
-                                                                        <div class="media">
-                                                                            <a href="javascript: void(0);">
-                                                                                <img src="
-                                                                                        {% if request.user.national_card %}{{ request.user.national_card.url }}{% endif %}"
-                                                                                     class="rounded mr-75"
-                                                                                     alt="profile image" height="200"
-                                                                                     width="300">
-                                                                            </a>
-                                                                            <div class="media-body mt-25">
-                                                                                <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                                                                                    <label for="card-files"
-                                                                                           class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0">
-                                                                                        <span>آپلود عکس</span>
-                                                                                        <input id="card-files"
-                                                                                               name="national-card"
-                                                                                               type="file" hidden>
-                                                                                    </label>
-                                                                                    <button class="btn btn-sm btn-light-secondary ml-50">
-                                                                                        ریست
-                                                                                    </button>
+                                                                <fieldset>
+                                                                <label>شخص</label>
+                                                                    <ul class="list-unstyled mt-1">
+                                                                        <li class="d-inline-block mr-2">
+                                                                            <fieldset>
+                                                                                <div class="radio radio-primary radio-glow">
+                                                                                    <input type="radio"
+                                                                                           value="realperson"
+                                                                                           id="realperson"
+                                                                                           name="existential"
+                                                                                            {% if request.user.existential == 0 %}
+                                                                                           checked {% endif %}>
+                                                                                    <label for="realperson">شخص
+                                                                                        حقیقی</label>
                                                                                 </div>
-                                                                                <p class="text-muted ml-1 mt-50"><small>فرمت
-                                                                                    های مورد قبول :
-                                                                                    PNG , JPG حداکثر حجم : 150KB</small>
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </div>
+                                                                            </fieldset>
+                                                                        </li>
+                                                                        <li class="d-inline-block mr-2">
+                                                                            <fieldset>
+                                                                                <div class="radio radio-primary radio-glow">
+                                                                                    <input type="radio"
+                                                                                           value="legalperson"
+                                                                                           id="legalperson"
+                                                                                           name="existential"
+                                                                                            {% if request.user.existential == 1 %}
+                                                                                           checked {% endif %}>
+                                                                                    <label for="legalperson">شخص
+                                                                                        حقوقی</label>
+                                                                                </div>
+                                                                            </fieldset>
+                                                                        </li>
+                                                                    </ul>
+                                                                </fieldset>
                                                             </div>
                                                             <div class="mt-2 col-12 d-block">
                                                                 <h5>شبکه های اجتماعی</h5>

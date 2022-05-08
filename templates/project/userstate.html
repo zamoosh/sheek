@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}انتخاب شهر و استان - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+    <script>
+        $(".open-modal").on("click", function () {
+            $.ajax({
+                url: $(this).attr("data-url"),
+                type: "GET",
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    $("#state_list").empty()
+                    data.forEach(function (element) {
+                        $("#state_list").append("<div class='form-check form-check-primary pt-1'><span>" + element.title + "</span></div>");
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0"></h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i
+                                        class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    انتخاب شهر و استان
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body"><!-- Basic Tables start -->
+                <div class="row">
+                    <div class="col-12">
+                        {% if error %}
+                            کارشناس قبلا ثبت شده است
+                        {% endif %}
+
+                        {% if userJobFields %}
+                            <div class="row">
+                            {% for userJobField in userJobFields %}
+                                <div class="col-lg-4 col-xl-4 user-details-card">
+                                    <div class="card widget-user-details">
+                                        <div class="card-header">
+                                            <div class="card-title-details d-flex align-items-center">
+                                                <div class="mt-n25">
+                                                    <h5 class="line-height-2 font-size-14">{{ userJobField.jobField.title }}</h5>
+                                                    <div class="card-subtitle font-size-12">{{ userJobField.jobField.parent.title }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <div class="table-responsive ps">
+                                                    <table class="table table-borderless">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="pb-0 pl-0"><small>تاریخ دریافت مدرک</small></td>
+                                                            <td class="pb-0 pl-0"><small>تاریخ انقضای مدرک</small></td>
+                                                            <td class="pb-0 pl-0"><small>محدوده فعالیت</small></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="pl-0">
+                                                                <div class="badge badge-light-primary text-bold-500 py-50">
+                                                                    {{ userJobField.issue|jformat:"%Y/%m/%d" }}
+                                                                </div>
+                                                            </td>
+                                                            <td class="pl-0">
+                                                                <div class="badge badge-light-danger text-bold-500 py-50">
+                                                                    {{ userJobField.expiration|jformat:"%Y/%m/%d" }}
+                                                                </div>
+                                                            </td>
+                                                            <td class="pl-0">
+                                                                <div class="badge badge-light-info text-bold-500 py-50">
+                                                                    <a data-toggle="modal" data-target="#picmodal"
+                                                                       aria-modal="true" class="pointer open-modal"
+                                                                       data-url="{% url 'projects:get_userstateapi' userJobField.id %}">مشاهده</a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <a href="{% url 'projects:adduserstate' userJobField.id %}"
+                                                   class="btn btn-success w-100">ویرایش / انتخاب</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            شما هنوز شهر یا استانی را انتخاب نکرده اید
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal fade text-left" id="picmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content p-2">
+                <div id="state_list"></div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

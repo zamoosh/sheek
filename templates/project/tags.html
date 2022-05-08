@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}تگ ها - آرمان سنجش{% endblock %}
+{% load jformat %}
+{% block css %}{% endblock %}
+{% block js %}
+    <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
+{% endblock %}
+{% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
+    footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block body %}
+    {% include "header.html" %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="breadcrumbs-top">
+                        <h5 class="content-header-title float-left pr-1 mb-0">تگ ها</h5>
+                        <div class="breadcrumb-wrapper d-none d-sm-block">
+                            <ol class="breadcrumb p-0 mb-0 pl-1">
+                                <li class="breadcrumb-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">تگ ها
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body"><!-- Basic Tables start -->
+                <div class="row" id="basic-table">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <a type="button" class="btn btn-primary float-right shadow mr-1 " data-toggle="modal"
+                                        data-target="#addTags">اضافه کردن تگ
+                                </a>
+                                <a class="btn btn-primary float-right shadow mr-1 "
+                                        href="{% url 'projects:set_tags' %}">انتساب تگ
+                                </a>
+
+                                <div class="table-responsive" id="jobTabale">
+                                    <table class="table">
+                                    <div class="overlay"></div>
+                                    <div class="loader"></div>
+                                        <thead>
+                                        <tr>
+                                            <th>عنوان</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for tag in tags %}
+                                            <tr>
+                                                <td class="text-bold-500">{{ tag.title }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% if tags.has_other_pages %}
+                                    <nav aria-label="Page navigation">
+                                    <ul class="pagination pagination-borderless justify-content-center mt-2">
+                                    {% if tags.has_previous %}
+                                    <li class="page-item previous"><a class="page-link" href="?page={{ tags.previous_page_number }}">
+                                        <i class="bx bx-chevron-left"></i>
+                                    </a></li>
+                                    {% else %}
+                                      <li class="page-item previous"><a class="page-link" disabled="">
+                                        <i class="bx bx-chevron-left"></i>
+                                      </a></li>
+                                    {% endif %}
+                                    {% for i in tags.paginator.page_range %}
+                                      {% if tags.number == i %}
+                                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ i }}</a></li>
+                                      {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                      {% endif %}
+                                    {% endfor %}
+                                    {% if tags.has_next %}
+                                    <li class="page-item next"><a class="page-link" href="?page={{ tags.next_page_number }}">
+                                        <i class="bx bx-chevron-right"></i>
+                                    </a></li>
+                                    {% else %}
+                                      <li class="page-item next"><a class="page-link" disabled="">
+                                        <i class="bx bx-chevron-right"></i>
+                                    </a></li>
+                                    {% endif %}
+                                  </ul>
+                                    </nav>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="addTags" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">اضافه کردن گروه</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form method="POST" action="{% url 'projects:tags' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <label>عنوان تگ: </label>
+                        <div class="form-group">
+                            <input name="tag" id="tag" type="text" placeholder="مشاور املاک" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">انصراف</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ذخیره</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+{% endblock %}

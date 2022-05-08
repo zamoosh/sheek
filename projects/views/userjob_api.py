@@ -5,30 +5,20 @@ from .imports import *
 def userjob_api(request):
     context = []
     if request.is_ajax and request.method == "GET":
-        jobField = request.GET.get('user_jobfield')
-        state = State.objects.get(id=request.GET.get('state'))
         q = Q()
-        q = q & Q(status=True, jobField=JobField.objects.get(id=jobField))
-        experience = UserJobField.objects.filter(q)
-        for item in experience:
-            five_delta = datetime.date.today() - datetime.timedelta(days=1825)
-            ten_delta = datetime.date.today() - datetime.timedelta(days=3650)
-            if item.experience > five_delta:
-                expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, owner=item.owner_id,
-                                                                                        state=state).distinct()
-                expert = User.objects.filter(id__in=expert_id)
-            elif item.experience > ten_delta:
-                expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q, owner=item.owner_id,
-                                                                                        state__in=State.objects.filter(
-                                                                                            parent_id=state.parent)).distinct()
-                expert = User.objects.filter(id__in=expert_id)
-            else:
-                expert_id = UserJobField.objects.values_list('owner', flat=True).filter(q,
-                                                                                        owner=item.owner_id).distinct()
-                expert = User.objects.filter(id__in=expert_id)
-            for i in expert:
-                tmp = {'id': i.pk, 'name': i.first_name, 'last_name': i.last_name, 'birthday': i.birthday}
-                if i.image:
-                    tmp['profile'] = i.image.url
-                context.append(tmp)
+        jobField = request.GET.get('salahiat')
+        state = request.GET.get('city')
+        q = q & Q(status=True, jobField=jobField)
+
+        user_state = UserState.objects.values_list('userjobfield_id', flat=True).filter(state=state, userjobfield__in=UserJobField.objects.filter(q))
+        print(user_state)
+        users = UserJobField.objects.values_list('owner', flat=True).filter(id__in=user_state)
+        user = User.objects.filter(id__in=users)
+        for i in user:
+            user_jobs = len(Project.objects.filter(user_jobField__owner=i.pk))
+            tmp = {'id': i.pk, 'name': i.first_name, 'last_name': i.last_name, 'birthday': i.birthday }
+            if i.image:
+                tmp['profile'] = i.image.url
+            tmp['projects'] = user_jobs
+            context.append(tmp)
         return JsonResponse(context, safe=False)
