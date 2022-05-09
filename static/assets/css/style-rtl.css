@@ -696,3 +696,20 @@ a.btn-end-comp {
 #state-error {
   width: 100%;
 }
+.collapse-icon [data-toggle="collapse"]::before {
+  transform: rotate(90deg);
+}
+.collapse-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  max-width: 990px;
+  text-align: right;
+}
+.show {
+  display: block;
+  visibility: visible;
+}

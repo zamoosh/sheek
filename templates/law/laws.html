@@ -27,13 +27,13 @@
                         <div class="col-12">
                             <div class="card faq-bg bg-transparent box-shadow-0 p-1 p-md-5">
                                 <div class="card-body p-0">
-                                    <h1 class="faq-title text-center mb-3">قوانین و آیین نامه ها</h1>
+                                    <h1 class="faq-title text-center mb-3">{% if group %}{{ group.title }}{% else %}قوانین و آیین نامه ها{% endif %}</h1>
                                     {% if group %}
                                     <form method="post">
                                         {% csrf_token %}
                                         <fieldset class="faq-search-width form-group position-relative w-50 mx-auto">
                                             <input type="text" name="searchbar" class="form-control round form-control-lg shadow pl-2"
-                                                   id="searchbar" placeholder="جستجو در {{ group.title }} ..." value="{% if searchbar %}جستجو برای : {{ searchbar }} در {{ group.title }}{% endif %}">
+                                                   id="searchbar" placeholder="جستجو در {{ group.title }} ..." value="{% if searchbar %}{{ searchbar }}{% endif %}">
                                         </fieldset>
                                     </form>
                                 {% endif %}
@@ -53,6 +53,7 @@
                                     </div-->
                                     <div class="col-12">
                                         <div class="row">
+                                        {% if not group %}
                                             {% for law in laws %}
                                                 <div class="col">
                                                     <div class="card text-center cent-text1">
@@ -67,10 +68,11 @@
                                                     </div>
                                                 </div>
                                             {% endfor %}
+                                        {% endif %}
                                         </div>
                                     </div>
                                     <div class="text-center p-md-4 p-sm-1 py-1 p-0">
-                                        <h5 class="faq-title">{% if request.method == "POST" %}جستجو برای :{{ searchbar }}در {{ group.title }}{% else %}{{ group.title }}{% endif %}</h5>
+                                        <h5 class="faq-title">{% if request.method == "POST" %}جستجو برای :{{ searchbar }}در {{ group.title }}{% endif %}</h5>
                                     </div>
                                     {% if request.method == "POST" %}{% if not lawsAcardeon %}
                                         <div class="alert alert-danger mb-2" role="alert">
@@ -88,9 +90,10 @@
                                                          data-target="#accordion{{ la.id }}"
                                                          aria-expanded="false"
                                                          aria-controls="accordion{{ la.id }}">
-                      <span class="collapse-title d-flex align-items-center"><i class="bx bxs-circle font-small-1"></i>
-                        {{ la.date }} / {{ la.title }} / {{ la.article }}
+                      <span class="collapse-title align-items-center"><i class="bx bxs-circle font-small-1"></i>
+                        {{ la.title }} / {{ la.article }}
                       </span>
+                                                        <span class="px-1">{{ la.date }}</span>
                                                     </div>
                                                     <div id="accordion{{ la.id }}" role="tabpanel"
                                                          data-parent="#accordionWrapar2"
