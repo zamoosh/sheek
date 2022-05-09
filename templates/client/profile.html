@@ -5,6 +5,12 @@
 {% block css %}
     <link type="text/css" rel="stylesheet" href="{% static "assets/css/bootstrap-datepicker.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
+    <style>
+    #select-files {
+  opacity: 0;
+  width: 0;
+}
+    </style>
 {% endblock %}
 {% block js %}
         <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.fa.min.js" %}"></script>
@@ -70,6 +76,12 @@
             });
         });
     </script>
+
+<script>
+
+  document.getElementById("select-files").required = true;
+
+</script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -171,7 +183,7 @@
                                                                         <input id="select-files" name="profile-picture"
                                                                                type="file"
                                                                                onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
-                                                                               hidden>
+                                                                                required>
                                                                     </label>
                                                                     <button class="btn btn-sm btn-light-secondary ml-50">
                                                                         ریست
