@@ -690,3 +690,9 @@ a.btn-end-comp {
   -webkit-box-orient: vertical;
   width: 100%;
 }
+.dir-ltr{
+    direction: ltr;
+}
+#state-error {
+  width: 100%;
+}

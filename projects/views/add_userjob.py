@@ -21,6 +21,8 @@ def adduserjobfields(request, id):
     if request.method == "POST":
         context['jobfield'] = request.POST.getlist('jobfield')
         context['inquiry'] = request.POST.get('inquiry', '').strip()
+        # if not 'htt' in context['inquiry']:
+        #     context['inquiry'] = "https://" + context['inquiry']
         q = Q()
 
         five_delta = datetime.date.today() - datetime.timedelta(days=5 * 365)

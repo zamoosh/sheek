@@ -4,6 +4,7 @@ from .imports import *
 def message_api(request, id):
     context = {}
     if request.is_ajax and request.method == "POST":
+        print("ASDADASDASDASDSD")
         context['project_details'] = Project.objects.get(id=id)
         context['req'] = {}
         context['req']['messageText'] = request.POST.get('messageText', '').strip()
@@ -13,9 +14,9 @@ def message_api(request, id):
         message.project = Project.objects.get(id=id)
         message.save()
         message.text = "کارشناس برای شما یک پیام ارسال کرده است"
-        message.owner_id = 0
-        message.project = Project.objects.get(id=id)
-        message.save()
+        # message.owner_id = 0
+        # message.project = Project.objects.get(id=id)
+        # message.save()
     return render(request, 'project/view_project.html', context)
 
 
@@ -27,5 +28,6 @@ def setreadmessage(request, id):
             i.user_view = True
             i.save()
         elif request.user.id == i.project.user_jobField.owner_id:
+            i.expert_view = True
             i.save()
     return render(request, 'project/view_project.html', context)
