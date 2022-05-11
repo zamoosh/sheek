@@ -8,12 +8,18 @@ class SimpleMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.user.is_authenticated:
+        projects = []
+        try:
             projects = Project.objects.filter(Q(owner=request.user) | Q(user_jobField__owner=request.user))
-            q = Q()
-            q = q & Q(Q(user_view=False) | Q(expert_view=False))
-            message = []
+        except (User.DoesNotExist, Exception):
+            pass
+        q = Q()
+        q = q & Q(Q(user_view=False) | Q(expert_view=False))
+        message = []
+        try:
             message = Message.objects.filter(q & ~Q(owner=request.user), project__in=projects)
-            request.message = message
-            response = self.get_response(request)
-            return response
+        except (User.DoesNotExist, Exception):
+            pass
+        request.message = message
+        response = self.get_response(request)
+        return response
