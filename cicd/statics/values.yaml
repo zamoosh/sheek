@@ -59,7 +59,7 @@ ingress:
 
     hosts:
         - host: static.karshenas.org
-        - paths:
+          paths:
           - path: /
             pathType: Prefix
     tls:
