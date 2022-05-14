@@ -55,8 +55,8 @@ def end_project(request, id):
         context['comment'].text = context['rate_description']
         context['comment'].save()
         message = Message()
-        message.text = "پروژه شما به اتمام رسید."
-        message.project = Project.objects.get(id=id)
-        message.owner_id = request.user.id
+        message.text = "پروژه توسط کاربر اعلام اتمام شد."
+        message.project = context['project_details']
+        message.owner_id = context['project_details'].user_jobField.owner_id
         message.save()
     return HttpResponseRedirect(reverse('projects:expert-projects'))

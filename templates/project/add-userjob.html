@@ -57,7 +57,7 @@
                                       enctype="multipart/form-data" action="{% url 'projects:adduserjob' %}">
                                     {% csrf_token %}
                                     <div class="form-body">
-                                    <span class="titles"><i class="bx bx-select-multiple"></i>  انتخاب حوزه کارشناسی</span>
+                                    <span class="titles"><i class="bx bx-select-multiple"></i>  انتخاب حوزه فعالیت</span>
                                         <div class="row">
                                             {% for jobfield in jobfields %}
                                             <div class="col-4 text-center pointer" onclick="expertselect({{ jobfield.id }})">
