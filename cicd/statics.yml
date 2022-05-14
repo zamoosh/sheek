@@ -7,7 +7,7 @@ deploy_static_storage:
     refs:
       - master
     changes:
-      - cicd/statics/version.txt
+      - cicd/statics.txt
   environment:
     name: $PROJECT_NAME
   dependencies:
