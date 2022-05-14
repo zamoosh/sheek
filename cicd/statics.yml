@@ -1,0 +1,22 @@
+deploy_stage_storage:
+  stage: deploy
+  variables:
+    PROJ_DIR: "."
+    IMAGE_ID: "scr.novinparva.com/sheek/statics:"
+  only:
+    refs:
+      - master
+    changes:
+      - cicd/storage/version.txt
+  environment:
+    name: $PROJECT_NAME
+  dependencies:
+    - build_all
+  script:
+    - pwd
+    - VERSION=$(cat cicd/statics.txt)
+    - IMAGE_TAG=$IMAGE_ID$VERSION
+    - docker build -t $IMAGE_TAG ./cicd/statics/
+    - docker push $IMAGE_TAG
+    - echo $IMAGE_TAG
+    - helm upgrade --install sheek-statics-prod cicd/statics --set image.tag=$VERSION -f cicd/statics/values.yaml
