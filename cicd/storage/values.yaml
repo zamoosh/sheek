@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: scr-noj.medga.ir/nojaba/storage
+  repository: scr.novinparva.com/sheek/storage
   tag: 1.21.7-alpine
   pullPolicy: IfNotPresent
 
@@ -56,20 +56,21 @@ ingress:
         nginx.ingress.kubernetes.io/enable-cors: "true"
 
     hosts:
-        - host: media.noj.medga.ir
+        - host: media.karshenas.org
           paths: ["/"]
     tls:
         - hosts:
-              - media.noj.medga.ir
-          secretName: media-noj-medga-ir
+              - media.karshenas.org
+          secretName: media.karshenas.org
     rules:
-        - host: media.noj.medga.ir
+        - host: media.karshenas.org
           http:
               paths:
                   - path: /
                     backend:
                         serviceName: storage-presentation
                         servicePort: 80
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

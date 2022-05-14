@@ -4,35 +4,38 @@
 {% load jformat %}
 {% block css %}
     <link type="text/css" rel="stylesheet" href="{% static "assets/css/bootstrap-datepicker.min.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static "app-assets/css-rtl/plugins/forms/validation/form-validation.css" %}">
 
 {% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/modal/components-modal.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.fa.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/bootstrap-datepicker.min.js" %}"></script>
+    <script src="{% static "app-assets/vendors/js/forms/validation/jquery.validate.min.js" %}"></script>
+    <script src="{% static "app-assets/js/scripts/forms/validation/form-validation.js" %}"></script>
     <script type="text/javascript">
-
-      $(document).ready(function() {
-                $("#issue-input").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    isRTL: true,
-                    dateFormat: "yy/mm/dd"
-                });
-                $("#expiration-input").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    isRTL: true,
-                    dateFormat: "yy/mm/dd"
-                });
+        $(document).ready(function () {
+            $("#issue-input").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                isRTL: true,
+                dateFormat: "yy/mm/dd"
             });
-
+            $("#expiration-input").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                isRTL: true,
+                dateFormat: "yy/mm/dd"
+            });
+        });
     </script>
     <script>
         var brd = $("#brd");
         brd.append(`<a class='breadcrumb-item pointer' onClick='brdClick({{ id.id }})' id="{{ id.id }}">{{id.title}}</a> `);
         expertapi();
-        function expertapi(id){
+
+        function expertapi(id) {
 
 
             $('#expert').find('option').remove().end();
@@ -70,10 +73,10 @@
             expertapi(id);
             var list = Object.entries(brd[0].children);
             list.forEach(function callback(el, index) {
-               if (Number(el[1].id) === id){
-                list = list.splice(0, index + 1);
-                return null;
-               }
+                if (Number(el[1].id) === id) {
+                    list = list.splice(0, index + 1);
+                    return null;
+                }
             });
             brd.empty();
             list.forEach((el) => {
@@ -82,20 +85,21 @@
         }
 
 
-/*
-        $("#expert").on(function () {
-        previousId = this.value;
-        });*/
+        /*
+                $("#expert").on(function () {
+                previousId = this.value;
+                });*/
         $("#expert").change(function () {
             if (($("#expert").val())) {
                 $("#brd").append(`<a class='breadcrumb-item pointer' onClick='brdClick(${$("#expert").val()})' id="${$("#expert").val()}"> ${$("#expert option:selected").text()}</a> `);
                 expertapi($("#expert").val());
-            }else {
+            } else {
                 $("#show_experts").removeClass('show-before-expert');
                 $("#show_experts").empty();
             }
             /*$.ajax({
-                url: '{% url 'projects:adduser-job-api' %}' + $("#expert").val() + '/',
+                url: '
+            {% url 'projects:adduser-job-api' %}' + $("#expert").val() + '/',
                 type: "GET",
                 async: false,
                 cache: false,
@@ -132,6 +136,19 @@
                 }
             });
         });*/
+    </script>
+    <script>
+        function handleData() {
+            var form_data = new FormData(document.querySelector("form"));
+            if (!form_data.has("jobfield")) {
+                document.getElementById("chk_option_error").style.visibility = "visible";
+                return false;
+            } else {
+                document.getElementById("chk_option_error").style.visibility = "hidden";
+                return true;
+            }
+
+        }
     </script>
     <script>
         /*mamad = function (mamadvar) {
@@ -252,7 +269,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form form-vertical" method="POST" novalidate="novalidate"
+                                <form onsubmit="return handleData()" id="jquery-val-form" class="form form-vertical needs-validation"
+                                      novalidate="novalidate" method="POST"
                                       enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="form-body">
@@ -261,7 +279,8 @@
                                                 <div class="form-group">
                                                     <label for="first-name-vertical">سرگروه</label>
                                                     <div class="input-group mt-1">
-                                                        <select class="form-control" name="expert" id="expert">
+                                                        <div class="w-100" id="chk_option_error" style="visibility:hidden; color:red; ">لطفا حداقل یک صلاحیت را انتخاب کنید</div>
+                                                        <select class="form-control" name="expert" id="expert" required>
                                                             <option selected>انتخاب سرگروه</option>
                                                         </select>
                                                     </div>
@@ -272,6 +291,7 @@
                                                 <div class="show_experts" id="show_experts"></div>
                                             </div>
 
+                                            {% if not id.id == 1  %}
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <div class="controls">
@@ -296,25 +316,22 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% endif %}
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <div class="controls">
                                                         <label>لینک مرجع استعلام</label>
-                                                        <input type="text" required class="form-control"
+                                                        <input type="url" class="form-control dir-ltr text-right"
                                                                placeholder="لینک مرجع استعلام"
                                                                value=""
-                                                               name="inquiry">
+                                                               name="inquiry" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="media">
                                                     <a href="javascript: void(0);">
-                                                        <img src="
-
-
-
-                                                                {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
+                                                        <img src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
                                                              class="rounded mr-75" alt="تصویر مدرک"
                                                              height="64"
                                                              width="64" id="blah">

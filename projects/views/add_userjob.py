@@ -21,6 +21,8 @@ def adduserjobfields(request, id):
     if request.method == "POST":
         context['jobfield'] = request.POST.getlist('jobfield')
         context['inquiry'] = request.POST.get('inquiry', '').strip()
+        # if not 'htt' in context['inquiry']:
+        #     context['inquiry'] = "https://" + context['inquiry']
         q = Q()
 
         five_delta = datetime.date.today() - datetime.timedelta(days=5 * 365)
@@ -33,12 +35,18 @@ def adduserjobfields(request, id):
                 userjobfield.owner_id = request.user.id
                 userjobfield.jobField_id = i
                 userjobfield.inquiry_link = context['inquiry']
-                if request.POST.get('expiration'):
-                    userjobfield.expiration = jdatetime.datetime.strptime(request.POST.get('expiration'),
+
+                if context['id'].id == 1:
+                   userjobfield.expiration = jdatetime.datetime.strptime('1410/01/01', "%Y/%m/%d").togregorian()
+                elif request.POST.get('expiration'):
+                   userjobfield.expiration = jdatetime.datetime.strptime(request.POST.get('expiration'),
                                                                           "%Y/%m/%d").togregorian()
-                if request.POST.get('issue'):
-                    userjobfield.issue = jdatetime.datetime.strptime(request.POST.get('issue'),
+                if context['id'].id == 1:
+                   userjobfield.issue = jdatetime.datetime.strptime('1390/01/01', "%Y/%m/%d").togregorian()
+                elif request.POST.get('issue'):
+                   userjobfield.issue = jdatetime.datetime.strptime(request.POST.get('issue'),
                                                                      "%Y/%m/%d").togregorian()
+
                 if 'document_picture' in request.FILES:
                     userjobfield.document_image = request.FILES['document_picture']
                 userjobfield.save()
