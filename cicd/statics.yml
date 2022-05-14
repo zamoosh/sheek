@@ -1,4 +1,4 @@
-deploy_stage_storage:
+deploy_static_storage:
   stage: deploy
   variables:
     PROJ_DIR: "."
@@ -7,7 +7,7 @@ deploy_stage_storage:
     refs:
       - master
     changes:
-      - cicd/storage/version.txt
+      - cicd/statics/version.txt
   environment:
     name: $PROJECT_NAME
   dependencies:
