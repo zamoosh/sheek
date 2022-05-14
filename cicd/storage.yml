@@ -14,7 +14,7 @@ deploy_storage:
     - build_all
   script:
     - pwd
-    - VERSION=$(cat cicd/storage/version.txt)
+    - VERSION=$(cat cicd/version.txt)
     - echo $IMAGE_TAG
     - helm upgrade --install sheek-storage cicd/storage --set image.tag=$VERSION -f cicd/storage/values.yaml
 
