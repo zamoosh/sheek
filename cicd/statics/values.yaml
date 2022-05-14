@@ -68,11 +68,11 @@ ingress:
     rules:
         - host: static.karshenas.org
           http:
-              paths:
-                  - path: /
-                    backend:
-                        serviceName: storage-static-sheek-presentation
-                        servicePort: 80
+            - path: /
+              pathType: Prefix
+              backend:
+                  serviceName: storage-static-sheek-presentation
+                  servicePort: 80
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
