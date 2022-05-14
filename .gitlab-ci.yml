@@ -6,6 +6,7 @@ build_all:
   script:
     - "echo starting"
 include:
+  - 'cicd/statics.yml'
   - 'cicd/deploy.yml'
   - 'cicd/deploy-stage.yml'
   - 'cicd/storage.yml'
