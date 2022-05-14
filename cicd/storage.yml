@@ -2,7 +2,7 @@ deploy_storage:
   stage: deploy
   variables:
     PROJ_DIR: "."
-    IMAGE_ID: "scr-noj.medga.ir/nojaba/storage:"
+    IMAGE_ID: "scr.novinparva.com/sheek/storage:"
   only:
     refs:
       - master

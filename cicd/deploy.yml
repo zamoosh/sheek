@@ -14,5 +14,7 @@ deploy:
   script:
     - pwd
     - export VERSION=$(cat cicd/version.txt)
+    - STATICPODNAME=$(kubectl get pods |grep 'sheek-statics-prod' |awk '{ print $1; exit }')
+    - kubectl cp static/. $STATICPODNAME:/usr/share/nginx/html/
     - helm upgrade --install sheek-prod cicd/sheekwebsite --set image.tag=$VERSION -f cicd/sheekwebsite/values.yaml
 

@@ -11,7 +11,7 @@ data:
   DATABASE_HOST: "185.53.143.186"
   DATABASE_PORT: ""
   DEBUG: "False"
-  STATIC_URL: "https://karshenas.org/"
+  STATIC_URL: "https://static.karshenas.org/"
   MEDIA_ROOT: "/storage/"
   MEDIA_URL: "https://media.karshenas.org/"
 {{- end -}}
