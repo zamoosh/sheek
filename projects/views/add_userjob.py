@@ -36,12 +36,12 @@ def adduserjobfields(request, id):
                 userjobfield.jobField_id = i
                 userjobfield.inquiry_link = context['inquiry']
 
-                if context['id'].id == 1:
+                if not context['id'].id == 1:
                    userjobfield.expiration = jdatetime.datetime.strptime('1410/01/01', "%Y/%m/%d").togregorian()
                 elif request.POST.get('expiration'):
                    userjobfield.expiration = jdatetime.datetime.strptime(request.POST.get('expiration'),
                                                                           "%Y/%m/%d").togregorian()
-                if context['id'].id == 1:
+                if not context['id'].id == 1:
                    userjobfield.issue = jdatetime.datetime.strptime('1390/01/01', "%Y/%m/%d").togregorian()
                 elif request.POST.get('issue'):
                    userjobfield.issue = jdatetime.datetime.strptime(request.POST.get('issue'),

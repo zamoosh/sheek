@@ -276,10 +276,8 @@
                                                                         <small>لینک استعلام</small>
                                                                     </a>
                                                                     <div data-toggle="modal" data-target="#picmodal"
-                                                                         onclick="document.getElementById('mamad').src='
-                                                                                 {% if userjob.document_image %}{{ userjob.document_image.url }}{% endif %}'"
-                                                                         aria-modal="true"
-                                                                         class="d-inline-flex align-items-center pointer">
+                                                                         onclick="document.getElementById('mamad').src='{% if userjob.document_image %}{{ userjob.document_image.url }}{% endif %}'"
+                                                                         aria-modal="true" class="d-inline-flex align-items-center pointer">
                                                                         <i class="bx bx-printer mr-25"></i>
                                                                         <small>مشاهده مدرک</small>
                                                                     </div>
