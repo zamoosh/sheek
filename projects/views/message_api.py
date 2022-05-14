@@ -10,7 +10,7 @@ def message_api(request, id):
         context['req']['messageText'] = request.POST.get('messageText', '').strip()
         message = Message()
         message.text = context['req']['messageText']
-        message.owner_id = request.user.id
+        message.owner_id = context['project_details'].user_jobField.owner_id
         message.project = Project.objects.get(id=id)
         message.save()
         message.text = "کارشناس برای شما یک پیام ارسال کرده است"

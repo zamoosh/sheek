@@ -24,7 +24,7 @@ def addproject(request):
             message.text = "شما یک درخواست دارید"
             message.project_id = project.id
             # message.owner_id = UserJobField.objects.get(owner=request.POST.get('expert-list')).id
-            message.owner_id = request.POST.get('expert-list')
+            message.owner_id = project.user_jobField.owner_id
             message.save()
         return HttpResponseRedirect(reverse('projects:redierct'))
     return render(request, 'project/addproject.html', context)

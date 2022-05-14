@@ -17,7 +17,7 @@ class SimpleMiddleware:
         q = q & Q(Q(user_view=False) | Q(expert_view=False))
         message = []
         try:
-            message = Message.objects.filter(q & ~Q(owner=request.user), project__in=projects)
+            message = Message.objects.filter(q & Q(owner=request.user), project__in=projects).order_by('-created_at')
         except (User.DoesNotExist, Exception):
             pass
         request.message = message
