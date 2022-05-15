@@ -713,3 +713,52 @@ a.btn-end-comp {
   display: block;
   visibility: visible;
 }
+.social {
+  position: relative;
+  float: right;
+}
+ul{
+    padding: 0;
+    margin: 0;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.p-rel{
+    position: relative;
+}
+.social ul li {
+  display: contents;
+  list-style: none;
+}
+.border-b::after {
+  position: absolute;
+  content: "";
+  height: 2px;
+  width: 93%;
+  background: rgba(226,232,240,1);
+  top: 50px;
+}
+.salahiat {
+  margin-top: 50px;
+    margin-bottom: 10px;
+}
+.salahiat span {
+    color: #5A8DEE;
+}
+.salahiat li {
+  list-style: none;
+  padding: 8px;
+}
+#select-files {
+  opacity: 0;
+  width: 0;
+}
+
+
+
+
+
+
+
+
