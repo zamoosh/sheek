@@ -59,7 +59,7 @@
                 <li class=" nav-item"><a href="{% url 'projects:experts' %}"><i class="bx bx-location-plus"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">تایید کارشناسان</span></a>
                 </li>{% endif %}
-            {% if request.user.is_superuser %}
+            {% if request.user.has_jobField or request.user.is_superuser  %}
                 <li class=" nav-item"><a href="{% url 'projects:tags' %}"><i class="bx bx-tag"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">تگ ها</span></a></li>{% endif %}
             <li class=" nav-item"><a href="{% url 'projects:userjob' %}"><i class="bx bxs-user-detail"></i><span

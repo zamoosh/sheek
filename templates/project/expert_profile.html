@@ -12,108 +12,77 @@
             <div class="content-body">
                 <section class="users-view">
                     <div class="row">
-                        <div class="col-12 col-sm-7">
-                            <div class="media mb-2">
-                                <a class="mr-1">
-                                    <img src="{% if user.image %}{{ user.image.url }}{% endif %}"
-                                         alt="users view avatar"
-                                         class="users-avatar-shadow rounded-circle" height="64" width="64">
-                                </a>
-                                <div class="media-body pt-25">
-                                    <h4 class="media-heading"><span
-                                            class="users-view-name">{{ user.get_full_name }} </span></h4>
-                                    <span>شناسه:</span>
-                                    <span class="users-view-id">{{ user.id }}</span>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <div class="row bg-primary bg-lighten-5 rounded mb-2 mx-25 text-center text-lg-left">
-                                <div class="col-12 col-sm-4 p-2">
-                                    <h6 class="text-primary mb-0">تعداد پروژها انجام شده: <span
-                                            class="font-large-1 align-middle">{{ projects_done|length }}</span>
-                                    </h6>
-                                </div>
-                                <div class="col-12 col-sm-4 p-2">
-                                    <h6 class="text-primary mb-0">تعداد پروژه های در دست انجام: <span
-                                            class="font-large-1 align-middle">{{ projects_inprog|length }}</span></h6>
-                                </div>
-                                <div class="col-12 col-sm-4 p-2">
-                                    <h6 class="text-primary mb-0">تعداد پروژه های در انتظار تایید: <span
-                                            class="font-large-1 align-middle">{{ projects_before|length }}</span></h6>
-                                </div>
-                            </div>
+                            <div class="col-12 col-sm-12">
+                                <div class="media user mb-2">
+                                    <a class="mr-1">
+                                        <img src="{% if user.image %}{{ user.image.url }}{% endif %}"
+                                             alt="users view avatar"
+                                             class="users-avatar-shadow rounded-circle" height="100" width="100">
+                                    </a>
+                                    <div class="media-body pt-25">
+                                        <h4 class="media-heading"><span
+                                                class="users-view-name">{{ user.get_full_name }} </span></h4>
 
-                            <div class="row">
-                                <div class="col-4">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                        <tr>
-                                            <td>نام:</td>
-                                            <td class="users-view-username">{{ user.first_name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>نام خانوادگی:</td>
-                                            <td class="users-view-name">{{ user.last_name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>ایمیل:</td>
-                                            <td class="users-view-email">{{ user.email }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>تاریخ عضویت:</td>
-                                            <td>{{ user.date_joined|jformat:"%Y/%m/%d" }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>شهر و استان:</td>
-                                            <td class="users-view-username">{{ user.state.parent.title }} / {{ user.state.title }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>تاریخ تولد:</td>
-                                            <td class="users-view-name">{{ user.birthday|jformat:"%Y/%m/%d" }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>وضعیت:</td>
-                                            <td><span class="badge badge-light-success users-view-status">تایید شده</span>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <h5 class="mb-1"><i class="bx bx-link"></i> شبکه های اجتماعی</h5>
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                        <tr>
-                                            <td>Linkedin:</td>
-                                            <td><a href="javascript:void(0);">{{ user.extra.linkedin }}</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Telegram:</td>
-                                            <td><a href="javascript:void(0);">{{ user.extra.telegram }}</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Whatsapp:</td>
-                                            <td><a href="javascript:void(0);">{{ user.extra.whatsapp }}</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Instagram:</td>
-                                            <td><a href="javascript:void(0);">{{ user.extra.instagram }}</a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                        <span>شناسه:</span>
+                                        <span class="users-view-id">{{ user.id }}</span><br>
+                                        <span class="badge badge-light-success users-view-status">فعال</span><br>
+                                        <div class="media social mb-2">
+                                            <ul>
+                                                {% if not user.extra.instagram %}
+                                                    <li><a href="{{ user.extra.instagram }}"><i
+                                                            class="bx bxl-instagram"></i></a></li>
+                                                {% endif %}
+                                                {% if user.extra.whatsapp %}
+                                                    <li><a href="{{ user.extra.whatsapp }}"><i
+                                                            class="bx bxl-whatsapp"></i></a></li>
+                                                {% endif %}
+                                                {% if user.extra.linkedin %}
+                                                    <li><a href="{{ user.extra.linkedin }}"><i
+                                                            class="bx bxl-linkedin"></i></a></li>
+                                                {% endif %}
+                                                {% if user.extra.telegram %}
+                                                    <li><a href="{{ user.extra.telegram }}"><i
+                                                            class="bx bxl-telegram"></i></a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-8">
-                                    <h5 class="mb-1"><i class="bx bxs-certification"></i> کارشناسی ها</h5>
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                        {% for job in userJob %}
-                                            <tr>
-                                                <td>{{ job.jobField.title }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
+                                <div class="row p-rel">
+                                    <div class="d-flex p-1 justify-between py-2 border-b border-gray-200 last:pb-0 col-12 col-md-4">
+                                        <span class="text-gray-500">ایمیل:</span>
+                                        <span class="text-gray-700">{{ user.email }}</span>
+                                    </div>
+                                    <div class="d-flex p-1 justify-between py-2 border-b border-gray-200 last:pb-0 col-12 col-md-4">
+                                        <span class="text-gray-500">تلفن همراه:</span>
+                                        <span class="text-gray-700">{{ user.cellphone }}</span>
+                                    </div>
+                                    <div class="d-flex p-1 justify-between py-2 border-b border-gray-200 last:pb-0 col-12 col-md-4">
+                                        <span class="text-gray-500">تاریخ عضویت:</span>
+                                        <span class="text-gray-700"> {{ user.date_joined|jformat:"%Y/%m/%d" }} </span>
+                                    </div>
+                                    <div class="d-flex p-1 justify-between py-2 border-b border-gray-200 last:pb-0 col-12 col-md-4">
+                                        <span class="text-gray-500">استان:</span>
+                                        <span class="text-gray-700"> {{ user.state.parent.title }} </span>
+                                    </div>
+                                    <div class="d-flex p-1 justify-between py-2 border-b border-gray-200 last:pb-0 col-12 col-md-4">
+                                        <span class="text-gray-500">شهر:</span>
+                                        <span class="text-gray-700"> {{ user.state.title }} </span>
+                                    </div>
+                                </div>
+                                <div class="salahiat">
+                                    <span>صلاحیت ها :</span>
+                                    <ul>
+                                    {% for job in userJob %}
+                                       <li>
+                                        {{ job.jobField.title }}
+                                       </li>
+                                    {% endfor %}
+                                    </ul>
                                 </div>
                             </div>
                         </div>

@@ -29,7 +29,6 @@ class JobField(models.Model):
 
     def get_child_competence(self):
         item = JobField.objects.filter(parent=self)
-        print(item)
         for i in item:
             if i.competence:
                 return self

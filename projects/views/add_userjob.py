@@ -11,7 +11,6 @@ def adduserjobfield(request):
     if request.method == 'POST':
         context['request'] = {}
         context['request']['expert-list'] = request.POST.get('expert-list')
-        print('Conxt', context['request']['expert-list'])
         return HttpResponseRedirect(reverse('projects:adduser-jobs', args=[int(context['request']['expert-list'])]))
     return render(request, 'project/add-userjob.html', context)
 

@@ -50,7 +50,6 @@ def jobs_api_search2(request, parent=None):
         context['main'] = []
         context['main_parent'] = []
         job_field = JobField.objects.filter(parent=JobField.objects.get(id=parent).parent)
-        print(job_field)
         context['select_parent_parent'] = job_field[0].parent.parent.id
         context['select_parent'] = job_field[0].parent.id
         context['selecte'] = parent
