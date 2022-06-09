@@ -2,9 +2,29 @@
 {% load static %}
 {% block title %}تگ ها - آرمان سنجش{% endblock %}
 {% load jformat %}
-{% block css %}{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/forms/select/select2.min.css' %}">
+    <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            float: right;
+        }
+        .select2-container .select2-search--inline {
+            float: right !important;
+        }
+        .select2-selection.select2-selection--multiple {
+            width: 600px !important;
+            text-align: right !important;
+            direction: rtl !important;
+        }
+        .tagset .select2{
+            direction: rtl !important;
+        }
+    </style>
+{% endblock %}
 {% block js %}
     <script src="{% static "app-assets/js/scripts/tooltip/tooltip.min.js" %}"></script>
+    <script src="{% static 'app-assets/vendors/js/forms/select/select2.full.min.js' %}"></script>
+    <script src="{% static 'app-assets/js/scripts/forms/select/form-select2.min.js' %}"></script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -34,21 +54,20 @@
                 <h5>{{ salahiat.title }}</h5>
                     <div class="col-12">
                         <form method="POST" class="row">
-                        {% csrf_token %}
-                            <div class="w-100">
-                                <button class="btn btn-primary float-right mr-5" type="submit">ذخیره</button>
-                            </div>
-                            {% for tag in tags %}
+                            {% csrf_token %}
                             <div class="col-12 col-md-3">
-                                <div class="">
-                                    <div class='form-check form-check-primary pt-1'>
-                                        <input name='tag' id="tag{{ tag.id }}" type='checkbox' {% if tag in tagin %}checked{% endif %} value="{{ tag.id }}" />
-                                        <label for="tag{{ tag.id }}">{{ tag.title }}</label>
+                                <div class="w-100 tagset">
+                                    <div class="form-group">
+                                    <label class="form-label-outlined" for="tag">انتخاب تگ<span class="text-danger">*</span></label>
+                                        <select class="select2 form-control tagselect" name="tag" multiple="multiple">
+                                            {% for tag in tags %}
+                                                <option  value="{{ tag.id }}" {% if tag in tagin %}selected aria-selected="true"{% endif %}>{{ tag.title }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                        <div class="w-100 mb-5">
+                            <div class="w-100 mb-5">
                                 <button class="btn btn-primary float-right mr-5" type="submit">ذخیره</button>
                             </div>
                         </form>

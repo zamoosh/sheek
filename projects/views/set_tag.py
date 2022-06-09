@@ -8,6 +8,7 @@ def set_tag(request, pk):
     context['tags'] = Tag.objects.all()
     context['tagin'] = Tag.get_tag(context['salahiat'])
     if request.method == "POST":
+        print(request.POST.getlist('tag'))
         selected_tags = Tag.objects.filter(id__in=request.POST.getlist('tag')).values_list('id', flat=True)
         common = job.tag_set.filter(id__in=selected_tags)
         common_ids = common.values_list('id', flat=True)
