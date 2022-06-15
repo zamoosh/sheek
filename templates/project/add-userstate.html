@@ -48,6 +48,7 @@
         </script>
 
         <script>
+        let selectedStates;
             $("#state").change(function () {
                 $.ajax({
                     url: '{% url 'state:stateapi' %}' + $("#state").val() + '/',
@@ -57,7 +58,14 @@
                     success: function (data) {
                         $("#show_experts").empty();
                         data.forEach(function (element) {
-                            $("#show_experts").append("<div class='form-check show-state form-check-primary pt-1'><input name='userstate' id='" + element.id + "' type='checkbox' value='" + element.id + "' /> <label for='" + element.id + "'>" + element.title + "</label> </div>");
+                            var checked = '';
+                            selectedStates.forEach(function (el) {
+                                if (el.parent_id === element.id) {
+                                    checked = 'checked';
+                                }
+                            });
+                            {#$("#show_experts").append("<div class='form-check show-state form-check-primary pt-1'><input name='userstate' id='" + element.id + "' type='checkbox' value='" + element.id + "' /> <label for='" + element.id + "'>" + element.title + "</label> </div>");#}
+                            $("#show_experts").append(`<div class='form-check show-state form-check-primary pt-1'><input name='userstate' id='${element.id}' type='checkbox' value='${element.id}' ${checked}/> <label for='${element.id}'>${element.title}</label> </div>`);
                         });
                     },
                     error: function (error) {
@@ -96,6 +104,7 @@
                 $("#show_history").empty();
                 let url = "{% url 'projects:dellstate' 1 %}";
                 url = url.substring(0, url.length - 2);
+                selectedStates = data;
                 console.log(data)
                 data.forEach(function (element) {
                     $("#show_history").append("<div class='form-check show-state form-check-primary pt-1'><span>" + element.title + "</span> <a href='" + url + element.id + "/'><i class=' bx bx-x font-medium-1'> </i></a> </div>");

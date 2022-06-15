@@ -7,7 +7,7 @@ def adduserjobfield(request):
     context = {}
     context['old'] = UserJobField.objects.values('jobField').filter(owner=request.user)
     context['beold'] = JobField.objects.filter(jobfield__jobfield__in=context['old'], parent=None).distinct()
-    context['jobfields'] = JobField.objects.filter(parent=None).exclude(jobfield__jobfield__in=context['old'])
+    context['jobfields'] = JobField.objects.filter(parent=None, status=True).exclude(jobfield__jobfield__in=context['old'])
     if request.method == 'POST':
         context['request'] = {}
         context['request']['expert-list'] = request.POST.get('expert-list')
