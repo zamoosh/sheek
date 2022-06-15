@@ -61,7 +61,7 @@
                                     <label class="form-label-outlined" for="tag">انتخاب تگ<span class="text-danger">*</span></label>
                                         <select class="select2 form-control tagselect" name="tag" multiple="multiple">
                                             {% for tag in tags %}
-                                                <option  value="{{ tag.id }}" {% if tag in tagin %}selected aria-selected="true"{% endif %}>{{ tag.title }}</option>
+                                                <option value="{{ tag.id }}" {% if tag in tagin %}selected aria-selected="true"{% endif %}>{{ tag.title }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>

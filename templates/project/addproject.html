@@ -213,7 +213,7 @@
         });
     </script>
     <script>
-        mamad = function (mamadvar) {
+        function mamad (mamadvar) {
             $.ajax({
                 url: '{% url 'projects:jobs_api_search' %}' + mamadvar + '/',
                 type: "GET",
@@ -239,7 +239,7 @@
                 }
             });
         }
-        mamad2 = function (mamadvar) {
+        function mamad2 (mamadvar) {
             $.ajax({
                 url: '{% url 'projects:jobs_api_search2' %}' + mamadvar + '/',
                 type: "GET",

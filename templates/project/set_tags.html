@@ -30,6 +30,28 @@
                 </div>
             </div>
             <div class="content-body">
+
+                <section class="faq-search">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card faq-bg bg-transparent box-shadow-0 p-1 p-md-5">
+                                <div class="card-body p-0">
+                                    <h1 class="faq-title text-center mb-3">انتساب تگ</h1>
+                                    {% if salahiats %}
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <fieldset class="faq-search-width form-group position-relative w-50 mx-auto">
+                                                <input type="text" name="searchbar" class="form-control round form-control-lg shadow pl-2"
+                                                       id="searchbar" placeholder=" جستجو در صلاحیت ها ..."
+                                                       value="{% if searchbar %}{{ searchbar }}{% endif %}">
+                                            </fieldset>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <div class="row">
                     <div class="col-12 row">
                         {% for salahiat in salahiats %}

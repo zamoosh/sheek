@@ -29,14 +29,15 @@
                                 <div class="card-body p-0">
                                     <h1 class="faq-title text-center mb-3">{% if group %}{{ group.title }}{% else %}قوانین و آیین نامه ها{% endif %}</h1>
                                     {% if group %}
-                                    <form method="post">
-                                        {% csrf_token %}
-                                        <fieldset class="faq-search-width form-group position-relative w-50 mx-auto">
-                                            <input type="text" name="searchbar" class="form-control round form-control-lg shadow pl-2"
-                                                   id="searchbar" placeholder=" جستجو در {{ group.title }} ..." value="{% if searchbar %}{{ searchbar }}{% endif %}">
-                                        </fieldset>
-                                    </form>
-                                {% endif %}
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <fieldset class="faq-search-width form-group position-relative w-50 mx-auto">
+                                                <input type="text" name="searchbar" class="form-control round form-control-lg shadow pl-2"
+                                                       id="searchbar" placeholder=" جستجو در {{ group.title }} ..."
+                                                       value="{% if searchbar %}{{ searchbar }}{% endif %}">
+                                            </fieldset>
+                                        </form>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -53,22 +54,22 @@
                                     </div-->
                                     <div class="col-12">
                                         <div class="row">
-                                        {% if not group %}
-                                            {% for law in laws %}
-                                                <div class="col">
-                                                    <div class="card text-center cent-text1">
-                                                        <div class="card-body">
-                                                            <div class="badge-circle badge-circle-lg badge-circle-light-info mx-auto my-1">
-                                                                <i class="bx bx-edit-alt font-medium-5"></i>
+                                            {% if not group %}
+                                                {% for law in laws %}
+                                                    <div class="col">
+                                                        <div class="card text-center cent-text1">
+                                                            <div class="card-body">
+                                                                <div class="badge-circle badge-circle-lg badge-circle-light-info mx-auto my-1">
+                                                                    <i class="bx bx-edit-alt font-medium-5"></i>
+                                                                </div>
+                                                                <a href="{% url 'law:law' law.id %}"><p
+                                                                        class="text-muted mb-0 line-ellipsis">{{ law.title }}</p>
+                                                                </a>
                                                             </div>
-                                                            <a href="{% url 'law:law' law.id %}"><p
-                                                                    class="text-muted mb-0 line-ellipsis">{{ law.title }}</p>
-                                                            </a>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="text-center p-md-4 p-sm-1 py-1 p-0">
@@ -76,8 +77,8 @@
                                     </div>
                                     {% if request.method == "POST" %}{% if not lawsAcardeon %}
                                         <div class="alert alert-danger mb-2" role="alert">
-                                                        هیچ موردی برای {{ searchbar }} یافت نشد
-                                                    </div>
+                                            هیچ موردی برای {{ searchbar }} یافت نشد
+                                        </div>
                                     {% endif %}{% endif %}
                                     <div id="accordion-icon-wrapper1"
                                          class="collapse-icon accordion-icon-rotate">
