@@ -4,7 +4,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @login_required
 def jobs(request):
     context = {}
-    context['jobs'] = JobField.objects.filter(status=True).order_by('-created_at')
+    q = Q(status=True)
+    if request.method == 'POST':
+        context['searchbar'] = request.POST.get('searchbar')
+        q = q & Q(title__icontains=context['searchbar'])
+    context['jobs'] = JobField.objects.filter(q).order_by('-created_at')
     page = request.GET.get('page', 1)
     paginator = Paginator(context['jobs'], 50)
     try:

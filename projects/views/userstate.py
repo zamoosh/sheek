@@ -84,5 +84,5 @@ def get_userstateapi(request, id):
     if request.method == "GET":
         user_state = UserState.objects.filter(userjobfield=id)
         for i in user_state:
-            state_list.append({'id': i.pk, 'title': i.state.title})
+            state_list.append({'id': i.pk, 'title': i.state.title, 'parent_id': i.state_id})
     return JsonResponse(state_list, safe=False)
