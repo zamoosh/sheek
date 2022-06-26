@@ -60,6 +60,8 @@ urlpatterns = [
     path('tags/', tags, name="tags"),
     path('set-tags/', set_tags, name="set_tags"),
     path('set-tag/<int:pk>/', set_tag, name="set_tag"),
+    path('set-tag/api/<int:pk>/', set_tag_api, name="set_tag_api"),
+    path('set-tag/toggle/api/<int:pk>/<int:tpk>/', set_tag_toggle_api, name="set_tag_toggle_api"),
 ]
 
 app_name = ProjectsConfig.name

@@ -20,3 +20,5 @@ from .expert_profile import *
 from .set_tags import *
 from .set_tag import *
 from .tags import *
+from .set_tag_api import set_tag_api
+from .set_tag_toggle_api import set_tag_toggle_api

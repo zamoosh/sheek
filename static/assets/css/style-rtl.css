@@ -755,9 +755,30 @@ ul{
   width: 0;
 }
 
-
-
-
+.toasts-success {
+  width: max-content;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #dff9ec;
+  border-color: #c4f4dc;
+  color: #39da8a;
+  position: absolute;
+    left: 5%;
+    margin: auto;
+    top: 15%;
+}
+.toasts-danger {
+  width: max-content;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #ffe5e5;
+  border-color: #ffcece;
+  color: #ff5b5c;
+  position: absolute;
+    left: 5%;
+    margin: auto;
+    top: 15%;
+}
 
 
 

@@ -4,27 +4,88 @@
 {% load jformat %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/forms/select/select2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/toastr.css' %}">
     <style>
         .select2-container--default .select2-selection--multiple .select2-selection__choice {
             float: right;
         }
+
         .select2-container .select2-search--inline {
             float: right !important;
         }
+
         .select2-selection.select2-selection--multiple {
             width: 600px !important;
             text-align: right !important;
             direction: rtl !important;
         }
-        .tagset .select2{
+
+        .tagset .select2 {
             direction: rtl !important;
         }
     </style>
 {% endblock %}
 {% block js %}
+    <script src="{% static 'app-assets/vendors/js/extensions/toastr.min.js' %}"></script>
     <script src="{% static "app-assets/js/scripts/tooltip/tooltip.min.js" %}"></script>
     <script src="{% static 'app-assets/vendors/js/forms/select/select2.full.min.js' %}"></script>
     <script src="{% static 'app-assets/js/scripts/forms/select/form-select2.min.js' %}"></script>
+    <script>
+        var timeOut;
+        $('#searchin').keyup(function () {
+            clearTimeout(timeOut)
+            timeOut = setTimeout(function () {
+                var url = '{% url 'projects:set_tag_api' 1252 %}'.replace(1252, {{ salahiat.id }});
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        title: $("#searchin").val(),
+                    },
+                    send: function (xhr) {
+                    },
+                    success: function (data) {
+                        $("#show_tagha").empty();
+                        data.forEach(data => {
+                            $("#show_tagha").append(`<div class="col-12 col-md-3"><input onclick="toggleTag(${data.id})" name='tag' id="tag${data.id}" type='checkbox' ${(data.checked) ? 'checked' : ''} ${(data.checked) ? 'checked' : ''} value="${data.id}" /> <label for="tag${data.id}">${data.title}</label></div>`);
+                        })
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }, 500);
+        });
+        function toggleTag(tagId) {
+
+            var url = '{% url 'projects:set_tag_toggle_api' 1252 1253 %}'.replace(1252, {{ salahiat.id }}).replace(1253, tagId);
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {},
+                send: function (xhr) {
+                },
+                success: function (data) {
+                    var toasts;
+                    console.log(data[0])
+                    if (data[0]) {
+                        toasts = document.getElementsByClassName("toasts-success")[0];
+                    } else {
+                        toasts = document.getElementsByClassName("toasts-danger")[0];
+                    }
+
+                    toasts.style.display = "block";
+                    setTimeout(function () {
+                        toasts.style.display = 'none';
+                    }, 2000)
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+        }
+    </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
@@ -49,31 +110,41 @@
                     </div>
                 </div>
             </div>
+
             <div class="content-body">
                 <div class="row">
-                <h5>{{ salahiat.title }}</h5>
+                    <h5>{{ salahiat.title }}</h5>
                     <div class="col-12">
-                        <form method="POST" class="row">
-                            {% csrf_token %}
-                            <div class="col-12 col-md-3">
-                                <div class="w-100 tagset">
-                                    <div class="form-group">
-                                    <label class="form-label-outlined" for="tag">انتخاب تگ<span class="text-danger">*</span></label>
-                                        <select class="select2 form-control tagselect" name="tag" multiple="multiple">
-                                            {% for tag in tags %}
-                                                <option value="{{ tag.id }}" {% if tag in tagin %}selected aria-selected="true"{% endif %}>{{ tag.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="first-name-vertical">برای انتساب تگ در کادر زیر یک تگ را جستجو کنید</label>
+                                <div class="input-group mt-1">
+                                    <input class="form-control" type="text" name="searchin"
+                                           id="searchin" placeholder="جستجو در تگ ها ...">
                                 </div>
                             </div>
-                            <div class="w-100 mb-5">
-                                <button class="btn btn-primary float-right mr-5" type="submit">ذخیره</button>
+                        </div>
+                        <form method="POST" class="row">
+                            {% csrf_token %}
+                            <div class="">
+                                <div id="show_tagha" class='row'></div>
                             </div>
+                            <!--div class="w-100 mb-5">
+                                <button class="btn btn-primary float-right mr-5" type="submit">ذخیره</button>
+                            </div-->
                         </form>
                     </div>
                 </div>
+
             </div>
+
+            <div class="toasts-success" style="display: none">
+                تگ با موفقیت ثبت شد
+           </div>
+            <div class="toasts-danger" style="display: none">
+                تگ با موفقیت حذف شد
+           </div>
+
         </div>
     </div>
     </div>
