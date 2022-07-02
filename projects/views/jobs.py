@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def jobs(request):
     context = {}
     q = Q(status=True)
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST.get('searchbar'):
         context['searchbar'] = request.POST.get('searchbar')
         q = q & Q(title__icontains=context['searchbar'])
     context['jobs'] = JobField.objects.filter(q).order_by('-created_at')
