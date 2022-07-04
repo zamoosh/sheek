@@ -23,12 +23,12 @@ class JobField(models.Model):
         self.save()
 
     def get_child(self):
-        item = JobField.objects.filter(parent=self, competence=False)
+        item = JobField.objects.filter(parent=self, competence=False, status=True)
         if not len(item):
             return self
 
     def get_child_competence(self):
-        item = JobField.objects.filter(parent=self)
+        item = JobField.objects.filter(parent=self, status=True)
         for i in item:
             if i.competence:
                 return self

@@ -7,7 +7,7 @@ def jobs(request):
     q = Q(status=True)
     if request.method == 'POST' and request.POST.get('searchbar'):
         context['searchbar'] = request.POST.get('searchbar')
-        q = q & Q(title__icontains=context['searchbar'])
+        q = q & Q(title__icontains=context['searchbar'], status=True)
     context['jobs'] = JobField.objects.filter(q).order_by('-created_at')
     page = request.GET.get('page', 1)
     paginator = Paginator(context['jobs'], 50)
