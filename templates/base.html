@@ -35,6 +35,9 @@
 <body{% block bodyclass %}{% endblock %}>
 {% block body %}{% endblock %}
 {% block js %}{% endblock %}
+<script>
+    $(`.main-menu-content a[href='${window.location.pathname}']`).parent().addClass('active');
+</script>
 </body>
 
 <!-- END: Body-->
