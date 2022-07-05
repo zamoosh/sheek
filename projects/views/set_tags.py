@@ -7,6 +7,6 @@ def set_tags(request):
     q = Q(competence=True)
     if request.method == 'POST':
         context['searchbar'] = request.POST.get('searchbar')
-        context['salahiats'] = JobField.objects.filter(title__icontains=context['searchbar'], status=True)
-    context['salahiats'] = JobField.objects.filter(status=True)
+        q =Q(title__icontains=context['searchbar'])
+    context['salahiats'] = JobField.objects.filter(q, status=True)
     return render(request, 'project/set_tags.html', context)
