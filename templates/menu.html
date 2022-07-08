@@ -2,31 +2,31 @@
 {% load static %}
 <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
-        <ul class="nav navbar-nav flex-row">
-            <li class="nav-item mr-auto"><a class="navbar-brand"
+        <ul class="nav navbar-nav flex-row h-100">
+            <li class="nav-item mr-auto my-auto"><a class="navbar-brand"
                                             href="#">
                 <div class="brand-logo">
                     <img src="{% static "app-assets/images/logo/logo.png" %}" alt="لوگو">
                 </div>
                 <h2 class="brand-text mb-0">آرمان سنجش</h2></a></li>
-            <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i
+            <li class="nav-item nav-toggle my-auto"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i
                     class="bx bx-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i
                     class="toggle-icon bx bx-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary"
                     data-ticon="bx-disc"></i></a></li>
         </ul>
     </div>
     <div class="shadow-bottom"></div>
-    <div class="main-menu-content">
+    <div class="main-menu-content mt-2">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
         {% if request.user.is_superuser %}
-            <li class=" nav-item"><a href="#"><i class="bx bxs-user-detail"></i><span
+            <li class="nav-item"><a href="#"><i class="bx bxs-user-detail"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">کاربران</span></a>
                 <ul class="menu-content">
                     {% if request.user.is_superuser %}
-                        <li class=" nav-item"><a href="{% url 'client:admins' %}"><i class="bx bx-user-plus"></i><span
+                        <li class="nav-item"><a href="{% url 'client:admins' %}"><i class="bx bx-user-plus"></i><span
                                 class="menu-title text-truncate" data-i18n="Dashboard">مدیران</span></a></li>{% endif %}
                     {% if request.user.is_superuser %}
-                        <li class=" nav-item"><a href="{% url 'client:experts' %}"><i class="bx bx-user-voice"></i><span
+                        <li class="nav-item"><a href="{% url 'client:experts' %}"><i class="bx bx-user-voice"></i><span
                                 class="menu-title text-truncate" data-i18n="Dashboard">کارشناسان</span></a>
                         </li>{% endif %}
                     {% if request.user.is_superuser %}
@@ -40,29 +40,29 @@
                 </ul>
             </li>
         {% endif %}
-            <li class=" nav-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i><span
+            <li class="nav-item"><a href="{% url 'client:dashboard' %}"><i class="bx bx-home-alt"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">داشبورد</span></a></li>
             {% if request.user.is_superuser %}
-                <li class=" nav-item"><a href="{% url 'projects:admin_complaints' %}"><i class="bx bx-support"></i><span
+                <li class="nav-item"><a href="{% url 'projects:admin_complaints' %}"><i class="bx bx-support"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">شکایات</span></a></li>{% endif %}
             {% if request.user.is_superuser %}
                 <li class="nav-item"><a href="{% url 'log:reports' %}"><i class="bx bx-user-pin"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">گزارشات</span></a></li>{% endif %}
             {% if request.user.is_superuser %}
-                <li class=" nav-item"><a href="{% url 'state:state' %}"><i class="bx bx-location-plus"></i><span
+                <li class="nav-item"><a href="{% url 'state:state' %}"><i class="bx bx-location-plus"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">شهر ها و استان ها</span></a>
                 </li>{% endif %}
             {% if request.user.is_superuser %}
-                <li class=" nav-item"><a href="{% url 'projects:jobs' %}"><i class="bx bx-briefcase-alt"></i><span
+                <li class="nav-item"><a href="{% url 'projects:jobs' %}"><i class="bx bx-briefcase-alt"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">حوزه های فعالیت</span></a></li>{% endif %}
             {% if request.user.is_superuser %}
-                <li class=" nav-item"><a href="{% url 'projects:experts' %}"><i class="bx bx-location-plus"></i><span
+                <li class="nav-item"><a href="{% url 'projects:experts' %}"><i class="bx bx-location-plus"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">تایید کارشناسان</span></a>
                 </li>{% endif %}
             {% if request.user.has_jobField or request.user.is_superuser  %}
-                <li class=" nav-item"><a href="{% url 'projects:tags' %}"><i class="bx bx-tag"></i><span
+                <li class="nav-item"><a href="{% url 'projects:tags' %}"><i class="bx bx-tag"></i><span
                         class="menu-title text-truncate" data-i18n="Dashboard">تگ ها</span></a></li>{% endif %}
-            <li class=" nav-item"><a href="{% url 'projects:userjob' %}"><i class="bx bxs-user-detail"></i><span
+            <li class="nav-item"><a href="{% url 'projects:userjob' %}"><i class="bx bxs-user-detail"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">کارشناسی</span></a>
                 <ul class="menu-content">
                     {% if request.user.has_jobField or request.user.is_superuser %}
@@ -82,7 +82,7 @@
                         </li>{% endif %}
                 </ul>
             </li>
-            <li class=" nav-item"><a href="{% url 'projects:projects' %}"><i class="bx bxs-user-detail"></i><span
+            <li class="nav-item"><a href="{% url 'projects:projects' %}"><i class="bx bxs-user-detail"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">پروژه ها</span></a>
                 <ul class="menu-content">
                     <li><a class="d-flex align-items-center" href="{% url 'projects:projects' %}"><i
@@ -103,7 +103,7 @@
                         </li>{% endif %}
                 </ul>
             </li>
-            <li class=" nav-item"><a href="{% url 'client:profile' %}"><i class="bx bx-user"></i><span
+            <li class="nav-item"><a href="{% url 'client:profile' %}"><i class="bx bx-user"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">حساب کاربری</span></a>
                 <ul class="menu-content">
                     <li><a class="d-flex align-items-center" href="{% url 'client:profile' %}"><i
@@ -120,7 +120,7 @@
                     </li>
                 </ul>
             </li>
-            <li class=" nav-item"><a href="{% url 'law:laws' %}"><i class="bx bx-location-plus"></i><span
+            <li class="nav-item"><a href="{% url 'law:laws' %}"><i class="bx bx-location-plus"></i><span
                     class="menu-title text-truncate" data-i18n="Dashboard">قوانین</span></a></li>
         </ul>
     </div>
