@@ -1,8 +1,36 @@
 {% extends "base.html" %}
 {% load static %}
+{% load jformat %}
 {% block title %}حساب کاربری آرمان سنجش{% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
     footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "assets/css/owl.carousel.min.css" %}">
+    <link rel="stylesheet" href="{% static "assets/css/owl.theme.default.css" %}">
+{% endblock %}
+{% block js %}
+
+    <script src="{% static "assets/js/owl.carousel.min.js" %}"></script>
+    <script>
+        $('#projects-carousel, #projects-carousel2').owlCarousel({
+            rtl: true,
+            loop: false,
+            margin: 10,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 2.5,
+                },
+                768: {
+                    items: 2.5,
+                },
+                1000: {
+                    items: 2.5,
+                }
+            }
+        })
+    </script>
+{% endblock %}
 {% block body %}
     {% include "header.html" %}
     <!-- BEGIN: Content-->
@@ -11,8 +39,199 @@
             <div class="content-body"><!-- Dashboard Analytics Start -->
                 <section id="dashboard-analytics">
                     <section id="dashboard-analytics">
+                        <div class="row my-2">
+                            <div class="col-12 col-md-8">
+                                <div class="card new-theme-card mb-0 h-100">
+                                    <div class="card-header">
+                                        <span>درخواست کارشناسی</span>
+                                        {% if projects_progress %}<span><a href="{% url 'projects:expert-projects' %}">همه درخواست ها</a></span>{% endif %}
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-12">
+                                            {% for projects_progres in projects_progress %}
+                                                <a href="{% url 'projects:view_project' projects_progres.id %}">
+                                                    <span class="row user-jobs-row">
+                                                        <span>
+                                                            <strong>{{ projects_progres.jobField.title }}</strong>
+                                                            <span>{{ projects_progres.title }}</span>
+                                                        </span>
+                                                        <span class="spacer"></span>
+                                                        <span class="d-flex align-items-center">
+                                                            <i class="bx bx-calendar"></i>
+                                                            <span class="font-size-12">{{ projects_progres.update_at|jformat:"%Y/%m/%d" }}</span>
+                                                            <i class="bx bx-arrow-back font-weight-bolder ml-1"></i>
+                                                        </span>
+                                                    </span>
+                                                </a>
+                                            {% empty %}
+                                                <a href="{% url 'client:expert_request' %}"></a>
+                                                <span class="row user-jobs-row">
+                                                    <span>
+                                                        <span>ارتقا به کارشناسی</span>
+                                                    </span>
+                                                    <span class="spacer"></span>
+                                                    <span class="d-flex align-items-center">
+                                                        <i class="bx bx-arrow-back font-weight-bolder ml-1"></i>
+                                                    </span>
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="card new-theme-card blue-top mb-0">
+                                    <div class="card-body">
+                                        <div class="col-6 text-center mx-auto">
+                                            <span>
+                                                <img class="round" src="
+                                                        {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'app-assets/images/portrait/small/avatar-s-3.jpg' %}{% endif %}"
+                                                     alt="avatar"
+                                                     height="130" width="130">
+                                            </span>
+                                            <div class="mt-2" style="display: grid;">
+                                                <span class="user-name mx-auto"><small>{{ request.user.username }}</small></span>
+                                                <span class="user-status text-muted mx-auto font-weight-bold">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{% url 'client:profile' %}">
+                                            <span class="d-flex">
+                                                <span><i class="bx bx-cog font-weight-bolder"></i></span>
+                                                <span class="spacer"></span>
+                                                <span class="font-size-15">ویرایش پروفایل</span>
+                                                <span class="spacer"></span>
+                                            </span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-12 col-md-6">
+                                <div class="card new-theme-card blue-bottom mb-0 h-100">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <div class="icon-box"><i class="bx bxs-file font-weight-bolder"></i></div>
+                                            <span class="mx-1">پروژه های جدید</span>
+                                        </div>
+                                        {% if new_projects %}<span><a class="btn btn-new-primary" href="{% url 'projects:userjob' %}">همه پروژه ها</a></span>{% endif %}
+                                    </div>
+                                    <div class="card-body pb-0">
+                                        <div class="col-12">
+                                            <div id="projects-carousel" class="owl-carousel owl-theme">
+
+                                                {% for new_project in new_projects %}
+                                                    <div class="item items-owl projects-carousel-item">
+                                                        <div class="card mb-0 bg-transparent">
+                                                            <div class="card-header pb-0">
+                                                                <div style="display: grid">
+                                                                    <span class="project-id mb-1">{{ new_project.id }}</span>
+                                                                    <span>{{ new_project.jobField.title }} > {{ new_project.title }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer new-card-footer">
+                                                                <div class="d-flex align-items-center">
+                                                                    <span class="font-weight-light font-size-12 project-status">
+                                                                    </span>
+                                                                    <div class="spacer"></div>
+                                                                    <span><i class="bx bx-arrow-back font-weight-bolder"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% empty %}
+                                                    پروژه جدیدی وجود ندارد.
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="card new-theme-card green-bottom mb-0 h-100">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <div class="icon-box"><i class="bx bxs-file font-weight-bolder"></i></div>
+                                            <span class="mx-1">پروژه های در حال انجام</span>
+                                        </div>
+                                        {% if projects_progress %}<span><a class="btn btn-new-primary" href="{% url 'projects:userjob' %}">همه پروژه ها</a></span>{% endif %}
+                                    </div>
+                                    <div class="card-body pb-0">
+                                        <div class="col-12">
+                                            <div id="projects-carousel2" class="owl-carousel owl-theme">
+
+                                                {% for project_progress in projects_progress %}
+                                                    <div class="item items-owl projects-carousel-item">
+                                                        <div class="card mb-0 bg-transparent">
+                                                            <div class="card-header pb-0">
+                                                                <div style="display: grid">
+                                                                    <span class="project-id mb-1">{{ project_progress.id }}</span>
+                                                                    <span>{{ project_progress.jobField.title }} > {{ project_progress.title }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer new-card-footer">
+                                                                <div class="d-flex align-items-center">
+                                                                    <span class="font-weight-light font-size-12 project-status">
+                                                                    </span>
+                                                                    <div class="spacer"></div>
+                                                                    <span><i class="bx bx-arrow-back font-weight-bolder"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% empty %}
+                                                    پروژه در حال انجام وجود ندارد.
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex box box-purple">
+                                    <a class="text-center" href="{% url 'law:laws' %}">
+                                        <i class="bx bxs-check-shield font-weight-bolder mb-2 text-white"></i>
+                                        <h4 class="text-white">قوانین</h4>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex box box-green">
+                                    <a class="text-center" href="#">
+                                        <i class="bx bxs-heart font-weight-bolder mb-2 text-white"></i>
+                                        <h4 class="text-white">شبکه های اجتماعی</h4>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex box box-blue">
+                                    <a class="text-center" href="{% url 'law:laws' %}">
+                                        <i class="bx bxs-file font-weight-bolder mb-2 text-white"></i>
+                                        <h4 class="text-white">درباره آرمان سنجش</h4>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex box box-red">
+                                    <a class="text-center" href="{% url 'law:laws' %}">
+                                        <i class="bx bxs-phone-call font-weight-bolder mb-2 text-white"></i>
+                                        <h4 class="text-white">تماس با ما</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--
                         <div class="row">
-                            <!-- Website Analytics Starts-->
                             {% for i in user_jobs %}
                                 {% if not i.return_userState|length %}
                                     <div class="col-12">
@@ -37,18 +256,19 @@
                         </div>
                         <div class="row">
                             {% for law in laws %}
-                            <div class="col-xl-2 col-md-4 col-sm-6">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <div class="badge-circle badge-circle-lg badge-circle-light-info mx-auto my-1">
-                                            <i class="bx bx-edit-alt font-medium-5"></i>
+                                <div class="col-xl-2 col-md-4 col-sm-6">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <div class="badge-circle badge-circle-lg badge-circle-light-info mx-auto my-1">
+                                                <i class="bx bx-edit-alt font-medium-5"></i>
+                                            </div>
+                                            <a href="{% url 'law:law' law.id %}"><p class="text-muted mb-0 line-ellipsis">{{ law.title }}</p></a>
                                         </div>
-                                        <a href="{% url 'law:law' law.id %}"><p class="text-muted mb-0 line-ellipsis">{{ law.title }}</p></a>
                                     </div>
                                 </div>
-                            </div>
                             {% endfor %}
                         </div>
+                    -->
                     </section>
                 </section>
             </div>
