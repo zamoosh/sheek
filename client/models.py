@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from unidecode import unidecode
 from PIL import Image
 from state.models import State
+from library.ippanel import IpPanel
 
 
 def user_image(instance, filename):
@@ -51,13 +52,48 @@ class User(AbstractUser):
             except:
                 pass
 
+    def create_verificationcode(self):
+        self.username = unidecode(self.username)
+        VerificationCode.objects.filter(name=self.username).delete()
+        vc = VerificationCode(name=self.username)
+        vc.save()
+        return str(vc.code)
+
+    def get_verificationcode(self):
+        VerificationCode.objects.filter(name=self.username, trying__gt=5).delete()
+        try:
+            vc = VerificationCode.objects.get(name=self.username)
+            vc.trying += 1
+            vc.save()
+            return str(vc.code)
+        except (VerificationCode.DoesNotExist, Exception):
+            pass
+        return None
+
+    def sendsms(self):
+        if not self.cellphone:
+            return False
+        code = self.create_verificationcode()
+        try:
+            values = {
+                'verification-code': self.get_verificationcode(),
+                'name': self.get_full_name() if self.first_name and self.last_name else self.cellphone
+            }
+            sms = IpPanel()
+            sms.send_with_pattern(IpPanel.PATTERNS.get('enter_code'), self.cellphone, values)
+        except (Exception, Exception):
+            print('احتمالا اعتبار سامانه‌ی پیامکی تمام شده است!')
+        print(code)
+
 
 class VerificationCode(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
+    name = models.CharField(max_length=100, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     code = models.IntegerField()
     trying = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        self.name = unidecode(self.name)
+        import random
+        if not self.code:
+            self.code = random.randint(1000, 9999)
         super(VerificationCode, self).save()

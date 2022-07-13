@@ -13,6 +13,7 @@ django_jalali
 suds-py3
 requests
 pytz
+ippanel
 
 pandas
 xlrd==1.2.0

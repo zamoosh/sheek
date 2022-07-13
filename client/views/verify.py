@@ -24,28 +24,19 @@ def verify(request):
                             context['active'] = False
                     else:
                         print("The username and password were incorrect.")
-                else:
-                    user = User.objects.create_user(
-                        cellphone=context['cellphone'],
-                        username=context['cellphone']
-                    )
-                    user.save()
-                    del request.session['user']
-                    context['register'] = 1
-                    if context['register']:
-                        if user.is_active:
-                            login(request, user)
-                            return HttpResponseRedirect("/accounts/profile/")
             else:
                 context['error'] = 1
         else:
-            import random
+            if not User.objects.filter(username=context['cellphone']).exists():
+                u = User()
+                u.cellphone = context['cellphone']
+                u.username = context['cellphone']
+                u.save()
+            u = User.objects.get(username=context['cellphone'])
             try:
-                sms = Smsir()
-                # key = str(random.randrange(10000, 99999))
-                key = 1234
+                u.sendsms()
+                key = u.get_verificationcode()
                 request.session['key'] = key
-                sms.sendwithtemplate({'verificationCode': key}, context['cellphone'], 55907)
                 return render(request, "client/verify.html", context)
             except:
                 context['sms'] = False
