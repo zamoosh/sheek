@@ -34,12 +34,24 @@ def adduserstate(request, id):
     if request.method == "POST":
         context['userstate'] = request.POST.getlist('userstate')
         print(context['userstate'])
-        for i in context['userstate']:
-            user_state = UserState()
-            user_state.userjobfield_id = id
-            user_state.owner_id = request.user.id
-            user_state.state_id = i
-            user_state.save()
+        user_states_selected = []
+        u = User.objects.get(id=request.user.id)
+        for userjobfield in u.userjobfield_set.all():
+            for userstate in userjobfield.userstate_set.all():
+                user_states_selected.append(userstate.state.title)
+        states = State.objects.filter(id__in=context['userstate']).values_list('title', flat=True)
+        for s in states:
+            if s not in user_states_selected:
+                user_state = UserState()
+                user_state.userjobfield_id = id
+                user_state.state_id = State.objects.get(title=s, parent__isnull=False).id
+                user_state.save()
+        # for i in context['userstate']:
+        #     user_state = UserState()
+        #     user_state.userjobfield_id = id
+            # user_state.owner_id = request.user.id
+            # user_state.state_id = i
+            # user_state.save()
         context['save'] = True
     return render(request, 'project/add-userstate.html', context)
 

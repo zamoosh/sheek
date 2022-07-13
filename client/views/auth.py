@@ -4,8 +4,7 @@ from .imports import *
 def auth(request):
     context = {}
     if request.user.is_authenticated:
-        return HttpResponseRedirect("/")
-    context = {}
+        return redirect(reverse('index'))
     context['error'] = 0
     if request.method == 'POST':
         context['request'] = {}
