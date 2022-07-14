@@ -44,14 +44,8 @@ def adduserstate(request, id):
             if s not in user_states_selected:
                 user_state = UserState()
                 user_state.userjobfield_id = id
-                user_state.state_id = State.objects.get(title=s, parent__isnull=False).id
+                user_state.state_id = State.objects.get(title=s, parent__id=request.POST.get('state')).id
                 user_state.save()
-        # for i in context['userstate']:
-        #     user_state = UserState()
-        #     user_state.userjobfield_id = id
-            # user_state.owner_id = request.user.id
-            # user_state.state_id = i
-            # user_state.save()
         context['save'] = True
     return render(request, 'project/add-userstate.html', context)
 
