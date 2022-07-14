@@ -162,7 +162,6 @@
                     $('.loader').show();
                 },
                 success: function (data) {
-
                     $("#experts").empty();
                     data.forEach(data => {
                         const card = `<div class="card-body">
@@ -191,13 +190,15 @@
                         ele.classList.add('col-6')
                         ele.innerHTML = card;
                         $("#experts").append(ele);
-
-                    })
-                    if (data.length == 0) {
+                    });
+                    if (data.length === 0) {
+                        show_sorting_area(false);
                         const card = `<div class="no-expert">کارشناسی برای ارائه به این درخواست وجود ندارد.<br><br>شما میتوانید از گزینه " ثبت درخواست بدون انتخاب کارشناس " استفاده نمایید.</div>`
                         const ele = document.createElement('div');
                         ele.innerHTML = card;
                         $("#experts").append(ele);
+                    }else {
+                        show_sorting_area(true);
                     }
                 },
                 error: function (error) {
@@ -304,6 +305,70 @@
                 input[0].parentElement.classList.add("bg-light-green");
             };
         }
+        function show_sorting_area(key) {
+            document.getElementById('sorting_area').hidden = !key;
+        }
+        let sorting_links = $('a.sort');
+        var cs = '{% csrf_token %}';
+        console.log(cs);
+        sorting_links.on('click', function () {
+            $(this).removeClass('btn-primary');
+            $(this).addClass('btn-info active');
+            sorting_links.not($(this)).removeClass('active btn-info');
+            sorting_links.not($(this)).addClass('btn-primary');
+            $.ajax({
+                url: '{% url 'projects:api_sort_experts' %}',
+                type: 'POST',
+                data: {
+                    'ids': $('input[name="expert-list"]').val(),
+                    'sorting': $(this).attr('id'),
+                    'city': $('#city').val(),
+                    'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+                },
+                success: function (data) {
+                    data = data['experts'];
+                    console.log(data);
+                    $("#experts").empty();
+                    data.forEach(data => {
+                        const card = `<div class="card-body">
+                                          <input id="chb1" type="radio" value="${data.id}" name="expert-list" class="d-none"/>
+                                          <div class="media-body card-body mt-25 row">
+                                              <div class="col-2">
+                                                  <img src="${data.profile}" class="rounded mr-75" alt="profile image" height="64" width="64">
+                                              </div>
+                                              <div class="col lin">
+                                                  <span>${data.first_name} ${data.last_name} </span><br>
+                                                  <span>تعداد پروژه ها : ${data.projects}</span>
+                                              </div>
+                                              <div class="col">
+                                                  <div class="view-profile">
+                                                      <a target="_blank" class="btn w-40 select-expert btn-light-primary glow" href="/jobs/expert/${data.id}">
+                                                        <i class="bx bx-user"></i>
+                                                      </a>
+                                                      <button type="button" class="btn w-40 select-expert btn-light-primary glow" onclick="expertselect(${data.id})">
+                                                        <i class="bx bx-check"></i>
+                                                      </button>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                       </div>`;
+                        const ele = document.createElement('div');
+                        ele.classList.add('col-6')
+                        ele.innerHTML = card;
+                        $("#experts").append(ele);
+                    });
+                    console.log('success!');
+                    console.log('success!');
+                    console.log('success!');
+                    data.forEach(function (element) {
+                        console.log(element);
+                    });
+                },
+                error: function () {
+                    console.log('error');
+                }
+            });
+        });
     </script>
 {% endblock %}
 {% block bodyclass %} class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky
@@ -445,7 +510,7 @@
                                                         <label>عنوان پروژه</label>
                                                         <input type="text" class="form-control"
                                                                placeholder="عنوان پروژه"
-                                                               value=""
+                                                               value="" required
                                                                name="project-title">
                                                     </div>
                                                 </div>
@@ -456,7 +521,7 @@
                                                         <label>توضیحات پروژه</label>
                                                         <textarea type="text-area" class="form-control"
                                                                   placeholder="توضیحات پروژه"
-                                                                  value="" rows="10"
+                                                                  value="" rows="10" required
                                                                   name="project-description"></textarea>
                                                     </div>
                                                 </div>
@@ -503,10 +568,25 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-12 mb-4" hidden id="sorting_area">
+                                                <div class="row row-cols-4">
+                                                    <div class="col d-flex justify-content-center">
+                                                        <a id="clos_city" href="javascript:void(0)" class="btn btn-primary sort">براساس نزدیک‌ترین شهر</a>
+                                                    </div>
+                                                    <div class="col d-flex justify-content-center">
+                                                        <a id="far_city" href="javascript:void(0)" class="btn btn-primary sort">براساس دورترین شره</a>
+                                                    </div>
+                                                    <div class="col d-flex justify-content-center">
+                                                        <a id="more_score" href="javascript:void(0)" class="btn btn-primary sort">براساس بیشتری امتیاز</a>
+                                                    </div>
+                                                    <div class="col d-flex justify-content-center">
+                                                        <a id="less_score" href="javascript:void(0)" class="btn btn-primary sort">براساس کمترین امتیاز</a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="overlay"></div>
                                             <div class="loader"></div>
-                                            <div class="col-12 row" id="experts">
-                                            </div>
+                                            <div class="col-12 row" id="experts"></div>
                                         </div>
                                         <button type="submit" class="btn btn-primary glow btnformsub">ثبت درخواست
                                         </button>

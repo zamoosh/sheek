@@ -1,6 +1,9 @@
 from django.urls import path
 from .views import *
 from .apps import ProjectsConfig
+from .api import api_sort_experts
+
+app_name = ProjectsConfig.name
 
 urlpatterns = [
     path('jobs/', jobs, name="jobs"),
@@ -62,7 +65,7 @@ urlpatterns = [
     path('set-tag/<int:pk>/', set_tag, name="set_tag"),
     path('set-tag/api/<int:pk>/', set_tag_api, name="set_tag_api"),
     path('set-tag/toggle/api/<int:pk>/<int:tpk>/', set_tag_toggle_api, name="set_tag_toggle_api"),
-]
 
-app_name = ProjectsConfig.name
-app_name = ProjectsConfig.name
+    # api
+    path('api/sort/expets/', api_sort_experts, name='api_sort_experts'),
+]
