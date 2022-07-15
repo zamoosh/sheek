@@ -1,5 +1,5 @@
 from django.core.mail import send_mail
-from django.db.models import Q, Sum, Count
+from django.db.models import Q, Sum, Count, QuerySet
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.shortcuts import render
@@ -23,6 +23,7 @@ from ..dto import *
 from client.dto import UserViewDto
 from client.models import *
 from client.serializer import UserSerializer
+import numpy as np
 
 
 def send_mail_func(message, email_address):
